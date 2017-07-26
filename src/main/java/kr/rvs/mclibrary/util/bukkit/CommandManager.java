@@ -13,14 +13,11 @@ import java.util.List;
  */
 public class CommandManager {
     public void registerCommand(MCCommand command) {
-        CommandStorageOld storage = new CommandStorageOld(command);
-
         CommandProcessor processor = new CommandProcessor(
                 command.label(),
                 command.description(),
                 command.usage(),
-                Arrays.asList(command.aliases()),
-                storage
+                Arrays.asList(command.aliases())
         );
 
         CommandUtils.registerCommand(processor.getLabel(), processor);
