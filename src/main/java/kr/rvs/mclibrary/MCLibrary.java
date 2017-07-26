@@ -8,6 +8,11 @@ import org.bukkit.plugin.java.JavaPlugin;
  */
 public class MCLibrary extends JavaPlugin {
     private static final CommandManager manager = new CommandManager();
+    public static MCLibrary self;
+
+    public MCLibrary() {
+        self = this;
+    }
 
     @Override
     public void onEnable() {
