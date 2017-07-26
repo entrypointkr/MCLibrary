@@ -49,7 +49,6 @@ public class CommandTest extends Assert {
             return "test";
         }
 
-
         @CommandArgs(
                 type = CommandType.PLAYER_ONLY,
                 args = "a b c",

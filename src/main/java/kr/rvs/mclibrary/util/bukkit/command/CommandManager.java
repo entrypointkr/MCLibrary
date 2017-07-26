@@ -1,4 +1,4 @@
-package kr.rvs.mclibrary.util.bukkit;
+package kr.rvs.mclibrary.util.bukkit.command;
 
 import kr.rvs.mclibrary.struct.command.CommandProcessor;
 import kr.rvs.mclibrary.struct.command.MCCommand;

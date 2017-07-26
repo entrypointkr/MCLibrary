@@ -1,6 +1,6 @@
 package kr.rvs.mclibrary;
 
-import kr.rvs.mclibrary.util.bukkit.CommandManager;
+import kr.rvs.mclibrary.util.bukkit.command.CommandManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
