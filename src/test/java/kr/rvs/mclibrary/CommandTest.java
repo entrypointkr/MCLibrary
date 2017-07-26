@@ -2,6 +2,7 @@ package kr.rvs.mclibrary;
 
 import kr.rvs.mclibrary.struct.command.CommandArgs;
 import kr.rvs.mclibrary.struct.command.CommandProcessor;
+import kr.rvs.mclibrary.struct.command.CommandType;
 import kr.rvs.mclibrary.struct.command.MCCommand;
 import kr.rvs.mclibrary.util.Injector;
 import kr.rvs.mclibrary.util.MockFactory;
@@ -41,6 +42,7 @@ public class CommandTest extends Assert {
         commandMap.dispatch(MockFactory.createCommandSender(), "test a b c dfawef awef");
     }
 
+    // TODO: Example command implemented class
     class TestCommand implements MCCommand {
         @Override
         public String label() {
@@ -49,6 +51,7 @@ public class CommandTest extends Assert {
 
 
         @CommandArgs(
+                type = CommandType.PLAYER_ONLY,
                 args = "a b c",
                 minArgs = 2
         )
