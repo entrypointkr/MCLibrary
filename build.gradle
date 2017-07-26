@@ -1,0 +1,41 @@
+import org.apache.tools.ant.filters.ReplaceTokens
+
+group 'kr.rvs.mclibrary'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+
+sourceCompatibility = 1.8
+
+test.testLogging.showStandardStreams = true
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+compileJava.dependsOn clean
+
+repositories {
+    mavenCentral()
+    /* Spigot Repo */
+    maven { url 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/' }
+    /* Vault Repo */
+    maven { url 'http://nexus.hc.to/content/repositories/pub_releases' }
+}
+
+dependencies {
+    compile('org.spigotmc:spigot-api:1.12-R0.1-SNAPSHOT') {
+        exclude module: 'bungeecord-chat'
+    }
+    compile('net.milkbowl.vault:VaultAPI:1.6') {
+        exclude module: 'bukkit'
+    }
+    testCompile group: 'junit', name: 'junit', version: '4.11'
+    testCompile group: 'org.powermock', name: 'powermock-module-junit4', version: '1.7.0'
+}
+
+processResources {
+    filteringCharset = 'UTF-8'
+    filter ReplaceTokens, tokens: [
+            "version"    : project.version,
+            "pluginName" : rootProject.name,
+            "mainPackage": project.group,
+            "author"     : "EntryPoint"
+    ]
+}
