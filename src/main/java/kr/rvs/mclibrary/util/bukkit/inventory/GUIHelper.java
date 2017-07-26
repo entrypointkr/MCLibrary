@@ -1,6 +1,7 @@
 package kr.rvs.mclibrary.util.bukkit.inventory;
 
 import kr.rvs.mclibrary.MCLibrary;
+import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.HumanEntity;
@@ -44,31 +45,40 @@ public class GUIHelper {
         this.title = type.getDefaultTitle();
     }
 
-    public static void init() {
-    }
-
     private static void close(Entity entity) {
+        Validate.notNull(entity);
+
         HELPER_MAP.remove(entity.getUniqueId());
     }
 
     private static GUIHelper getHelper(Entity entity) {
+        Validate.notNull(entity);
+
         return HELPER_MAP.get(entity.getUniqueId());
     }
 
     private static void putEntity(Entity entity, GUIHelper helper) {
+        Validate.notNull(entity);
+
         HELPER_MAP.put(entity.getUniqueId(), helper);
     }
 
     public static boolean isIn(Entity entity) {
+        Validate.notNull(entity);
+
         return HELPER_MAP.containsKey(entity.getUniqueId());
     }
 
     public GUIHelper setTitle(String title) {
+        Validate.notNull(title);
+
         this.title = title;
         return this;
     }
 
     public GUIHelper setSize(int size) {
+        Validate.isTrue(size % 9 == 0);
+
         this.size = size;
         return this;
     }
@@ -86,28 +96,39 @@ public class GUIHelper {
     }
 
     private void setItemToInventory(Inventory inv) {
+        Validate.notNull(inv);
+
         for (Map.Entry<Integer, ItemStack> entry : itemMap.entrySet()) {
             inv.setItem(entry.getKey(), entry.getValue());
         }
     }
 
     public GUIHelper open(Player player) {
+        Validate.notNull(player);
+
         player.openInventory(create());
 
         return this;
     }
 
     public GUIHelper putListener(Listener listener) {
+        Validate.notNull(listener);
+
         listeners.add(listener);
         return this;
     }
 
     public GUIHelper putItem(Integer index, ItemStack item) {
+        Validate.notNull(index);
+        Validate.notNull(item);
+
         this.itemMap.put(index, item);
         return this;
     }
 
     private void notifyListeners(InventoryClickEvent e) {
+        Validate.notNull(e);
+
         for (Listener listener : listeners) {
             listener.onClick(e);
         }
