@@ -66,10 +66,12 @@ public class CommandProcessor extends Command {
         }
 
         void execute(CommandSender sender, String[] args, int index) {
-            if (args.length <= index)
-                return;
+            String arg = "";
 
-            String arg = args[index];
+            if (args.length > index) {
+                arg = args[index];
+            }
+
             SubCommand command = subCommandMap.get(arg);
             if (command != null) {
                 command.execute(sender, args, index + 1);
@@ -79,9 +81,17 @@ public class CommandProcessor extends Command {
                         || (storage.getMax() != -1 && storage.getMin() > remainSize)
                         || (storage.getMax() != -1 && storage.getMax() < remainSize))
                     return;
-                try {
-                    String[] newArgs = new String[remainSize];
+
+                String[] newArgs;
+
+                if (args.length > 0) {
+                    newArgs = new String[remainSize];
                     System.arraycopy(args, index, newArgs, 0, newArgs.length);
+                } else {
+                    newArgs = new String[0];
+                }
+
+                try {
                     storage.getMethod().invoke(storage.getCommand(), sender, new VolatileArrayList(Arrays.asList(newArgs)));
                 } catch (IllegalAccessException | InvocationTargetException e) {
                     e.printStackTrace();
