@@ -14,18 +14,22 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Arrays;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Junhyeong Lim on 2017-07-26.
  */
 public class CommandTest extends Assert {
+    private final CountDownLatch latch = new CountDownLatch(1);
+
     @Before
     public void dependencyInject() {
         Injector.injectServer(MockFactory.createMockServer());
     }
 
     @Test
-    public void commandTest() {
+    public void commandTest() throws InterruptedException {
         SimpleCommandMap commandMap = new SimpleCommandMap(MockFactory.createMockServer());
 
         MCCommand command = new TestCommand();
@@ -34,16 +38,21 @@ public class CommandTest extends Assert {
                 command.label(),
                 command.description(),
                 command.usage(),
-                Arrays.asList(command.aliases())
+                Arrays.asList(command.aliases()),
+                command
         );
 
         commandMap.register(processor.getLabel(), processor);
 
         commandMap.dispatch(MockFactory.createCommandSender(), "test a b c dfawef awef");
+
+        if (!latch.await(3, TimeUnit.SECONDS)) {
+            throw new Error("Command testing fail");
+        }
     }
 
     // TODO: Example command implemented class
-    class TestCommand implements MCCommand {
+    public class TestCommand implements MCCommand {
         @Override
         public String label() {
             return "test";
@@ -52,10 +61,11 @@ public class CommandTest extends Assert {
         @CommandArgs(
                 type = CommandType.PLAYER_ONLY,
                 args = "a b c",
-                minArgs = 2
+                min = 2
         )
         public void testCommand(CommandSender sender, VolatileArrayList list) {
             System.out.println("Test success");
+            latch.countDown();
         }
     }
 }

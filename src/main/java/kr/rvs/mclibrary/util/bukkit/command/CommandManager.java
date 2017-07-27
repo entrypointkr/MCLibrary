@@ -17,7 +17,8 @@ public class CommandManager {
                 command.label(),
                 command.description(),
                 command.usage(),
-                Arrays.asList(command.aliases())
+                Arrays.asList(command.aliases()),
+                command
         );
 
         CommandUtils.registerCommand(processor.getLabel(), processor);

@@ -26,12 +26,12 @@ import java.util.UUID;
  */
 
 public class GUIHelper {
-    private static final org.bukkit.event.Listener INTERNAL_LISTENER = new InternalListener();
-    private static final Map<UUID, GUIHelper> HELPER_MAP = new HashMap<>();
+    private static final org.bukkit.event.Listener internalListener = new InternalListener();
+    private static final Map<UUID, GUIHelper> helperMap = new HashMap<>();
 
     static {
         Bukkit.getPluginManager().registerEvents(
-                INTERNAL_LISTENER, MCLibrary.self);
+                internalListener, MCLibrary.self);
     }
 
     private final InventoryType type;
@@ -45,28 +45,22 @@ public class GUIHelper {
         this.title = type.getDefaultTitle();
     }
 
-    private static void close(Entity entity) {
-        Validate.notNull(entity);
-
-        HELPER_MAP.remove(entity.getUniqueId());
-    }
-
     private static GUIHelper getHelper(Entity entity) {
         Validate.notNull(entity);
 
-        return HELPER_MAP.get(entity.getUniqueId());
+        return helperMap.get(entity.getUniqueId());
     }
 
     private static void putEntity(Entity entity, GUIHelper helper) {
         Validate.notNull(entity);
 
-        HELPER_MAP.put(entity.getUniqueId(), helper);
+        helperMap.put(entity.getUniqueId(), helper);
     }
 
     public static boolean isIn(Entity entity) {
         Validate.notNull(entity);
 
-        return HELPER_MAP.containsKey(entity.getUniqueId());
+        return helperMap.containsKey(entity.getUniqueId());
     }
 
     public GUIHelper setTitle(String title) {
@@ -109,6 +103,12 @@ public class GUIHelper {
         player.openInventory(create());
 
         return this;
+    }
+
+    private static void close(Entity entity) {
+        Validate.notNull(entity);
+
+        helperMap.remove(entity.getUniqueId());
     }
 
     public GUIHelper putListener(Listener listener) {
