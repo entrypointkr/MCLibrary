@@ -66,6 +66,8 @@ public class ItemBuilder {
         if (lores != null)
             meta.setLore(Arrays.asList(lores));
 
+        itemStack.setItemMeta(meta);
+
         return itemStack;
     }
 
