@@ -19,7 +19,7 @@ public class MCLibrary extends JavaPlugin {
 
     }
 
-    public static CommandManager getManager() {
+    public static CommandManager getCommandManager() {
         return manager;
     }
 }

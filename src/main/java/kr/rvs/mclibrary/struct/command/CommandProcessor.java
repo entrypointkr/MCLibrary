@@ -78,7 +78,7 @@ public class CommandProcessor extends Command {
             } else {
                 int remainSize = args.length - index;
                 if (!storage.getType().isValid(sender)
-                        || (storage.getMax() != -1 && storage.getMin() > remainSize)
+                        || (storage.getMin() != -1 && storage.getMin() > remainSize)
                         || (storage.getMax() != -1 && storage.getMax() < remainSize))
                     return;
 

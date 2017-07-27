@@ -25,7 +25,7 @@ public class ClassProbe {
     private final String winPackageName;
     private final List<Class<?>> cachedClasses = new ArrayList<>();
 
-    public ClassProbe(String packageName) {
+    public ClassProbe(String packageName, ClassLoader... loaders) {
         this.packageName = packageName;
         this.rscPackageName = packageName
                 .replace('.', '/')
@@ -33,11 +33,25 @@ public class ClassProbe {
         this.winPackageName = packageName
                 .replace('.', '\\')
                 .replace(".class", "");
-        init();
+        init(loaders);
     }
 
-    private void init() {
-        for (ClassLoader loader : getClassLoaders()) {
+    public ClassProbe(String packageName) {
+        this(packageName, getDefaultClassLoaders());
+    }
+
+    public static ClassLoader[] getDefaultClassLoaders() {
+        return new ClassLoader[]{
+                Thread.currentThread().getContextClassLoader(),
+                ClassProbe.class.getClassLoader()
+        };
+    }
+
+    private void init(ClassLoader... loaders) {
+        for (ClassLoader loader : loaders) {
+            if (loader == null)
+                continue;
+
             try {
                 Enumeration<URL> urlEnum = loader.getResources(rscPackageName);
                 while (urlEnum.hasMoreElements()) {
@@ -48,13 +62,6 @@ public class ClassProbe {
                 // Ignore
             }
         }
-    }
-
-    private ClassLoader[] getClassLoaders() {
-        return new ClassLoader[]{
-                Thread.currentThread().getContextClassLoader(),
-                ClassProbe.class.getClassLoader()
-        };
     }
 
     private Set<Class<?>> getClassesFromUrl(URL url) throws UnsupportedEncodingException {
