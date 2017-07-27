@@ -8,6 +8,8 @@ import org.bukkit.Server;
  */
 public class Injector {
     public static void injectServer(Server server) {
-        Bukkit.setServer(server);
+        if (Bukkit.getServer() == null) {
+            Bukkit.setServer(server);
+        }
     }
 }
