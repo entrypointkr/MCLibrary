@@ -1,4 +1,4 @@
-package kr.rvs.mclibrary.util.bukkit.command.item;
+package kr.rvs.mclibrary.util.bukkit.item;
 
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
