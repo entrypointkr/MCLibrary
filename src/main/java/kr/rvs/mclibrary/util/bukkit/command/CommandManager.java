@@ -1,14 +1,17 @@
 package kr.rvs.mclibrary.util.bukkit.command;
 
+import kr.rvs.mclibrary.struct.command.CommandLayout;
 import kr.rvs.mclibrary.struct.command.CommandProcessor;
 import kr.rvs.mclibrary.struct.command.MCCommand;
 import kr.rvs.mclibrary.util.Static;
 import kr.rvs.mclibrary.util.reflection.ClassProbe;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
 /**
  * Created by Junhyeong Lim on 2017-07-26.
@@ -48,5 +51,9 @@ public class CommandManager {
                 Static.log(e);
             }
         });
+    }
+
+    public static void setCommandHelpLayout(CommandLayout layout) {
+        CommandProcessor.setCommandLayout(layout);
     }
 }

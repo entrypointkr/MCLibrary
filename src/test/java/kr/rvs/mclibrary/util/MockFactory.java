@@ -10,6 +10,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFactory;
 import org.bukkit.plugin.SimplePluginManager;
 import org.mockito.Mockito;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 
 import java.util.logging.Logger;
 
@@ -34,6 +36,10 @@ public class MockFactory extends Mockito {
                 CommandSender.class,
                 withSettings().extraInterfaces(Player.class)
         );
+        doAnswer(invocation -> {
+            System.out.println(invocation.getArguments()[0].toString());
+            return null;
+        }).when(sender).sendMessage(anyString());
         return sender;
     }
 

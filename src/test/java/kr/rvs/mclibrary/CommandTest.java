@@ -41,14 +41,18 @@ public class CommandTest extends Assert {
                 Arrays.asList(command.aliases()),
                 command
         );
+        CommandSender mockSender = MockFactory.createCommandSender();
 
         commandMap.register(processor.getLabel(), processor);
 
-        commandMap.dispatch(MockFactory.createCommandSender(), "test a b c dfawef awef");
+        commandMap.dispatch(mockSender, "test a b c dfawef awef");
 
         if (!latch.await(3, TimeUnit.SECONDS)) {
             throw new Error("Command testing fail");
         }
+
+        // Help message
+        commandMap.dispatch(mockSender, "test a b c a");
     }
 
     // TODO: Example command implemented class

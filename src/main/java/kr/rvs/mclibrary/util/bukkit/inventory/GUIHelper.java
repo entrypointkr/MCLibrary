@@ -26,12 +26,11 @@ import java.util.UUID;
  */
 
 public class GUIHelper {
-    private static final org.bukkit.event.Listener internalListener = new InternalListener();
     private static final Map<UUID, GUIHelper> helperMap = new HashMap<>();
 
     static {
         Bukkit.getPluginManager().registerEvents(
-                internalListener, MCLibrary.self);
+                new InternalListener(), MCLibrary.self);
     }
 
     private final InventoryType type;
