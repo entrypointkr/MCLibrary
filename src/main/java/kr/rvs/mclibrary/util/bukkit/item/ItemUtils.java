@@ -146,18 +146,18 @@ public class ItemUtils {
     }
 
     public static int getLeftSize(Inventory inv,ItemStack item){
-        int max = maxStack.getOrDefault(item.getTypeId(),64);
+         int max = item.getMaxStackSize();
         int left = 0;
-        for(int i = 0;i < inv.getSize();i++){
-            ItemStack n = inv.getItem(i);
-            if(n != null && n.getType() != Material.AIR)
-            {
-                if(n.isSimilar(item))
-                    left += maxStack.getOrDefault(n.getTypeId(),64) - n.getAmount();
+           for(int i = inv.getSize();i > 0;i--){
+                ItemStack n = inv.getItem(i);
+                if(n != null && n.getType() != Material.AIR) {
+                   if(n.isSimilar(item)) {
+                         left += max - n.getAmount();
+                    }
+                } else {
+                    left += max;
+                }
             }
-            else
-                left += max;
+            return left;
         }
-        return left;
-    }
 }
