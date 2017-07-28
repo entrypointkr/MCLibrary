@@ -1,12 +1,11 @@
 package kr.rvs.mclibrary.util.collection;
 
-import java.util.ArrayList;
 import java.util.Collection;
 
 /**
  * Created by Junhyeong Lim on 2017-07-26.
  */
-public class VolatileArrayList extends ArrayList<String> {
+public class VolatileArrayList extends OptionalArrayList<String> {
     public VolatileArrayList(int initialCapacity) {
         super(initialCapacity);
     }

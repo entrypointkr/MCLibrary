@@ -1,6 +1,7 @@
 package kr.rvs.mclibrary;
 
 import kr.rvs.mclibrary.util.bukkit.command.CommandManager;
+import kr.rvs.mclibrary.util.bukkit.inventory.GUIHelper;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
@@ -20,6 +21,6 @@ public class MCLibrary extends JavaPlugin {
 
     @Override
     public void onEnable() {
-
+        GUIHelper.init();
     }
 }

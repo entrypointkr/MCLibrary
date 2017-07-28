@@ -9,31 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ItemUtils {
-    static class ItemRemoval {
-        List<Integer> sameItemSlot = new ArrayList<>();
-        List<Integer> itemSlotAmount = new ArrayList<>();
-        int totalAmount;
-
-        public void removeItem(Player player, int am) {
-            Inventory inv = player.getInventory();
-            for (int i = 0; i < sameItemSlot.size(); i++) {
-                int amount = itemSlotAmount.get(i);
-                int slot = sameItemSlot.get(i);
-                if (amount < am) {
-                    am -= amount;
-                    inv.setItem(slot, new ItemStack(Material.AIR));
-                } else if (amount > am) {
-                    amount -= am;
-                    inv.getItem(slot).setAmount(amount);
-                    return;
-                } else {
-                    inv.setItem(slot, new ItemStack(Material.AIR));
-                    return;
-                }
-            }
-        }
-    }
-
     public static ItemRemoval getItemAmount(Player player, ItemStack item) {
         int hasAmount = 0;
         ItemRemoval removal = new ItemRemoval();
@@ -67,5 +42,30 @@ public class ItemUtils {
             }
         }
         return left;
+    }
+
+    static class ItemRemoval {
+        List<Integer> sameItemSlot = new ArrayList<>();
+        List<Integer> itemSlotAmount = new ArrayList<>();
+        int totalAmount;
+
+        public void removeItem(Player player, int am) {
+            Inventory inv = player.getInventory();
+            for (int i = 0; i < sameItemSlot.size(); i++) {
+                int amount = itemSlotAmount.get(i);
+                int slot = sameItemSlot.get(i);
+                if (amount < am) {
+                    am -= amount;
+                    inv.setItem(slot, new ItemStack(Material.AIR));
+                } else if (amount > am) {
+                    amount -= am;
+                    inv.getItem(slot).setAmount(amount);
+                    return;
+                } else {
+                    inv.setItem(slot, new ItemStack(Material.AIR));
+                    return;
+                }
+            }
+        }
     }
 }

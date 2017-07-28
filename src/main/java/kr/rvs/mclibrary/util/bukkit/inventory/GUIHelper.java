@@ -7,6 +7,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
@@ -26,22 +27,21 @@ import java.util.UUID;
  */
 
 public class GUIHelper {
+    private static final InternalListener internalListener = new InternalListener();
     private static final Map<UUID, GUIHelper> helperMap = new HashMap<>();
-
-    static {
-        Bukkit.getPluginManager().registerEvents(
-                new InternalListener(), MCLibrary.self);
-    }
-
     private final InventoryType type;
     private Set<Listener> listeners = new HashSet<>();
     private Map<Integer, ItemStack> itemMap = new HashMap<>();
     private String title;
     private int size = 9;
-
     public GUIHelper(InventoryType type) {
         this.type = type;
         this.title = type.getDefaultTitle();
+    }
+
+    public static void init() {
+        HandlerList.unregisterAll(internalListener);
+        Bukkit.getPluginManager().registerEvents(internalListener, MCLibrary.self);
     }
 
     private static GUIHelper getHelper(Entity entity) {

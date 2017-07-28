@@ -6,8 +6,7 @@ import org.bukkit.ChatColor;
  * Created by Junhyeong Lim on 2017-07-26.
  */
 public enum Lang {
-    PREFIX("[MCLibrary] ")
-    ;
+    PREFIX("[MCLibrary] ");
     private String content;
 
     Lang(String content) {

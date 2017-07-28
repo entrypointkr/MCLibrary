@@ -1,15 +1,32 @@
+plugins {
+    id "de.undercouch.download" version "3.2.0"
+    id 'java'
+}
+
 import org.apache.tools.ant.filters.ReplaceTokens
+import de.undercouch.gradle.tasks.download.Download
 
 group 'kr.rvs.mclibrary'
 version '1.0-SNAPSHOT'
 
-apply plugin: 'java'
-
 sourceCompatibility = 1.8
+
+task downloadFile(type: Download) {
+    src 'https://addons-origin.cursecdn.com/files/954/479/BarAPI.jar'
+    File libsDir = new File('libs')
+    libsDir.mkdirs()
+    dest libsDir
+    onlyIfNewer true
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '3.3'
+}
 
 test.testLogging.showStandardStreams = true
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 compileJava.dependsOn clean
+compileJava.dependsOn downloadFile
 
 repositories {
     mavenCentral()
@@ -17,6 +34,8 @@ repositories {
     maven { url 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/' }
     /* Vault Repo */
     maven { url 'http://nexus.hc.to/content/repositories/pub_releases' }
+    /* ProtocolLib */
+    maven { url 'http://repo.dmulloy2.net/content/groups/public/' }
 }
 
 dependencies {
@@ -26,6 +45,9 @@ dependencies {
     compile('net.milkbowl.vault:VaultAPI:1.6') {
         exclude module: 'bukkit'
     }
+    compile group: 'com.comphenix.protocol', name: 'ProtocolLib-API', version: '4.4.0-SNAPSHOT'
+    compile fileTree(dir: 'libs', include: '*.jar')
+
     testCompile group: 'junit', name: 'junit', version: '4.11'
     testCompile group: 'org.powermock', name: 'powermock-module-junit4', version: '1.7.0'
 }
@@ -38,8 +60,4 @@ processResources {
             "mainPackage": project.group,
             "author"     : "EntryPoint"
     ]
-}
-
-task wrapper(type: Wrapper) {
-    gradleVersion = '3.3'
 }

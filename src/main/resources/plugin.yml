@@ -2,3 +2,4 @@ main: @mainPackage@.@pluginName@
 name: @pluginName@
 version: @version@
 author: @author@
+softdepend: [ProtocolLib, BossBarAPI]
