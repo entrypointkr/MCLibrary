@@ -62,6 +62,12 @@ public class GUIHelper {
         return helperMap.containsKey(entity.getUniqueId());
     }
 
+    private static void close(Entity entity) {
+        Validate.notNull(entity);
+
+        helperMap.remove(entity.getUniqueId());
+    }
+
     public GUIHelper setTitle(String title) {
         Validate.notNull(title);
 
@@ -102,12 +108,6 @@ public class GUIHelper {
         player.openInventory(create());
 
         return this;
-    }
-
-    private static void close(Entity entity) {
-        Validate.notNull(entity);
-
-        helperMap.remove(entity.getUniqueId());
     }
 
     public GUIHelper putListener(Listener listener) {

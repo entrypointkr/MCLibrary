@@ -32,6 +32,14 @@ public class CommandProcessor extends Command {
         init();
     }
 
+    public static CommandLayout getCommandLayout() {
+        return commandLayout;
+    }
+
+    public static void setCommandLayout(CommandLayout commandLayout) {
+        CommandProcessor.commandLayout = commandLayout;
+    }
+
     private void init() {
         for (Method method : command.getClass().getMethods()) {
             CommandArgs annot = method.getAnnotation(CommandArgs.class);
@@ -89,14 +97,6 @@ public class CommandProcessor extends Command {
         if (suffix != null && !suffix.isEmpty())
             builder.append("\n").append(suffix);
         sender.sendMessage(builder.toString());
-    }
-
-    public static CommandLayout getCommandLayout() {
-        return commandLayout;
-    }
-
-    public static void setCommandLayout(CommandLayout commandLayout) {
-        CommandProcessor.commandLayout = commandLayout;
     }
 
     class SubCommand {

@@ -7,19 +7,19 @@ import org.bukkit.plugin.java.JavaPlugin;
  * Created by Junhyeong Lim on 2017-07-26.
  */
 public class MCLibrary extends JavaPlugin {
-    public static MCLibrary self;
     private static final CommandManager manager = new CommandManager();
+    public static MCLibrary self;
 
     public MCLibrary() {
         self = this;
     }
 
+    public static CommandManager getCommandManager() {
+        return manager;
+    }
+
     @Override
     public void onEnable() {
 
-    }
-
-    public static CommandManager getCommandManager() {
-        return manager;
     }
 }

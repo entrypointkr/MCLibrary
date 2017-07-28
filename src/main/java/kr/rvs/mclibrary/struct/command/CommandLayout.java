@@ -12,6 +12,7 @@ public interface CommandLayout {
     default String prefix() {
         return "&6---------------------------";
     }
+
     default String suffix() {
         return "&6---------------------------";
     }

@@ -2,7 +2,6 @@ package kr.rvs.mclibrary.util;
 
 import kr.rvs.mclibrary.mock.MockItemFactory;
 import kr.rvs.mclibrary.mock.MockItemMeta;
-import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.SimpleCommandMap;
@@ -10,12 +9,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFactory;
 import org.bukkit.plugin.SimplePluginManager;
 import org.mockito.Mockito;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 
 import java.util.logging.Logger;
-
-import static org.mockito.BDDMockito.given;
 
 /**
  * Created by Junhyeong Lim on 2017-07-26.
