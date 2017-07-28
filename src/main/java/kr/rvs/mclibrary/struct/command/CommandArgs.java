@@ -15,6 +15,8 @@ public @interface CommandArgs {
 
     String usage() default "";
 
+    String desc() default "";
+
     String args() default "";
 
     int min() default -1;
