@@ -35,19 +35,21 @@ public class ItemUtils {
     }
 
     public static ItemRemoval getItemAmount(Player player, ItemStack item) {
-        int am = 0;
+        int hasAmount = 0;
         ItemRemoval removal = new ItemRemoval();
         Inventory inv = player.getInventory();
+
         for (int i = 0; i < inv.getSize(); i++) {
-            ItemStack n = inv.getItem(i);
-            if (n != null && n.getType() != Material.AIR && n.isSimilar(item)) {
-                int a2 = n.getAmount();
-                am += a2;
-                removal.itemSlotAmount.add(a2);
+            ItemStack elemItem = inv.getItem(i);
+            if (elemItem != null && elemItem.getType() != Material.AIR && elemItem.isSimilar(item)) {
+                int itemAmount = elemItem.getAmount();
+                hasAmount += itemAmount;
+                removal.itemSlotAmount.add(itemAmount);
                 removal.sameItemSlot.add(i);
             }
         }
-        removal.totalAmount = am;
+
+        removal.totalAmount = hasAmount;
         return removal;
     }
 
@@ -55,10 +57,10 @@ public class ItemUtils {
         int max = item.getMaxStackSize();
         int left = 0;
         for (int i = inv.getSize(); i > 0; i--) {
-            ItemStack n = inv.getItem(i);
-            if (n != null && n.getType() != Material.AIR) {
-                if (n.isSimilar(item)) {
-                    left += max - n.getAmount();
+            ItemStack elemeItem = inv.getItem(i);
+            if (elemeItem != null && elemeItem.getType() != Material.AIR) {
+                if (elemeItem.isSimilar(item)) {
+                    left += max - elemeItem.getAmount();
                 }
             } else {
                 left += max;
