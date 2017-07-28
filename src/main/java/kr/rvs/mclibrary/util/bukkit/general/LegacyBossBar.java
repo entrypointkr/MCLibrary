@@ -17,6 +17,7 @@ public class LegacyBossBar {
     private final Set<Player> receiver = new HashSet<>();
     private String text = "";
     private float healthPercent = 100;
+    private int timeout = -1;
 
     public LegacyBossBar setText(String text) {
         this.text = text;
@@ -28,14 +29,26 @@ public class LegacyBossBar {
         return this;
     }
 
+    public LegacyBossBar setTimeout(int timeout) {
+        this.timeout = timeout;
+        return this;
+    }
+
     public LegacyBossBar addPlayer(Player... players) {
         receiver.addAll(Arrays.asList(players));
+        return this;
+    }
 
+    public LegacyBossBar removePlayer(Player... players) {
+        for (Player player : players) {
+            BarAPI.removeBar(player);
+            receiver.remove(player);
+        }
         return this;
     }
 
     public LegacyBossBar show(ShowType type) {
-        MCValidate.isProtocolLibEnabled();
+        MCValidate.isBarAPIEnabled();
 
         Collection<? extends Player> players;
         if (type == ShowType.GLOBAL) {
@@ -52,7 +65,11 @@ public class LegacyBossBar {
     }
 
     public LegacyBossBar showToSpecificPlayer(Player player) {
-        BarAPI.setMessage(player, text, healthPercent);
+        if (timeout != -1) {
+            BarAPI.setMessage(player, text, timeout);
+        } else {
+            BarAPI.setMessage(player, text, healthPercent);
+        }
         return this;
     }
 
