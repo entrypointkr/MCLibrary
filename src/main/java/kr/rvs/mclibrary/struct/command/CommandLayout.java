@@ -21,7 +21,7 @@ public interface CommandLayout {
         /*
         Example: /test arg (usage): This is a test command.
          */
-        return String.format("/%s %s (%s): %s",
+        return String.format("/%s %s %s: %s",
                 LABEL_KEY, ARGS_KEY, USAGE_KEY, DESCRIPTION_KEY);
     }
 }
