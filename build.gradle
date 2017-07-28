@@ -39,3 +39,7 @@ processResources {
             "author"     : "EntryPoint"
     ]
 }
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '3.3'
+}
