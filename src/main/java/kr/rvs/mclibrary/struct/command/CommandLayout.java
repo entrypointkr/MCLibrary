@@ -10,18 +10,18 @@ public interface CommandLayout {
     String DESCRIPTION_KEY = "{desc}";
 
     default String prefix() {
-        return "&6---------------------------";
+        return "&e&l---------------------------";
     }
 
     default String suffix() {
-        return "&6---------------------------";
+        return "&e&l---------------------------";
     }
 
     default String content() {
         /*
         Example: /test arg (usage): This is a test command.
          */
-        return String.format("/%s %s %s: %s",
+        return String.format("&6&l/%s %s %s: &f&l%s",
                 LABEL_KEY, ARGS_KEY, USAGE_KEY, DESCRIPTION_KEY);
     }
 }

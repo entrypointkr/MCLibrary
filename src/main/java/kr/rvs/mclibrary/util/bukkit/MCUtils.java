@@ -5,6 +5,7 @@ import com.comphenix.protocol.ProtocolManager;
 import com.comphenix.protocol.events.PacketContainer;
 import kr.rvs.mclibrary.util.Static;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
 
@@ -66,5 +67,9 @@ public class MCUtils {
         } catch (InvocationTargetException e) {
             Static.log(e);
         }
+    }
+
+    public static String colorize(String cmd) {
+        return ChatColor.translateAlternateColorCodes('&', cmd);
     }
 }

@@ -1,6 +1,7 @@
 package kr.rvs.mclibrary.struct.command;
 
 import kr.rvs.mclibrary.util.Static;
+import kr.rvs.mclibrary.util.bukkit.MCUtils;
 import kr.rvs.mclibrary.util.collection.VolatileArrayList;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -96,7 +97,7 @@ public class CommandProcessor extends Command {
         String suffix = commandLayout.suffix();
         if (suffix != null && !suffix.isEmpty())
             builder.append("\n").append(suffix);
-        sender.sendMessage(builder.toString());
+        sender.sendMessage(MCUtils.colorize(builder.toString()));
     }
 
     class SubCommand {
