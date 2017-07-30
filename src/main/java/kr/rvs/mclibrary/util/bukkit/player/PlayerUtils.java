@@ -2,6 +2,7 @@ package kr.rvs.mclibrary.util.bukkit.player;
 
 import kr.rvs.mclibrary.util.Static;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -10,9 +11,9 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 
 /**
  * Created by Junhyeong Lim on 2017-07-28.
@@ -61,21 +62,31 @@ public class PlayerUtils {
 
     public static boolean takeItem(Player player, ItemStack item, int takeAmount) {
         Inventory inv = player.getInventory();
-        Set<ItemStack> removeSet = new HashSet<>();
+        Map<Integer, ItemStack> removeItemMap = new HashMap<>();
 
-        for (ItemStack elemItem : inv) {
-            if (!elemItem.isSimilar(item))
+        for (int i = 0; i < inv.getSize(); i++) {
+            ItemStack elemItem = inv.getItem(i);
+            if (elemItem == null || elemItem.getType() == Material.AIR
+                    || !elemItem.isSimilar(item))
                 continue;
 
-            removeSet.add(elemItem);
             int amount = elemItem.getAmount();
 
             if (takeAmount > amount) {
                 takeAmount -= amount;
+                removeItemMap.put(i, elemItem);
             } else {
-                for (ItemStack remove : removeSet) {
-                    inv.removeItem(remove);
+                if (takeAmount < amount) {
+                    elemItem.setAmount(amount - takeAmount);
+                    inv.setItem(i, elemItem);
+                } else {
+                    removeItemMap.put(i, elemItem);
                 }
+
+                for (Integer slot : removeItemMap.keySet()) {
+                    inv.clear(slot);
+                }
+
                 return true;
             }
         }
