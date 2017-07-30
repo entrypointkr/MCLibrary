@@ -38,9 +38,11 @@ public class PlayerUtils {
     public static int hasItemAmount(Player player, ItemStack item) {
         int hasAmount = 0;
         for (ItemStack elemItem : player.getInventory()) {
-            if (elemItem.isSimilar(item)) {
-                hasAmount += elemItem.getAmount();
-            }
+            if (elemItem == null || elemItem.getType() == Material.AIR
+                    || !elemItem.isSimilar(item))
+                continue;
+
+            hasAmount += elemItem.getAmount();
         }
 
         return hasAmount;
@@ -49,12 +51,14 @@ public class PlayerUtils {
     public static boolean isHasItem(Player player, ItemStack item, int amount) {
         int hasAmount = 0;
         for (ItemStack elemItem : player.getInventory()) {
-            if (elemItem.isSimilar(item)) {
-                hasAmount += elemItem.getAmount();
+            if (elemItem == null || elemItem.getType() == Material.AIR
+                    || !elemItem.isSimilar(item))
+                continue;
 
-                if (hasAmount >= amount)
-                    return true;
-            }
+            hasAmount += elemItem.getAmount();
+
+            if (hasAmount >= amount)
+                return true;
         }
 
         return false;
