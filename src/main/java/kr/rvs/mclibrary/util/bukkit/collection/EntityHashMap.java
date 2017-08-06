@@ -46,4 +46,8 @@ public class EntityHashMap<V> extends OptionalHashMap<UUID, V> {
     public V computeIfAbsent(Entity entity, Function<UUID, ? extends V> mappingFunction) {
         return computeIfAbsent(entity.getUniqueId(), mappingFunction);
     }
+
+    public boolean containsKey(Entity entity) {
+        return containsKey(entity.getUniqueId());
+    }
 }
