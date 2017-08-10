@@ -24,6 +24,9 @@ public class SpeedTester {
     }
 
     public void start() {
+        // Preheat
+        runnableList.forEach(Runnable::run);
+
         int size = runnableList.size();
         for (int i = 0; i < size; i++) {
             long total = 0;
@@ -31,7 +34,7 @@ public class SpeedTester {
                 Runnable runnable = runnableList.get(i);
                 long start = System.currentTimeMillis();
                 runnable.run();
-                total += System.currentTimeMillis() - start;
+                total += System.nanoTime() - start;
             }
             System.out.println(i + " 평균: " + total / tryCount);
         }
