@@ -3,8 +3,13 @@ package kr.rvs.mclibrary.struct.command.layout;
 import kr.rvs.mclibrary.struct.command.CommandStorage;
 import kr.rvs.mclibrary.struct.command.MCCommand;
 import kr.rvs.mclibrary.util.collection.VolatileArrayList;
+import kr.rvs.mclibrary.util.general.StringUtil;
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 
 import java.util.List;
+
+import static org.apache.commons.lang.StringUtils.isNotEmpty;
 
 /**
  * Created by Junhyeong Lim on 2017-08-10.
@@ -13,25 +18,46 @@ public abstract class PagingCommandLayout implements CommandLayout {
     private static final int PAGE_LINE = 5;
 
     @Override
-    public void writeHelpMessage(StringBuilder builder, MCCommand parent, List<CommandStorage> storages, VolatileArrayList args) {
-        int page = args.getInt(1, 1);
+    public void writeHelpMessage(CommandLayoutStorage storage) {
+        VolatileArrayList args = storage.getArgs();
+        List<CommandStorage> storages = storage.getStorages();
+
+        int page = args.size() == 1 ? args.getInt(0, 1) : args.getInt(1, 1);
         int pages = getPageSize(storages);
         int index = (page - 1) * PAGE_LINE;
 
-        builder.append(prefix(parent, page, pages))
-                .append('\n');
-        builder.append(usage(parent, page, pages))
-                .append('\n');
-        for (int i = index; i < index + PAGE_LINE; i++) {
-            if (storages.size() <= i)
-                break;
+        String prefix = prefix(storage, page, pages);
+        String usage = usage(storage, page, pages);
+        String suffix = suffix(storage, page, pages);
 
-            builder.append('\n');
-            writeCmdInfoLine(parent, builder, storages.get(i));
+        if (isNotEmpty(prefix))
+            storage.append(prefix).append('\n');
+        if (isNotEmpty(usage))
+            storage.append(usage).append('\n');
+
+        if (isPagingRequire(pages, storage.getSender())) {
+            for (int i = index; i < index + PAGE_LINE; i++) {
+                if (storages.size() <= i) // IndexOverflow
+                    break;
+
+                if (i != index)
+                    storage.append('\n');
+                writeCmdInfoLine(storage, storages.get(i));
+            }
+        } else {
+            for (int i = 0; i < storages.size(); i++) {
+                if (i != 0)
+                    storage.append('\n');
+                writeCmdInfoLine(storage, storages.get(i));
+            }
         }
-        String suffix = suffix(parent, page, pages);
-        if (suffix != null && !suffix.isEmpty())
-            builder.append(suffix);
+
+        if (isNotEmpty(suffix))
+            storage.append(suffix);
+    }
+
+    public boolean isPagingRequire(int maxPage, CommandSender sender) {
+        return maxPage > 1 && (!(sender instanceof ConsoleCommandSender));
     }
 
     private int getPageSize(List<CommandStorage> storages) {
@@ -43,11 +69,29 @@ public abstract class PagingCommandLayout implements CommandLayout {
         return pages;
     }
 
-    public abstract String prefix(MCCommand parent, int currPage, int maxPage);
+    public String prefix(CommandLayoutStorage storage, int currPage, int maxPage) {
+        StringBuilder builder = new StringBuilder(50)
+                .append("&e--------- ").append("&f도움말: /").append(storage.getParent().label()).append(' ');
 
-    public abstract String usage(MCCommand parent, int currPage, int maxPage);
+        if (isPagingRequire(maxPage, storage.getSender()))
+            builder.append(String.format("(%d/%d)", currPage, maxPage));
 
-    public abstract void writeCmdInfoLine(MCCommand parent, StringBuilder builder, CommandStorage storage);
+        builder.append("&e");
+        for (int i = StringUtil.length(builder.toString()); i < 55; i++)
+            builder.append('-');
 
-    public abstract String suffix(MCCommand parent, int currPage, int maxPag);
+        return builder.toString();
+    }
+
+    public String usage(CommandLayoutStorage storage, int currPage, int maxPage) {
+        MCCommand parent = storage.getParent();
+        return String.format("&7'/%s %s [페이지]' 를 입력할 수 있습니다.",
+                parent.label(), parent.helpArg());
+    }
+
+    public abstract void writeCmdInfoLine(CommandLayoutStorage layoutStorage, CommandStorage storage);
+
+    public String suffix(CommandLayoutStorage storage, int currPage, int maxPag) {
+        return null;
+    }
 }

@@ -15,20 +15,16 @@ import java.util.List;
  */
 public class CommandManager {
     public void registerCommand(MCCommand command, JavaPlugin plugin) {
-        try {
-            CommandProcessor processor = new CommandProcessor(
-                    command.label(),
-                    command.description(),
-                    command.usage(),
-                    Arrays.asList(command.aliases()),
-                    plugin,
-                    command
-            );
+        CommandProcessor processor = new CommandProcessor(
+                command.label(),
+                command.description(),
+                command.usage(),
+                Arrays.asList(command.aliases()),
+                plugin,
+                command
+        );
 
-            CommandUtils.registerCommand(plugin.getName(), processor);
-        } catch (Exception ex) {
-            Static.log(ex);
-        }
+        CommandUtils.registerCommand(plugin.getName(), processor);
     }
 
     public void registerCommand(String packageName, JavaPlugin plugin) {
@@ -46,7 +42,7 @@ public class CommandManager {
                 Thread.currentThread().getContextClassLoader(), getClass().getClassLoader(), pluginCL);
         List<Class<? extends MCCommand>> classes = probe.getSubTypesOf(MCCommand.class);
 
-        classes.forEach(aClass -> {
+        classes.stream().filter(aClass -> !aClass.isInterface()).forEach(aClass -> {
             try {
                 registerCommand(aClass.newInstance(), plugin);
             } catch (InstantiationException | IllegalAccessException e) {

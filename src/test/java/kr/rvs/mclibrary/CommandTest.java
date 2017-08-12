@@ -60,7 +60,6 @@ public class CommandTest extends Assert {
         commandMap.dispatch(mockSender, "test help 2");
     }
 
-    // TODO: Example command implemented class
     public class TestCommand implements MCCommand {
         @Override
         public String label() {

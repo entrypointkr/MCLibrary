@@ -2,6 +2,8 @@ package kr.rvs.mclibrary.struct.command;
 
 import java.lang.reflect.Method;
 
+import static org.apache.commons.lang.StringUtils.isNotEmpty;
+
 /**
  * Created by Junhyeong Lim on 2017-07-27.
  */
@@ -53,14 +55,14 @@ public class CommandStorage {
     }
 
     public boolean hasUsage() {
-        return getUsage() != null && !getUsage().isEmpty();
+        return isNotEmpty(getUsage());
     }
 
     public boolean hasArgs() {
-        return getArgs() != null && !getArgs().isEmpty();
+        return isNotEmpty(getArgs());
     }
 
     public boolean hasDescription() {
-        return getDescription() != null && !getDescription().isEmpty();
+        return isNotEmpty(getDescription());
     }
 }

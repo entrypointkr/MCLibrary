@@ -1,5 +1,6 @@
 package kr.rvs.mclibrary.struct.command;
 
+import kr.rvs.mclibrary.struct.command.layout.CommandLayoutStorage;
 import kr.rvs.mclibrary.util.Static;
 import kr.rvs.mclibrary.util.bukkit.MCUtils;
 import kr.rvs.mclibrary.util.collection.VolatileArrayList;
@@ -25,7 +26,7 @@ public class CommandProcessor extends Command implements PluginIdentifiableComma
     private final SubCommand subCommand;
     private final List<CommandStorage> storages = new ArrayList<>();
 
-    public CommandProcessor(String name, String description, String usageMessage, List<String> aliases, Plugin owner, MCCommand command) throws NoSuchMethodException {
+    public CommandProcessor(String name, String description, String usageMessage, List<String> aliases, Plugin owner, MCCommand command) {
         super(name, description, usageMessage, aliases);
 
         this.owner = owner;
@@ -71,9 +72,9 @@ public class CommandProcessor extends Command implements PluginIdentifiableComma
 
     private void sendHelpMessage(CommandSender sender, VolatileArrayList args) {
         StringBuilder builder = new StringBuilder(15);
-        command.layout().writeHelpMessage(builder, command, storages, args);
+        command.layout().writeHelpMessage(new CommandLayoutStorage(builder, sender, command, storages, args));
 
-        sender.sendMessage(MCUtils.colorize(builder.toString()));
+        sender.sendMessage(MCUtils.colorize(builder.toString()).split("\n"));
     }
 
     @Override
