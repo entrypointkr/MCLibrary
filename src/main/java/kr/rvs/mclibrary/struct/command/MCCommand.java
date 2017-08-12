@@ -4,15 +4,10 @@ import kr.rvs.mclibrary.struct.command.layout.CommandLayout;
 import kr.rvs.mclibrary.struct.command.layout.DefaultCommandLayout;
 import org.apache.commons.lang.StringUtils;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * Created by Junhyeong Lim on 2017-07-26.
  */
 public interface MCCommand {
-    Map<String, CommandLayout> CACHED_LAYOUT = new HashMap<>();
-
     String label();
 
     default String description() {
@@ -32,6 +27,6 @@ public interface MCCommand {
     }
 
     default CommandLayout layout() {
-        return CACHED_LAYOUT.computeIfAbsent(label(), k -> new DefaultCommandLayout());
+        return new DefaultCommandLayout();
     }
 }

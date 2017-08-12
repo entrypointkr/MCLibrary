@@ -1,5 +1,6 @@
 package kr.rvs.mclibrary.struct.command;
 
+import kr.rvs.mclibrary.struct.command.layout.CommandLayout;
 import kr.rvs.mclibrary.struct.command.layout.CommandLayoutStorage;
 import kr.rvs.mclibrary.util.Static;
 import kr.rvs.mclibrary.util.bukkit.MCUtils;
@@ -21,6 +22,8 @@ import java.util.Map;
  * Created by Junhyeong Lim on 2017-07-26.
  */
 public class CommandProcessor extends Command implements PluginIdentifiableCommand {
+    private static final Map<String, CommandLayout> layoutMap = new HashMap<>();
+
     private final Plugin owner;
     private final MCCommand command;
     private final SubCommand subCommand;
@@ -34,6 +37,10 @@ public class CommandProcessor extends Command implements PluginIdentifiableComma
         this.subCommand = new SubCommand();
 
         init();
+    }
+
+    public static Map<String, CommandLayout> getLayoutMap() {
+        return layoutMap;
     }
 
     private void init() {
@@ -72,7 +79,8 @@ public class CommandProcessor extends Command implements PluginIdentifiableComma
 
     private void sendHelpMessage(CommandSender sender, VolatileArrayList args) {
         StringBuilder builder = new StringBuilder(15);
-        command.layout().writeHelpMessage(new CommandLayoutStorage(builder, sender, command, storages, args));
+        CommandLayout layout = layoutMap.computeIfAbsent(getLabel(), k -> command.layout());
+        layout.writeHelpMessage(new CommandLayoutStorage(builder, sender, command, storages, args));
 
         sender.sendMessage(MCUtils.colorize(builder.toString()).split("\n"));
     }
