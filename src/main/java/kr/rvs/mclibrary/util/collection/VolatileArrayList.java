@@ -18,12 +18,17 @@ public class VolatileArrayList extends OptionalArrayList<String> {
     }
 
     public Integer getInt(int i, int def) {
-        String arg = get(i);
+        Integer ret = def;
+        String elem = get(i);
 
-        try {
-            return Integer.parseInt(arg);
-        } catch (NumberFormatException ex) {
-            return def;
+        if (elem != null) {
+            try {
+                ret = Integer.valueOf(elem);
+            } catch (NumberFormatException ex) {
+                // Ignore
+            }
         }
+
+        return ret;
     }
 }

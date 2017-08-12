@@ -1,6 +1,5 @@
 package kr.rvs.mclibrary.util.bukkit.command;
 
-import kr.rvs.mclibrary.struct.command.CommandLayout;
 import kr.rvs.mclibrary.struct.command.CommandProcessor;
 import kr.rvs.mclibrary.struct.command.MCCommand;
 import kr.rvs.mclibrary.util.Static;
@@ -15,20 +14,21 @@ import java.util.List;
  * Created by Junhyeong Lim on 2017-07-26.
  */
 public class CommandManager {
-    public static void setCommandHelpLayout(CommandLayout layout) {
-        CommandProcessor.setCommandLayout(layout);
-    }
-
     public void registerCommand(MCCommand command, JavaPlugin plugin) {
-        CommandProcessor processor = new CommandProcessor(
-                command.label(),
-                command.description(),
-                command.usage(),
-                Arrays.asList(command.aliases()),
-                command
-        );
+        try {
+            CommandProcessor processor = new CommandProcessor(
+                    command.label(),
+                    command.description(),
+                    command.usage(),
+                    Arrays.asList(command.aliases()),
+                    plugin,
+                    command
+            );
 
-        CommandUtils.registerCommand(plugin.getName(), processor);
+            CommandUtils.registerCommand(plugin.getName(), processor);
+        } catch (Exception ex) {
+            Static.log(ex);
+        }
     }
 
     public void registerCommand(String packageName, JavaPlugin plugin) {

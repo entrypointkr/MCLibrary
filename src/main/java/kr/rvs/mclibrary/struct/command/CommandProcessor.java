@@ -5,6 +5,8 @@ import kr.rvs.mclibrary.util.bukkit.MCUtils;
 import kr.rvs.mclibrary.util.collection.VolatileArrayList;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.PluginIdentifiableCommand;
+import org.bukkit.plugin.Plugin;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -17,28 +19,20 @@ import java.util.Map;
 /**
  * Created by Junhyeong Lim on 2017-07-26.
  */
-public class CommandProcessor extends Command {
-    private static CommandLayout commandLayout = new CommandLayout() {
-    };
-
+public class CommandProcessor extends Command implements PluginIdentifiableCommand {
+    private final Plugin owner;
     private final MCCommand command;
     private final SubCommand subCommand;
     private final List<CommandStorage> storages = new ArrayList<>();
 
-    public CommandProcessor(String name, String description, String usageMessage, List<String> aliases, MCCommand command) {
+    public CommandProcessor(String name, String description, String usageMessage, List<String> aliases, Plugin owner, MCCommand command) throws NoSuchMethodException {
         super(name, description, usageMessage, aliases);
 
+        this.owner = owner;
         this.command = command;
         this.subCommand = new SubCommand();
+
         init();
-    }
-
-    public static CommandLayout getCommandLayout() {
-        return commandLayout;
-    }
-
-    public static void setCommandLayout(CommandLayout commandLayout) {
-        CommandProcessor.commandLayout = commandLayout;
     }
 
     private void init() {
@@ -48,11 +42,11 @@ public class CommandProcessor extends Command {
                 continue;
 
             String[] args = annot.args().split(" ");
-            register(args, 0, annot, subCommand, method);
+            register(args, 0, new SubCommandStorage(annot), subCommand, method);
         }
     }
 
-    private void register(String[] args, int index, CommandArgs annot, SubCommand subCommand, Method method) {
+    private void register(String[] args, int index, SubCommandStorage annot, SubCommand subCommand, Method method) {
         SubCommand newSubCommand = new SubCommand();
         subCommand.put(args[index], newSubCommand);
 
@@ -67,37 +61,30 @@ public class CommandProcessor extends Command {
 
     @Override
     public boolean execute(CommandSender sender, String commandLabel, String[] args) {
-        if (!subCommand.execute(sender, args, 0)) {
-            sendHelpMessage(sender);
+        switch (subCommand.execute(sender, args, 0)) {
+            case PERMISSION_DENIED:
+            case HELP:
+                sendHelpMessage(sender, new VolatileArrayList(Arrays.asList(args)));
         }
         return true;
     }
 
-    private void sendHelpMessage(CommandSender sender) {
-        StringBuilder builder = new StringBuilder();
-        String prefix = commandLayout.prefix();
-        if (prefix != null && !prefix.isEmpty())
-            builder.append(prefix);
+    private void sendHelpMessage(CommandSender sender, VolatileArrayList args) {
+        StringBuilder builder = new StringBuilder(15);
+        command.layout().writeHelpMessage(builder, command, storages, args);
 
-        for (CommandStorage storage : storages) {
-            if (builder.length() > 0) {
-                builder.append("\n");
-            }
-            String layout = commandLayout.content();
-            if (layout != null && !layout.isEmpty()) {
-                builder.append(
-                        layout.replace(CommandLayout.LABEL_KEY, getLabel())
-                                .replace(CommandLayout.ARGS_KEY, storage.getArgs())
-                                .replace(CommandLayout.USAGE_KEY, storage.getUsage())
-                                .replace(CommandLayout.DESCRIPTION_KEY, storage.getDescription())
-                );
-            }
-        }
-
-        String suffix = commandLayout.suffix();
-        if (suffix != null && !suffix.isEmpty())
-            builder.append("\n").append(suffix);
         sender.sendMessage(MCUtils.colorize(builder.toString()));
+    }
+
+    @Override
+    public Plugin getPlugin() {
+        return owner;
+    }
+
+    enum CommandResult {
+        DONE,
+        PERMISSION_DENIED,
+        HELP
     }
 
     class SubCommand {
@@ -111,7 +98,7 @@ public class CommandProcessor extends Command {
             this.storage = storage;
         }
 
-        boolean execute(CommandSender sender, String[] args, int index) {
+        CommandResult execute(CommandSender sender, String[] args, int index) {
             String arg = "";
 
             if (args.length > index) {
@@ -126,7 +113,7 @@ public class CommandProcessor extends Command {
                 if (storage == null || !storage.getType().isValid(sender)
                         || (storage.getMin() != -1 && storage.getMin() > remainSize)
                         || (storage.getMax() != -1 && storage.getMax() < remainSize))
-                    return false;
+                    return CommandResult.HELP;
 
                 String[] newArgs;
 
@@ -139,13 +126,13 @@ public class CommandProcessor extends Command {
 
                 try {
                     storage.getMethod().invoke(storage.getCommand(), sender, new VolatileArrayList(Arrays.asList(newArgs)));
-                    return true;
+                    return CommandResult.DONE;
                 } catch (IllegalAccessException | InvocationTargetException e) {
                     Static.log(e);
                 }
             }
 
-            return false;
+            return CommandResult.HELP;
         }
 
         public SubCommand put(String cmd, SubCommand command) {

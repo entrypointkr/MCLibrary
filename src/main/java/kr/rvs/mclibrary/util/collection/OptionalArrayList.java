@@ -1,13 +1,12 @@
 package kr.rvs.mclibrary.util.collection;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;
 
 /**
  * Created by Junhyeong Lim on 2017-07-28.
  */
-public class OptionalArrayList<E> extends ArrayList<E> {
+public class OptionalArrayList<E> extends NullableArrayList<E> {
     public OptionalArrayList(int initialCapacity) {
         super(initialCapacity);
     }

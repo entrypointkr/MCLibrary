@@ -69,7 +69,7 @@ public class MCUtils {
         }
     }
 
-    public static String colorize(String cmd) {
-        return ChatColor.translateAlternateColorCodes('&', cmd);
+    public static String colorize(String message) {
+        return ChatColor.translateAlternateColorCodes('&', message);
     }
 }

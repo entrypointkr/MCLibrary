@@ -7,58 +7,60 @@ import java.lang.reflect.Method;
  */
 public class CommandStorage {
     private final MCCommand command;
-    private final CommandType type;
-    private final String usage;
-    private final String description;
-    private final String args;
-    private final int min;
-    private final int max;
+    private final SubCommandStorage info;
     private final Method method;
 
-    public CommandStorage(MCCommand command, CommandType type, String usage, String description, String args, int min, int max, Method method) {
+    public CommandStorage(MCCommand command, SubCommandStorage info, Method method) {
         this.command = command;
-        this.type = type;
-        this.usage = usage;
-        this.description = description;
-        this.args = args;
-        this.min = min;
-        this.max = max;
+        this.info = info;
         this.method = method;
     }
 
-    public CommandStorage(MCCommand command, CommandArgs annot, Method method) {
-        this(command, annot.type(), annot.usage(), annot.desc(), annot.args(), annot.min(), annot.max(), method);
+    public MCCommand getCommand() {
+        return command;
     }
 
-    public CommandType getType() {
-        return type;
-    }
-
-    public String getUsage() {
-        return usage;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public String getArgs() {
-        return args;
-    }
-
-    public int getMin() {
-        return min;
-    }
-
-    public int getMax() {
-        return max;
+    public SubCommandStorage getInfo() {
+        return info;
     }
 
     public Method getMethod() {
         return method;
     }
 
-    public MCCommand getCommand() {
-        return command;
+    public CommandType getType() {
+        return info.getType();
+    }
+
+    public String getUsage() {
+        return info.getUsage();
+    }
+
+    public String getDescription() {
+        return info.getDesc();
+    }
+
+    public String getArgs() {
+        return info.getArgs();
+    }
+
+    public int getMin() {
+        return info.getMin();
+    }
+
+    public int getMax() {
+        return info.getMax();
+    }
+
+    public boolean hasUsage() {
+        return getUsage() != null && !getUsage().isEmpty();
+    }
+
+    public boolean hasArgs() {
+        return getArgs() != null && !getArgs().isEmpty();
+    }
+
+    public boolean hasDescription() {
+        return getDescription() != null && !getDescription().isEmpty();
     }
 }

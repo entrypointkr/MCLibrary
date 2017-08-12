@@ -34,6 +34,7 @@ public class GUIHelper {
     private Map<Integer, ItemStack> itemMap = new HashMap<>();
     private String title;
     private int size = 9;
+
     public GUIHelper(InventoryType type) {
         this.type = type;
         this.title = type.getDefaultTitle();
