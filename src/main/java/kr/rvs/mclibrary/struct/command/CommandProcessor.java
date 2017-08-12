@@ -4,6 +4,7 @@ import kr.rvs.mclibrary.struct.command.layout.CommandLayout;
 import kr.rvs.mclibrary.struct.command.layout.CommandLayoutStorage;
 import kr.rvs.mclibrary.util.Static;
 import kr.rvs.mclibrary.util.bukkit.MCUtils;
+import kr.rvs.mclibrary.util.bukkit.command.CommandSenderWrapper;
 import kr.rvs.mclibrary.util.collection.VolatileArrayList;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -134,7 +135,7 @@ public class CommandProcessor extends Command implements PluginIdentifiableComma
                 }
 
                 try {
-                    storage.getMethod().invoke(storage.getCommand(), sender, new VolatileArrayList(Arrays.asList(newArgs)));
+                    storage.getMethod().invoke(storage.getCommand(), new CommandSenderWrapper(sender), new VolatileArrayList(Arrays.asList(newArgs)));
                     return CommandResult.DONE;
                 } catch (IllegalAccessException | InvocationTargetException e) {
                     Static.log(e);
