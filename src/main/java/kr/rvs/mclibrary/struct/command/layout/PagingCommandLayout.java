@@ -19,6 +19,7 @@ public abstract class PagingCommandLayout implements CommandLayout {
 
     @Override
     public void writeHelpMessage(CommandLayoutStorage storage) {
+        StringBuilder builder = storage.getBuilder();
         VolatileArrayList args = storage.getArgs();
         List<CommandStorage> storages = storage.getStorages();
 
@@ -31,9 +32,9 @@ public abstract class PagingCommandLayout implements CommandLayout {
         String suffix = suffix(storage, page, pages);
 
         if (isNotEmpty(prefix))
-            storage.append(prefix).append('\n');
+            builder.append(prefix).append('\n');
         if (isNotEmpty(usage))
-            storage.append(usage).append('\n');
+            builder.append(usage).append('\n');
 
         if (isPagingRequire(pages, storage.getSender())) {
             for (int i = index; i < index + PAGE_LINE; i++) {
@@ -41,19 +42,19 @@ public abstract class PagingCommandLayout implements CommandLayout {
                     break;
 
                 if (i != index)
-                    storage.append('\n');
+                    builder.append('\n');
                 writeCmdInfoLine(storage, storages.get(i));
             }
         } else {
             for (int i = 0; i < storages.size(); i++) {
                 if (i != 0)
-                    storage.append('\n');
+                    builder.append('\n');
                 writeCmdInfoLine(storage, storages.get(i));
             }
         }
 
         if (isNotEmpty(suffix))
-            storage.append(suffix);
+            builder.append(suffix);
     }
 
     public boolean isPagingRequire(int maxPage, CommandSender sender) {

@@ -26,14 +26,6 @@ public class CommandLayoutStorage {
         this.args = args;
     }
 
-    public StringBuilder append(CharSequence charSequence) {
-        return builder.append(charSequence);
-    }
-
-    public StringBuilder append(char ch) {
-        return builder.append(ch);
-    }
-
     public StringBuilder getBuilder() {
         return builder;
     }

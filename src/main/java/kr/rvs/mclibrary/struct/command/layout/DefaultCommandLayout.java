@@ -9,17 +9,18 @@ import kr.rvs.mclibrary.struct.command.MCCommand;
 public class DefaultCommandLayout extends PagingCommandLayout {
     @Override
     public void writeCmdInfoLine(CommandLayoutStorage layoutStorage, CommandStorage storage) {
+        StringBuilder builder = layoutStorage.getBuilder();
         MCCommand parent = layoutStorage.getParent();
 
-        layoutStorage.append("&6/").append(parent.label());
+        builder.append("&6/").append(parent.label());
         if (storage.hasArgs())
-            layoutStorage.append(" ").append(storage.getArgs());
+            builder.append(" ").append(storage.getArgs());
         if (storage.hasUsage())
-            layoutStorage.append(" ").append(storage.getUsage());
-        layoutStorage.append(": &f");
+            builder.append(" ").append(storage.getUsage());
+        builder.append(": &f");
         if (storage.hasDescription())
-            layoutStorage.append(storage.getDescription());
+            builder.append(storage.getDescription());
         else
-            layoutStorage.append("'/").append(parent.label()).append("' 의 하위 명령어");
+            builder.append("'/").append(parent.label()).append("' 의 하위 명령어");
     }
 }
