@@ -25,7 +25,7 @@ import java.util.UUID;
 /**
  * Created by Junhyeong Lim on 2017-07-26.
  */
-
+@Deprecated
 public class GUIHelper {
     private static final InternalListener internalListener = new InternalListener();
     private static final Map<UUID, GUIHelper> helperMap = new HashMap<>();
@@ -42,7 +42,7 @@ public class GUIHelper {
 
     public static void init() {
         HandlerList.unregisterAll(internalListener);
-        Bukkit.getPluginManager().registerEvents(internalListener, MCLibrary.self);
+        Bukkit.getPluginManager().registerEvents(internalListener, MCLibrary.getPlugin());
     }
 
     private static GUIHelper getHelper(Entity entity) {
@@ -51,7 +51,7 @@ public class GUIHelper {
         return helperMap.get(entity.getUniqueId());
     }
 
-    private static void putEntity(Entity entity, GUIHelper helper) {
+    private static void setHelper(Entity entity, GUIHelper helper) {
         Validate.notNull(entity);
 
         helperMap.put(entity.getUniqueId(), helper);
@@ -111,14 +111,14 @@ public class GUIHelper {
         return this;
     }
 
-    public GUIHelper putListener(Listener listener) {
+    public GUIHelper addListener(Listener listener) {
         Validate.notNull(listener);
 
         listeners.add(listener);
         return this;
     }
 
-    public GUIHelper putItem(Integer index, ItemStack item) {
+    public GUIHelper setItem(Integer index, ItemStack item) {
         Validate.notNull(index);
         Validate.notNull(item);
 
