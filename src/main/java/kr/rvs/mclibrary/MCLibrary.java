@@ -1,9 +1,9 @@
 package kr.rvs.mclibrary;
 
 import kr.rvs.mclibrary.util.bukkit.command.CommandManager;
-import kr.rvs.mclibrary.util.bukkit.gson.GsonManager;
 import kr.rvs.mclibrary.util.bukkit.inventory.GUI;
 import kr.rvs.mclibrary.util.bukkit.inventory.GUIHelper;
+import kr.rvs.mclibrary.util.gson.GsonManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**

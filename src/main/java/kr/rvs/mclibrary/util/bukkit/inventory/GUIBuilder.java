@@ -1,13 +1,20 @@
 package kr.rvs.mclibrary.util.bukkit.inventory;
 
+import kr.rvs.mclibrary.util.bukkit.inventory.factory.DefaultInventoryFactory;
+import kr.rvs.mclibrary.util.bukkit.inventory.factory.InventoryFactory;
+import kr.rvs.mclibrary.util.bukkit.inventory.factory.SingleInventoryFactory;
+import kr.rvs.mclibrary.util.bukkit.inventory.handler.EventCancelHandler;
 import kr.rvs.mclibrary.util.general.VarargsParser;
 import org.apache.commons.lang.Validate;
-import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -15,20 +22,31 @@ import java.util.Map;
  */
 public class GUIBuilder {
     private final InventoryType type;
-    private int size = 9;
+    private int size;
     private String title;
+    private InventoryFactory factory;
+
     private final Map<Integer, ItemStack> itemMap = new HashMap<>();
-    private final Map<Integer, GUIListener> listenerMap = new HashMap<>();
+    private final List<GUIHandler> handlers = new ArrayList<>();
 
     public GUIBuilder(InventoryType type) {
         this.type = type;
+        this.size = type.getDefaultSize();
         this.title = type.getDefaultTitle();
+
+        factory(new DefaultInventoryFactory());
     }
 
     public GUIBuilder size(int size) {
         Validate.isTrue(size % 9 == 0,
                 "Inventory size must be a multiple of 9");
         this.size = size;
+        return this;
+    }
+
+    public GUIBuilder line(int line) {
+        Validate.isTrue(line <= 5);
+        this.size = line * 9;
         return this;
     }
 
@@ -50,7 +68,7 @@ public class GUIBuilder {
     }
 
     public GUIBuilder item(Object... args) {
-        Class[] types = new Class[]{Integer.class, GUIListener.class};
+        Class[] types = new Class[]{Integer.class, GUIHandler.class};
         VarargsParser parser = new VarargsParser(args, types)
                 .count(2);
         parser.parse(section ->
@@ -59,38 +77,39 @@ public class GUIBuilder {
         return this;
     }
 
-    public GUIBuilder listener(Integer index, GUIListener listener) {
-        listenerMap.put(index, listener);
+    public GUIBuilder handler(GUIHandler... handlers) {
+        this.handlers.addAll(Arrays.asList(handlers));
         return this;
     }
 
-    public GUIBuilder listener(GUIListener listener, Integer... indexes) {
-        for (Integer index : indexes) {
-            listener(index, listener);
-        }
-        return this;
-    }
-
-    public GUIBuilder listener(Object... args) {
-        Class[] types = new Class[]{Integer.class, GUIListener.class};
-        VarargsParser parser = new VarargsParser(args, types)
-                .count(2);
-        parser.parse(section ->
-                listener((Integer) section.get(0), section.get(1)));
-
+    public GUIBuilder factory(InventoryFactory factory) {
+        this.factory = factory;
+        factory.initialize(type, title, size, itemMap);
         return this;
     }
 
     public GUI build() {
-        Inventory inv = type == InventoryType.CHEST ?
-                Bukkit.createInventory(null, size, title) :
-                Bukkit.createInventory(null, type, title);
-        for (int i = 0; i < inv.getSize(); i++) {
-            inv.setItem(i, itemMap.get(i));
-        }
-        GUI ret = new GUI(inv);
-        ret.setListener(listenerMap);
+        GUI ret = new GUI(factory);
+        ret.addHandlers(handlers);
 
         return ret;
+    }
+
+    public static void main(String[] args) {
+        // Example
+        GUI gui = new GUIBuilder(InventoryType.CHEST)
+                .size(54)
+                .title("test")
+                .item(
+                        0, new ItemStack(Material.STONE),
+                        1, new ItemStack(Material.APPLE),
+                        4, new ItemStack(Material.BEDROCK)
+                )
+                .handler(new EventCancelHandler())
+                .factory(new SingleInventoryFactory(new DefaultInventoryFactory()))
+                .build();
+
+        Player player = null;
+        gui.open(player);
     }
 }

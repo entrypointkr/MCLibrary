@@ -1,7 +1,10 @@
-package kr.rvs.mclibrary.util.bukkit.gson;
+package kr.rvs.mclibrary.util.gson;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import kr.rvs.mclibrary.util.bukkit.gson.ItemMetaTypeAdapter;
+import kr.rvs.mclibrary.util.bukkit.gson.ItemStackAdapterFactory;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.lang.reflect.Type;
 
@@ -10,33 +13,27 @@ import java.lang.reflect.Type;
  */
 public class GsonManager {
     private final GsonBuilder builder;
-    private Gson cachedGson = null;
 
     public GsonManager(GsonBuilder builder) {
         this.builder = builder;
     }
 
     public GsonManager() {
-        this(new GsonBuilder().setPrettyPrinting());
+        this(new GsonBuilder().setPrettyPrinting()
+                .registerTypeAdapter(ItemMeta.class, new ItemMetaTypeAdapter())
+                .registerTypeAdapterFactory(new ItemStackAdapterFactory()));
+        // TODO
     }
 
     public Gson getGson() {
-        if (cachedGson == null) {
-            refresh();
-        }
-        return cachedGson;
+        return builder.create();
     }
 
     public void registerTypeAdapter(Type type, Object typeAdapter) {
         builder.registerTypeAdapter(type, typeAdapter);
-        refresh();
     }
 
     public GsonBuilder getBuilder() {
         return builder;
-    }
-
-    public void refresh() {
-        cachedGson = builder.create();
     }
 }

@@ -17,30 +17,47 @@ import java.lang.reflect.Method;
  * Created by Junhyeong Lim on 2017-07-28.
  */
 public class MCUtils {
-    private static String nmsPackageName;
+    private static String packageVersion;
 
-    public static synchronized String getNMSPackage(String name) {
-        if (nmsPackageName == null) {
+    public static String getNMSPackageVersion() {
+        if (packageVersion == null) {
             try {
                 Server server = Bukkit.getServer();
                 Field field = server.getClass().getDeclaredField("console");
                 field.setAccessible(true);
                 Object nmsServer = field.get(server);
                 String packageName = nmsServer.getClass().getName();
-                nmsPackageName = packageName.substring(0,
-                        packageName.lastIndexOf("."));
+                int point = packageName.indexOf(".v") + 1;
+
+                packageVersion = packageName.substring(
+                        point, packageName.indexOf('.', point));
             } catch (NoSuchFieldException | IllegalAccessException e) {
                 Static.log(e);
             }
         }
+        return packageVersion;
+    }
 
-        return nmsPackageName + "." + name;
+    public static String getNMSClassName(String className) {
+        return "net.minecraft.server." + getNMSPackageVersion() + "." + className;
     }
 
     public static Class<?> getNMSClass(String name) {
         try {
-            return Class.forName(getNMSPackage(name));
+            return Class.forName(getNMSClassName(name));
         } catch (Exception e) {
+            throw new IllegalStateException("Can't find a " + name + " class");
+        }
+    }
+
+    public static String getOBCClassName(String className) {
+        return "org.bukkit.craftbukkit." + getNMSPackageVersion() + "." + className;
+    }
+
+    public static Class<?> getOBCClass(String name) {
+        try {
+            return Class.forName(getOBCClassName(name));
+        } catch (Exception ex) {
             throw new IllegalStateException("Can't find a " + name + " class");
         }
     }
@@ -71,5 +88,11 @@ public class MCUtils {
 
     public static String colorize(String message) {
         return ChatColor.translateAlternateColorCodes('&', message);
+    }
+
+    public static void main(String[] args) {
+        String name = "net.minecraft.server.v1_12_R1.DedicatedServer";
+        int point = name.indexOf(".v") + 1;
+        System.out.println(name.substring(point, name.indexOf('.', point)));
     }
 }
