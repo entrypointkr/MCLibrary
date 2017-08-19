@@ -2,9 +2,7 @@ package kr.rvs.mclibrary.util.gson;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import kr.rvs.mclibrary.util.bukkit.gson.ItemMetaTypeAdapter;
 import kr.rvs.mclibrary.util.bukkit.gson.ItemStackAdapterFactory;
-import org.bukkit.inventory.meta.ItemMeta;
 
 import java.lang.reflect.Type;
 
@@ -20,9 +18,7 @@ public class GsonManager {
 
     public GsonManager() {
         this(new GsonBuilder().setPrettyPrinting()
-                .registerTypeAdapter(ItemMeta.class, new ItemMetaTypeAdapter())
                 .registerTypeAdapterFactory(new ItemStackAdapterFactory()));
-        // TODO
     }
 
     public Gson getGson() {
