@@ -3,7 +3,7 @@ package kr.rvs.mclibrary;
 import kr.rvs.mclibrary.util.bukkit.command.CommandManager;
 import kr.rvs.mclibrary.util.bukkit.inventory.GUI;
 import kr.rvs.mclibrary.util.gson.GsonManager;
-import kr.rvs.mclibrary.util.gson.SettingsManager;
+import kr.rvs.mclibrary.util.gson.SettingManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
@@ -12,7 +12,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class MCLibrary extends JavaPlugin {
     private static final CommandManager commandManager = new CommandManager();
     private static final GsonManager gsonManager = new GsonManager();
-    private static final SettingsManager settingsManager = new SettingsManager();
+    private static final SettingManager SETTING_MANAGER = new SettingManager();
     private static MCLibrary plugin;
 
     public MCLibrary() {
@@ -27,8 +27,8 @@ public class MCLibrary extends JavaPlugin {
         return gsonManager;
     }
 
-    public static SettingsManager getSettingsManager() {
-        return settingsManager;
+    public static SettingManager getSettingManager() {
+        return SETTING_MANAGER;
     }
 
     public static MCLibrary getPlugin() {
@@ -42,6 +42,6 @@ public class MCLibrary extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        settingsManager.save();
+        SETTING_MANAGER.save();
     }
 }

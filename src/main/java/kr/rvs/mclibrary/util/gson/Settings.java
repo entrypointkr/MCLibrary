@@ -74,7 +74,7 @@ public abstract class Settings {
     }
 
     public <T extends Settings> T setAutoSave() {
-        MCLibrary.getSettingsManager().add(this);
+        MCLibrary.getSettingManager().add(this);
         return (T) this;
     }
 
