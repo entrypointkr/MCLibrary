@@ -1,10 +1,10 @@
 package kr.rvs.mclibrary.util.general;
 
 import kr.rvs.mclibrary.util.collection.NullableArrayList;
-import org.apache.commons.lang.Validate;
 
 import java.util.ArrayDeque;
 import java.util.Arrays;
+import java.util.Optional;
 import java.util.Queue;
 import java.util.function.Consumer;
 
@@ -13,16 +13,13 @@ import java.util.function.Consumer;
  */
 public class VarargsParser {
     private final Object[] args;
-    private final Class[] types;
     private int count = 2;
 
-    public VarargsParser(Object[] args, Class[] types) {
+    public VarargsParser(Object[] args) {
         this.args = args;
-        this.types = types;
     }
 
     public VarargsParser count(int count) {
-        Validate.isTrue(types.length == count);
         this.count = count;
         return this;
     }
@@ -49,6 +46,10 @@ public class VarargsParser {
         public <T> T get(Integer index) {
             Object value = values.get(index);
             return value != null ? (T) value : null;
+        }
+
+        public <T> Optional<T> getOptional(Integer index) {
+            return Optional.ofNullable(get(index));
         }
     }
 }

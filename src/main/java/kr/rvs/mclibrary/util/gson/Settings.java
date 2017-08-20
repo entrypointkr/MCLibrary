@@ -33,10 +33,11 @@ public abstract class Settings {
                 Gson gson = MCLibrary.getGsonManager().getGson();
                 JsonReader reader = new JsonReader(new BufferedReader(new FileReader(file)));
                 ret = gson.fromJson(reader, aClass);
+                ret.setPath(file);
             } else {
                 file.getParentFile().mkdirs();
             }
-        } catch (Exception ex) {
+        } catch (IOException ex) {
             // Ignore
         }
 
@@ -55,6 +56,10 @@ public abstract class Settings {
 
             return ret;
         });
+    }
+
+    public void setPath(File path) {
+        this.path = path;
     }
 
     public void save(Consumer<Exception> exceptionCallback) {

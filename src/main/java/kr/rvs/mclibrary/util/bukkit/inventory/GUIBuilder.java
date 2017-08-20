@@ -44,7 +44,7 @@ public class GUIBuilder {
         return this;
     }
 
-    public GUIBuilder line(int line) {
+    public GUIBuilder lineSize(int line) {
         Validate.isTrue(line <= 5);
         this.size = line * 9;
         return this;
@@ -67,12 +67,16 @@ public class GUIBuilder {
         return this;
     }
 
+    /**
+     * This method can use two types of multiple args.
+     * For example, item(1, item, 2, item, 10, item)
+     *
+     * @param args (int slot, ItemStack item)...
+     */
     public GUIBuilder item(Object... args) {
-        Class[] types = new Class[]{Integer.class, GUIHandler.class};
-        VarargsParser parser = new VarargsParser(args, types)
-                .count(2);
+        VarargsParser parser = new VarargsParser(args);
         parser.parse(section ->
-                item((Integer) section.get(0), section.get(1)));
+                item(section.<Integer>get(0), section.get(1)));
 
         return this;
     }

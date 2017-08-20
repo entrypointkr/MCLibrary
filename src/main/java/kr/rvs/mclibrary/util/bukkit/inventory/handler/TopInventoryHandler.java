@@ -1,15 +1,16 @@
 package kr.rvs.mclibrary.util.bukkit.inventory.handler;
 
 import kr.rvs.mclibrary.util.bukkit.inventory.GUIHandler;
+import kr.rvs.mclibrary.util.bukkit.inventory.InventoryUtils;
 import org.bukkit.event.inventory.InventoryClickEvent;
 
 /**
  * Created by Junhyeong Lim on 2017-08-18.
  */
-public abstract class TopInventoryHandler extends GUIHandler {
+public abstract class TopInventoryHandler implements GUIHandler {
     @Override
     public void onClick(InventoryClickEvent e) {
-        if (correctSlot(e) < e.getInventory().getSize()) {
+        if (InventoryUtils.movedSlot(e) < e.getInventory().getSize()) {
             receive(e);
         }
     }

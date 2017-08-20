@@ -42,8 +42,8 @@ public class ItemBuilder {
         return this;
     }
 
-    public ItemBuilder data(short data) {
-        this.data = data;
+    public ItemBuilder data(int data) {
+        this.data = (short) data;
         return this;
     }
 
