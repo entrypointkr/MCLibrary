@@ -12,7 +12,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class MCLibrary extends JavaPlugin {
     private static final CommandManager commandManager = new CommandManager();
     private static final GsonManager gsonManager = new GsonManager();
-    private static final SettingManager SETTING_MANAGER = new SettingManager();
+    private static final SettingManager settingManager = new SettingManager();
     private static MCLibrary plugin;
 
     public MCLibrary() {
@@ -28,7 +28,7 @@ public class MCLibrary extends JavaPlugin {
     }
 
     public static SettingManager getSettingManager() {
-        return SETTING_MANAGER;
+        return settingManager;
     }
 
     public static MCLibrary getPlugin() {
@@ -42,6 +42,6 @@ public class MCLibrary extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        SETTING_MANAGER.save();
+        settingManager.save();
     }
 }
