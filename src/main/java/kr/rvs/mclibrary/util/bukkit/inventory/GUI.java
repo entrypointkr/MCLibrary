@@ -13,6 +13,7 @@ import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
+import org.bukkit.event.inventory.InventoryEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
@@ -20,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 /**
  * Created by Junhyeong Lim on 2017-08-17.
@@ -64,8 +66,19 @@ public class GUI {
         guiMap.put(human, this);
     }
 
-    public void notify(InventoryClickEvent e) {
-        handlers.forEach(listener -> listener.onClick(e));
+    public void notify(InventoryEvent e) {
+        Consumer<GUIHandler> consumer;
+        if (e instanceof InventoryClickEvent) {
+            consumer = handler -> handler.onClick((InventoryClickEvent) e);
+        } else if (e instanceof InventoryCloseEvent) {
+            consumer = handler -> handler.onClose((InventoryCloseEvent) e);
+        } else if (e instanceof InventoryDragEvent) {
+            consumer = handler -> handler.onDrag((InventoryDragEvent) e);
+        } else {
+            consumer = handler -> handler.onUnknown(e);
+        }
+
+        handlers.forEach(consumer);
     }
 
     static class InternalListener implements Listener {
@@ -91,14 +104,16 @@ public class GUI {
         @EventHandler
         public void onDrag(InventoryDragEvent e) {
             getOptional(e.getWhoClicked()).ifPresent(gui -> {
-                System.out.println(e);
+                gui.notify(e);
             });
         }
 
         @EventHandler
         public void onClose(InventoryCloseEvent e) {
-            if (guiMap.containsKey(e.getPlayer()))
+            getOptional(e.getPlayer()).ifPresent(gui -> {
+                gui.notify(e);
                 guiMap.remove(e.getPlayer());
+            });
         }
     }
 }
