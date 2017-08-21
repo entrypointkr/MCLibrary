@@ -60,16 +60,12 @@ public class GUI {
     }
 
     public void open(HumanEntity human) {
-        human.openInventory(createInventory());
+        human.openInventory(factory.create());
         guiMap.put(human, this);
     }
 
     public void notify(InventoryClickEvent e) {
         handlers.forEach(listener -> listener.onClick(e));
-    }
-
-    private Inventory createInventory() {
-        return factory.create();
     }
 
     static class InternalListener implements Listener {

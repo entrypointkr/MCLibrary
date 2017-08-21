@@ -45,7 +45,7 @@ public class GUIBuilder {
     }
 
     public GUIBuilder lineSize(int line) {
-        Validate.isTrue(line <= 5);
+        Validate.isTrue(line <= 6);
         this.size = line * 9;
         return this;
     }
@@ -88,11 +88,11 @@ public class GUIBuilder {
 
     public GUIBuilder factory(InventoryFactory factory) {
         this.factory = factory;
-        factory.initialize(type, title, size, itemMap);
         return this;
     }
 
     public GUI build() {
+        factory.initialize(type, title, size, itemMap);
         GUI ret = new GUI(factory);
         ret.addHandlers(handlers);
 

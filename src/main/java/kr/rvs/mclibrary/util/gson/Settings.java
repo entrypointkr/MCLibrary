@@ -1,17 +1,9 @@
 package kr.rvs.mclibrary.util.gson;
 
-import com.google.gson.Gson;
-import com.google.gson.stream.JsonReader;
 import kr.rvs.mclibrary.MCLibrary;
 import kr.rvs.mclibrary.util.Static;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.Writer;
 import java.lang.reflect.Constructor;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -27,21 +19,11 @@ public abstract class Settings {
     }
 
     public static <T extends Settings> T load(File file, Class<T> aClass, Supplier<T> def) {
-        T ret = null;
-        try {
-            if (file.isFile()) {
-                Gson gson = MCLibrary.getGsonManager().getGson();
-                JsonReader reader = new JsonReader(new BufferedReader(new FileReader(file)));
-                ret = gson.fromJson(reader, aClass);
-                ret.setPath(file);
-            } else {
-                file.getParentFile().mkdirs();
-            }
-        } catch (IOException ex) {
-            // Ignore
-        }
+        T ret = GsonUtils.read(file, aClass, def);
+        if (ret != null)
+            ret.setPath(file);
 
-        return ret != null ? ret : def.get();
+        return ret;
     }
 
     public static <T extends Settings> T load(File file, Class<T> aClass) {
@@ -63,21 +45,14 @@ public abstract class Settings {
     }
 
     public void save(Consumer<Exception> exceptionCallback) {
-        try {
-            try (Writer writer = new BufferedWriter(new FileWriter(path))) {
-                Gson gson = MCLibrary.getGsonManager().getGson();
-                gson.toJson(this, writer);
-            }
-        } catch (IOException e) {
-            if (exceptionCallback != null)
-                exceptionCallback.accept(e);
-        }
+        GsonUtils.write(path, this, exceptionCallback);
     }
 
     public void save() {
         save(Exception::printStackTrace);
     }
 
+    @SuppressWarnings("unchecked")
     public <T extends Settings> T setAutoSave() {
         MCLibrary.getSettingManager().add(this);
         return (T) this;
