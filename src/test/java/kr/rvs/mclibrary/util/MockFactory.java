@@ -2,6 +2,7 @@ package kr.rvs.mclibrary.util;
 
 import kr.rvs.mclibrary.mock.MockItemFactory;
 import kr.rvs.mclibrary.mock.MockItemMeta;
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
@@ -27,15 +28,16 @@ public class MockFactory extends Mockito {
         return server;
     }
 
-    public static CommandSender createCommandSender() {
+    public static CommandSender createCommandSender() { // TODO
         CommandSender sender = mock(
                 CommandSender.class,
                 withSettings().extraInterfaces(Player.class)
         );
         doAnswer(invocation -> {
-            System.out.println(ChatColor.stripColor(invocation.getArguments()[0].toString()));
+            String fixed = StringUtils.join((String[]) invocation.getArguments()[0], '\n');
+            System.out.println(ChatColor.stripColor(fixed));
             return null;
-        }).when(sender).sendMessage(anyString());
+        }).when(sender).sendMessage((String[]) any());
         return sender;
     }
 

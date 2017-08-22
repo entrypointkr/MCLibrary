@@ -55,8 +55,7 @@ public class CommandTest extends Assert {
     @Test
     public void commandHelp() {
         // Help message
-        commandMap.dispatch(mockSender, "test a b c a");
-        commandMap.dispatch(mockSender, "test help 1");
+        commandMap.dispatch(mockSender, "test awe faw");
         commandMap.dispatch(mockSender, "test help 2");
     }
 
@@ -75,5 +74,40 @@ public class CommandTest extends Assert {
             System.out.println("Test success");
             latch.countDown();
         }
+
+        @CommandArgs(
+                args = "a"
+        )
+        public void helpTest(CommandSender sender, VolatileArrayList args){ }
+
+        @CommandArgs(
+                args = "b"
+        )
+        public void helpTestB(CommandSender sender, VolatileArrayList args){ };
+
+        @CommandArgs(
+                args = "c"
+        )
+        public void helpTestC(CommandSender sender, VolatileArrayList args){ };
+
+        @CommandArgs(
+                args = "d"
+        )
+        public void helpTestD(CommandSender sender, VolatileArrayList args){ };
+
+        @CommandArgs(
+                args = "e"
+        )
+        public void helpTestE(CommandSender sender, VolatileArrayList args){ };
+
+        @CommandArgs(
+                args = "f"
+        )
+        public void helpTestF(CommandSender sender, VolatileArrayList args){ };
+
+        @CommandArgs(
+                args = "g"
+        )
+        public void helpTestG(CommandSender sender, VolatileArrayList args){ };
     }
 }
