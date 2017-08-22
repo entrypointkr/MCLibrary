@@ -83,31 +83,31 @@ public class CommandTest extends Assert {
         @CommandArgs(
                 args = "b"
         )
-        public void helpTestB(CommandSender sender, VolatileArrayList args){ };
+        public void helpTestB(CommandSender sender, VolatileArrayList args){ }
 
         @CommandArgs(
                 args = "c"
         )
-        public void helpTestC(CommandSender sender, VolatileArrayList args){ };
+        public void helpTestC(CommandSender sender, VolatileArrayList args){ }
 
         @CommandArgs(
                 args = "d"
         )
-        public void helpTestD(CommandSender sender, VolatileArrayList args){ };
+        public void helpTestD(CommandSender sender, VolatileArrayList args){ }
 
         @CommandArgs(
                 args = "e"
         )
-        public void helpTestE(CommandSender sender, VolatileArrayList args){ };
+        public void helpTestE(CommandSender sender, VolatileArrayList args){ }
 
         @CommandArgs(
                 args = "f"
         )
-        public void helpTestF(CommandSender sender, VolatileArrayList args){ };
+        public void helpTestF(CommandSender sender, VolatileArrayList args){ }
 
         @CommandArgs(
                 args = "g"
         )
-        public void helpTestG(CommandSender sender, VolatileArrayList args){ };
+        public void helpTestG(CommandSender sender, VolatileArrayList args){ }
     }
 }
