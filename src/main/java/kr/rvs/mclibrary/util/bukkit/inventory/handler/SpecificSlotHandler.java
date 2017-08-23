@@ -30,15 +30,5 @@ public abstract class SpecificSlotHandler implements GUIHandler {
         }
     }
 
-    @Override
-    public void onDrag(InventoryDragEvent e) {
-        for (int slot : e.getRawSlots()) {
-            if (this.slots.contains(slot)) {
-                this.receive(e);
-                break;
-            }
-        }
-    }
-
-    public abstract void receive(InventoryInteractEvent e);
+    public abstract void receive(InventoryClickEvent e);
 }

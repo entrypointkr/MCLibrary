@@ -76,7 +76,7 @@ public class CommandTest extends Assert {
         }
 
         @CommandArgs(
-                args = "a"
+                args = "aa"
         )
         public void helpTest(CommandSender sender, VolatileArrayList args){ }
 
