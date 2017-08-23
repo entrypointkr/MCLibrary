@@ -11,11 +11,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+
+import static kr.rvs.mclibrary.util.bukkit.MCUtils.colorize;
 
 /**
  * Created by Junhyeong Lim on 2017-08-17.
@@ -92,7 +90,7 @@ public class GUIBuilder {
     }
 
     public GUI build() {
-        factory.initialize(type, title, size, itemMap);
+        factory.initialize(type, colorize(title), size, itemMap);
         GUI ret = new GUI(factory);
         ret.addHandlers(handlers);
 

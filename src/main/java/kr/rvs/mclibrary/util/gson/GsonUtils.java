@@ -3,14 +3,9 @@ package kr.rvs.mclibrary.util.gson;
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 import kr.rvs.mclibrary.MCLibrary;
+import kr.rvs.mclibrary.util.general.FileUtils;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.Writer;
+import java.io.*;
 import java.lang.reflect.Type;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -36,9 +31,12 @@ public class GsonUtils {
     }
 
     public static void write(File file, Object obj, Consumer<Exception> callback) {
-        try (Writer writer = new BufferedWriter(new FileWriter(file))) {
+        try {
+            FileUtils.ensure(file);
+            Writer writer = new BufferedWriter(new FileWriter(file));
             Gson gson = MCLibrary.getGsonManager().getGson();
             gson.toJson(obj, writer);
+            writer.close();
         } catch (IOException e) {
             if (callback != null)
                 callback.accept(e);
