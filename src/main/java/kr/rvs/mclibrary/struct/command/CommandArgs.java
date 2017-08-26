@@ -19,6 +19,8 @@ public @interface CommandArgs {
 
     String args() default "";
 
+    String perm() default "";
+
     int min() default -1;
 
     int max() default -1;

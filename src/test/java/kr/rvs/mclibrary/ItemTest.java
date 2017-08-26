@@ -22,7 +22,7 @@ public class ItemTest extends Assert {
     @Test
     public void itemTest() {
         ItemBuilder builder = new ItemBuilder(Material.DIAMOND)
-                .name("Test diamond")
+                .display("Test diamond")
                 .lore(
                         "Test",
                         "Lore"

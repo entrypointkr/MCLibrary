@@ -12,6 +12,9 @@ import org.bukkit.entity.Player;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by Junhyeong Lim on 2017-07-28.
@@ -73,7 +76,7 @@ public class MCUtils {
     }
 
     public static ProtocolManager getProtocolManager() {
-        MCValidate.isProtocolLibEnabled();
+        MCValidate.protocolLibEnabled();
 
         return ProtocolLibrary.getProtocolManager();
     }
@@ -90,9 +93,23 @@ public class MCUtils {
         return ChatColor.translateAlternateColorCodes('&', message);
     }
 
-    public static void main(String[] args) {
-        String name = "net.minecraft.server.v1_12_R1.DedicatedServer";
-        int point = name.indexOf(".v") + 1;
-        System.out.println(name.substring(point, name.indexOf('.', point)));
+    public static List<String> colorize(List<String> list) {
+        List<String> newList = new ArrayList<>();
+        for (String element : list) {
+            newList.add(colorize(element));
+        }
+
+        return newList;
+    }
+
+    public static List<String> asColorizeList(String... args) {
+        for (int i = 0; i < args.length; i++) {
+            args[i] = colorize(args[i]);
+        }
+        return Arrays.asList(args);
+    }
+
+    public static boolean isEnabled(String name) {
+        return Bukkit.getPluginManager().isPluginEnabled(name);
     }
 }

@@ -27,6 +27,8 @@ public class CommandStorage {
     }
 
     public Method getMethod() {
+        if (!method.isAccessible())
+            method.setAccessible(true);
         return method;
     }
 
@@ -44,6 +46,10 @@ public class CommandStorage {
 
     public String getArgs() {
         return info.getArgs();
+    }
+
+    public String getPermission() {
+        return info.getPerm();
     }
 
     public int getMin() {
@@ -64,5 +70,9 @@ public class CommandStorage {
 
     public boolean hasDescription() {
         return isNotEmpty(getDescription());
+    }
+
+    public boolean hasPermission() {
+        return isNotEmpty(getPermission());
     }
 }

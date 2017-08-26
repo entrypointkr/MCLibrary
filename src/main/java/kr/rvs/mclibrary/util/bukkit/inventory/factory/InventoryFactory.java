@@ -1,6 +1,8 @@
 package kr.rvs.mclibrary.util.bukkit.inventory.factory;
 
+import kr.rvs.mclibrary.util.bukkit.inventory.GUI;
 import org.apache.commons.lang.Validate;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -47,5 +49,5 @@ public abstract class InventoryFactory {
         Validate.notNull(obj, "Not initialized yet.");
     }
 
-    public abstract Inventory create();
+    public abstract Inventory create(GUI gui, HumanEntity viewer);
 }

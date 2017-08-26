@@ -2,7 +2,7 @@ package kr.rvs.mclibrary.util.bukkit.inventory.handler;
 
 import kr.rvs.mclibrary.util.bukkit.inventory.GUIHandler;
 import kr.rvs.mclibrary.util.bukkit.inventory.InventoryUtils;
-import org.bukkit.event.inventory.InventoryClickEvent;
+import kr.rvs.mclibrary.util.bukkit.inventory.event.GUIClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryInteractEvent;
 
@@ -11,7 +11,7 @@ import org.bukkit.event.inventory.InventoryInteractEvent;
  */
 public abstract class TopInventoryHandler implements GUIHandler {
     @Override
-    public void onClick(InventoryClickEvent e) {
+    public void onClick(GUIClickEvent e) {
         if (InventoryUtils.movedSlot(e) < e.getInventory().getSize()) {
             receive(e);
         }

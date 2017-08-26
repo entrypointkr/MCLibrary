@@ -2,6 +2,7 @@ package kr.rvs.mclibrary.util.bukkit.inventory;
 
 import kr.rvs.mclibrary.MCLibrary;
 import kr.rvs.mclibrary.util.bukkit.collection.EntityHashMap;
+import kr.rvs.mclibrary.util.bukkit.inventory.event.GUIClickEvent;
 import kr.rvs.mclibrary.util.bukkit.inventory.factory.InventoryFactory;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
@@ -37,10 +38,6 @@ public class GUI {
         return guiMap.getOptional(entity);
     }
 
-    public static GUI get(Entity entity) {
-        return guiMap.get(entity);
-    }
-
     public GUI(InventoryFactory factory) {
         this.factory = factory;
     }
@@ -63,9 +60,9 @@ public class GUI {
                 topInv.getSize() == factory.getSize() &&
                 topInv.getType() == factory.getType() &&
                 topInv.getTitle().equals(factory.getTitle())) {
-            topInv.setContents(factory.create().getContents());
+            topInv.setContents(factory.create(this, human).getContents());
         } else {
-            human.openInventory(factory.create());
+            human.openInventory(factory.create(this, human));
         }
         guiMap.put(human, this);
     }
@@ -73,7 +70,7 @@ public class GUI {
     public void notify(InventoryEvent e) {
         Consumer<GUIHandler> consumer;
         if (e instanceof InventoryClickEvent) {
-            consumer = handler -> handler.onClick((InventoryClickEvent) e);
+            consumer = handler -> handler.onClick(new GUIClickEvent((InventoryClickEvent) e));
         } else if (e instanceof InventoryCloseEvent) {
             consumer = handler -> handler.onClose((InventoryCloseEvent) e);
         } else if (e instanceof InventoryDragEvent) {

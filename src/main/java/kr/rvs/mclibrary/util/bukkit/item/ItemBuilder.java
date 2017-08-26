@@ -1,10 +1,12 @@
 package kr.rvs.mclibrary.util.bukkit.item;
 
+import kr.rvs.mclibrary.util.bukkit.MCUtils;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by Junhyeong Lim on 2017-07-27.
@@ -15,7 +17,7 @@ public class ItemBuilder {
     private short data = 0;
 
     private String displayName = null;
-    private String[] lores = null;
+    private List<String> lore = null;
 
     public ItemBuilder(Material material) {
         this.material = material;
@@ -37,6 +39,16 @@ public class ItemBuilder {
         this.data = data;
     }
 
+    public ItemBuilder(ItemStack item) {
+        this.material = item.getType();
+        this.amount = item.getAmount();
+        this.data = item.getDurability();
+
+        ItemWrapper wrapped = new ItemWrapper(item);
+        this.displayName = wrapped.getDisplayName(null);
+        this.lore = wrapped.getLore();
+    }
+
     public ItemBuilder amount(int amount) {
         this.amount = amount;
         return this;
@@ -47,13 +59,13 @@ public class ItemBuilder {
         return this;
     }
 
-    public ItemBuilder name(String displayName) {
+    public ItemBuilder display(String displayName) {
         this.displayName = displayName;
         return this;
     }
 
     public ItemBuilder lore(String... lores) {
-        this.lores = lores;
+        this.lore = Arrays.asList(lores);
         return this;
     }
 
@@ -62,9 +74,9 @@ public class ItemBuilder {
         ItemMeta meta = itemStack.getItemMeta();
 
         if (displayName != null)
-            meta.setDisplayName(displayName);
-        if (lores != null)
-            meta.setLore(Arrays.asList(lores));
+            meta.setDisplayName(MCUtils.colorize(displayName));
+        if (lore != null)
+            meta.setLore(MCUtils.colorize(lore));
 
         itemStack.setItemMeta(meta);
 

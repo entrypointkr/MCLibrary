@@ -65,6 +65,13 @@ public class GUIBuilder {
         return this;
     }
 
+    public GUIBuilder item(ItemStack... items) {
+        for (int i = 0; i < items.length; i++) {
+            item(i, items[i]);
+        }
+        return this;
+    }
+
     /**
      * This method can use two types of multiple args.
      * For example, item(1, item, 2, item, 10, item)

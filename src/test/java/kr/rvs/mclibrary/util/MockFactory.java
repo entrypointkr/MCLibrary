@@ -9,6 +9,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFactory;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.SimplePluginManager;
 import org.mockito.Mockito;
 
@@ -28,7 +29,7 @@ public class MockFactory extends Mockito {
         return server;
     }
 
-    public static CommandSender createCommandSender() { // TODO
+    public static CommandSender createCommandSender() {
         CommandSender sender = mock(
                 CommandSender.class,
                 withSettings().extraInterfaces(Player.class)
@@ -38,6 +39,10 @@ public class MockFactory extends Mockito {
             System.out.println(ChatColor.stripColor(fixed));
             return null;
         }).when(sender).sendMessage((String[]) any());
+        doAnswer(invocation -> {
+            sender.sendMessage(new String[] {(String) invocation.getArguments()[0]});
+            return null;
+        }).when(sender).sendMessage(anyString());
         return sender;
     }
 
@@ -46,5 +51,12 @@ public class MockFactory extends Mockito {
         when(factory.getItemMeta(any())).thenReturn(new MockItemMeta());
 
         return factory;
+    }
+
+    public static Plugin createPlugin() {
+        Plugin plugin = mock(Plugin.class);
+        when(plugin.getName()).thenReturn("MCLibrary");
+
+        return plugin;
     }
 }

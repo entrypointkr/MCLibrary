@@ -14,6 +14,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
@@ -36,7 +37,7 @@ public class CommandTest extends Assert {
                 command.description(),
                 command.usage(),
                 Arrays.asList(command.aliases()),
-                null,
+                MockFactory.createPlugin(),
                 command
         );
 
@@ -45,7 +46,7 @@ public class CommandTest extends Assert {
 
     @Test
     public void commandTest() throws InterruptedException {
-        commandMap.dispatch(mockSender, "test a b c dfawef awef");
+        commandMap.dispatch(mockSender, "test a b cef dfawef awef");
 
         if (!latch.await(10, TimeUnit.SECONDS)) {
             throw new Error("Command testing fail");
@@ -59,6 +60,13 @@ public class CommandTest extends Assert {
         commandMap.dispatch(mockSender, "test help 2");
     }
 
+    @Test
+    public void tabComplete() {
+        List<String> matches = commandMap.tabComplete(mockSender, "test a b ce");
+        System.out.println(matches.toString());
+        assertTrue(matches.size() == 2);
+    }
+
     public class TestCommand implements MCCommand {
         @Override
         public String label() {
@@ -67,7 +75,7 @@ public class CommandTest extends Assert {
 
         @CommandArgs(
                 type = CommandType.PLAYER_ONLY,
-                args = "a b c",
+                args = "a b cef",
                 min = 2
         )
         public void testCommand(CommandSender sender, VolatileArrayList list) {
@@ -76,38 +84,52 @@ public class CommandTest extends Assert {
         }
 
         @CommandArgs(
+                type = CommandType.PLAYER_ONLY,
+                args = "a b cea"
+        )
+        public void testCommandB(CommandSender sender, VolatileArrayList args) {
+        }
+
+        @CommandArgs(
                 args = "aa"
         )
-        public void helpTest(CommandSender sender, VolatileArrayList args){ }
+        public void helpTest(CommandSender sender, VolatileArrayList args) {
+        }
 
         @CommandArgs(
                 args = "b"
         )
-        public void helpTestB(CommandSender sender, VolatileArrayList args){ }
+        public void helpTestB(CommandSender sender, VolatileArrayList args) {
+        }
 
         @CommandArgs(
                 args = "c"
         )
-        public void helpTestC(CommandSender sender, VolatileArrayList args){ }
+        public void helpTestC(CommandSender sender, VolatileArrayList args) {
+        }
 
         @CommandArgs(
                 args = "d"
         )
-        public void helpTestD(CommandSender sender, VolatileArrayList args){ }
+        public void helpTestD(CommandSender sender, VolatileArrayList args) {
+        }
 
         @CommandArgs(
                 args = "e"
         )
-        public void helpTestE(CommandSender sender, VolatileArrayList args){ }
+        public void helpTestE(CommandSender sender, VolatileArrayList args) {
+        }
 
         @CommandArgs(
                 args = "f"
         )
-        public void helpTestF(CommandSender sender, VolatileArrayList args){ }
+        public void helpTestF(CommandSender sender, VolatileArrayList args) {
+        }
 
         @CommandArgs(
                 args = "g"
         )
-        public void helpTestG(CommandSender sender, VolatileArrayList args){ }
+        public void helpTestG(CommandSender sender, VolatileArrayList args) {
+        }
     }
 }

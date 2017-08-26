@@ -1,5 +1,6 @@
 package kr.rvs.mclibrary.util.bukkit.command;
 
+import kr.rvs.mclibrary.util.bukkit.MCUtils;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
@@ -29,12 +30,14 @@ public class CommandSenderWrapper implements CommandSender {
 
     @Override
     public void sendMessage(String message) {
-        handle.sendMessage(message);
+        handle.sendMessage(MCUtils.colorize(message));
     }
 
     @Override
     public void sendMessage(String[] messages) {
-        handle.sendMessage(messages);
+        for (String message : messages) {
+            sendMessage(message);
+        }
     }
 
     @Override

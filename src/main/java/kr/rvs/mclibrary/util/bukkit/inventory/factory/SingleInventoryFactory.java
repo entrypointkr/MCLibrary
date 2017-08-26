@@ -1,5 +1,7 @@
 package kr.rvs.mclibrary.util.bukkit.inventory.factory;
 
+import kr.rvs.mclibrary.util.bukkit.inventory.GUI;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.inventory.Inventory;
 
 /**
@@ -14,9 +16,9 @@ public class SingleInventoryFactory extends InventoryFactory {
     }
 
     @Override
-    public Inventory create() {
+    public Inventory create(GUI gui, HumanEntity viewer) {
         if (cachedInventory == null) {
-            cachedInventory = factory.create();
+            cachedInventory = factory.create(gui, viewer);
         }
         return cachedInventory;
     }

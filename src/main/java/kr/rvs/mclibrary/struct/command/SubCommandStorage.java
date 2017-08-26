@@ -8,20 +8,22 @@ public class SubCommandStorage {
     private final String usage;
     private final String desc;
     private final String args;
+    private final String perm;
     private final int min;
     private final int max;
 
-    public SubCommandStorage(CommandType type, String usage, String desc, String args, int min, int max) {
+    public SubCommandStorage(CommandType type, String usage, String desc, String args, String perm, int min, int max) {
         this.type = type;
         this.usage = usage;
         this.desc = desc;
         this.args = args;
+        this.perm = perm;
         this.min = min;
         this.max = max;
     }
 
     public SubCommandStorage(CommandArgs annot) {
-        this(annot.type(), annot.usage(), annot.desc(), annot.args(), annot.min(), annot.max());
+        this(annot.type(), annot.usage(), annot.desc(), annot.args(), annot.perm(), annot.min(), annot.max());
     }
 
     public CommandType getType() {
@@ -38,6 +40,10 @@ public class SubCommandStorage {
 
     public String getArgs() {
         return args;
+    }
+
+    public String getPerm() {
+        return perm;
     }
 
     public int getMin() {
