@@ -34,4 +34,36 @@ public class Version {
                 this.maintenance = Integer.parseInt(maintenance);
         }
     }
+
+    public boolean after(Version version) {
+        return major == version.major ? minor == version.minor ?
+                maintenance > version.maintenance : minor > version.minor : major > version.major;
+    }
+
+    public boolean afterEquals(Version version) {
+        return major == version.major ? minor == version.minor ?
+                maintenance >= version.maintenance : minor >= version.minor : major >= version.major;
+    }
+
+    public boolean before(Version version) {
+        return major == version.major ? minor == version.minor ?
+                maintenance < version.maintenance : minor < version.minor : major < version.minor;
+    }
+
+    public boolean beforeEquals(Version version) {
+        return major == version.major ? minor == version.minor ?
+                maintenance <= version.maintenance : minor <= version.minor : major <= version.minor;
+    }
+
+    public int getMajor() {
+        return major;
+    }
+
+    public int getMinor() {
+        return minor;
+    }
+
+    public int getMaintenance() {
+        return maintenance;
+    }
 }

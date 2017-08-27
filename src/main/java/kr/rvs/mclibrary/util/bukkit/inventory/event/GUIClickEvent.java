@@ -1,10 +1,9 @@
 package kr.rvs.mclibrary.util.bukkit.inventory.event;
 
-import com.comphenix.protocol.events.PacketContainer;
 import kr.rvs.mclibrary.MCLibrary;
-import kr.rvs.mclibrary.util.bukkit.MCUtils;
-import kr.rvs.mclibrary.util.bukkit.factory.Platform;
 import kr.rvs.mclibrary.util.bukkit.item.ItemBuilder;
+import kr.rvs.mclibrary.util.bukkit.item.ItemWrapper;
+import kr.rvs.mclibrary.util.collection.OptionalHashMap;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
@@ -18,12 +17,12 @@ import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * Created by Junhyeong Lim on 2017-08-24.
  */
-public class GUIClickEvent extends InventoryClickEvent implements MessageSendable {
+public class GUIClickEvent extends InventoryClickEvent {
+    private static final OptionalHashMap<Integer, ItemStack> messageItemMap = new OptionalHashMap<>();
     private final InventoryClickEvent delegate;
 
     public GUIClickEvent(InventoryClickEvent delegate) {
@@ -31,20 +30,29 @@ public class GUIClickEvent extends InventoryClickEvent implements MessageSendabl
         this.delegate = delegate;
     }
 
-    @Override
-    public void sendMessage(String title, String... messages) {
+    public void sendMessage(int tick, String title, String... messages) {
         if (!(getWhoClicked() instanceof Player))
             return;
 
-        Optional.ofNullable(getInventory().getItem(getRawSlot())).ifPresent(item -> {
-            ItemStack newItem = new ItemBuilder(item)
+        ItemWrapper clickedItem = new ItemWrapper(getInventory().getItem(getSlot()));
+        if (clickedItem.isNotEmpty() && !messageItemMap.containsKey(getSlot())) {
+            messageItemMap.put(getSlot(), clickedItem.getHandle());
+            ItemStack newItem = new ItemBuilder(clickedItem)
                     .display(title)
                     .lore(messages).build();
-            PacketContainer packet = Platform.getPacketFactory().createSetSlot(0, getRawSlot() - getInventory().getSize(), newItem);
-            Bukkit.getScheduler().runTaskLater(MCLibrary.getPlugin(), () ->
-                    MCUtils.sendPacket((Player) getWhoClicked(), packet),
-                    2);
-        });
+            getInventory().setItem(getSlot(), newItem);
+
+            Bukkit.getScheduler().runTaskLater(MCLibrary.getPlugin(), () -> {
+                messageItemMap.getOptional(getSlot()).ifPresent(item -> {
+                    getInventory().setItem(getSlot(), item);
+                    messageItemMap.remove(getSlot());
+                });
+            }, tick);
+        }
+    }
+
+    public void sendMessage(String title, String... messages) {
+        sendMessage(60, title, messages);
     }
 
     @Override

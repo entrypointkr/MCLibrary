@@ -19,8 +19,8 @@ public class ItemWrapper extends Wrapper<ItemStack> {
         super(handle);
 
         // Ensure
-        if (!handle.hasItemMeta()) {
-            handle.setItemMeta(handle.getItemMeta());
+        if (getHandle() != null && !getHandle().hasItemMeta()) {
+            getHandle().setItemMeta(handle.getItemMeta());
         }
     }
 

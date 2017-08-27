@@ -8,8 +8,10 @@ import kr.rvs.mclibrary.util.bukkit.command.CommandManager;
 import kr.rvs.mclibrary.util.bukkit.command.CommandSenderWrapper;
 import kr.rvs.mclibrary.util.bukkit.inventory.GUI;
 import kr.rvs.mclibrary.util.bukkit.protocol.PacketMonitoringListener;
+import kr.rvs.mclibrary.util.general.Version;
 import kr.rvs.mclibrary.util.gson.GsonManager;
 import kr.rvs.mclibrary.util.gson.SettingManager;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
@@ -24,6 +26,7 @@ public class MCLibrary extends JavaPlugin {
     private static final CommandManager commandManager = new CommandManager();
     private static final GsonManager gsonManager = new GsonManager();
     private static final SettingManager settingManager = new SettingManager();
+    private static final Version bukkitVersion = new Version(Bukkit.getBukkitVersion());
     private static MCLibrary plugin;
 
     public MCLibrary() {
@@ -40,6 +43,10 @@ public class MCLibrary extends JavaPlugin {
 
     public static SettingManager getSettingManager() {
         return settingManager;
+    }
+
+    public static Version getBukkitVersion() {
+        return bukkitVersion;
     }
 
     public static MCLibrary getPlugin() {

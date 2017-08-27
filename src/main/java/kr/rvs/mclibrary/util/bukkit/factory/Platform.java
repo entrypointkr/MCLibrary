@@ -1,5 +1,11 @@
 package kr.rvs.mclibrary.util.bukkit.factory;
 
+import kr.rvs.mclibrary.MCLibrary;
+import kr.rvs.mclibrary.util.bukkit.factory.packet.DefaultPacketFactory;
+import kr.rvs.mclibrary.util.bukkit.factory.packet.PacketFactory;
+import kr.rvs.mclibrary.util.bukkit.factory.packet.Upper1_11PacketFactory;
+import kr.rvs.mclibrary.util.general.Version;
+
 /**
  * Created by Junhyeong Lim on 2017-08-26.
  */
@@ -8,8 +14,10 @@ public class Platform {
 
     public static PacketFactory getPacketFactory() {
         if (packetFactory == null) {
-            // TODO: version separate
-            packetFactory = new DefaultPacketFactory();
+            if (MCLibrary.getBukkitVersion().afterEquals(new Version(1, 11, 0)))
+                packetFactory = new Upper1_11PacketFactory();
+            else
+                packetFactory = new DefaultPacketFactory();
         }
 
         return packetFactory;

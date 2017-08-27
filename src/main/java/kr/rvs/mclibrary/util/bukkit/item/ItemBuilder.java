@@ -49,6 +49,10 @@ public class ItemBuilder {
         this.lore = wrapped.getLore();
     }
 
+    public ItemBuilder(ItemWrapper wrapped) {
+        this(wrapped.getHandle());
+    }
+
     public ItemBuilder amount(int amount) {
         this.amount = amount;
         return this;

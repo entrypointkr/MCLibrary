@@ -1,11 +1,9 @@
-package kr.rvs.mclibrary.util.bukkit.factory;
+package kr.rvs.mclibrary.util.bukkit.factory.packet;
 
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.PacketContainer;
 import kr.rvs.mclibrary.util.bukkit.MCUtils;
 import org.bukkit.inventory.ItemStack;
-
-import java.util.List;
 
 /**
  * Created by Junhyeong Lim on 2017-08-26.
@@ -23,10 +21,10 @@ public class DefaultPacketFactory implements PacketFactory {
     }
 
     @Override
-    public PacketContainer createWindowItems(int windowId, List<ItemStack> items) {
+    public PacketContainer createWindowItems(int windowId, ItemStack[] items) {
         PacketContainer packet = MCUtils.getProtocolManager().createPacket(PacketType.Play.Server.WINDOW_ITEMS);
         packet.getIntegers().write(0, windowId);
-        packet.getItemArrayModifier().write(0, (ItemStack[]) items.toArray());
+        packet.getItemArrayModifier().write(0, items);
 
         return packet;
     }

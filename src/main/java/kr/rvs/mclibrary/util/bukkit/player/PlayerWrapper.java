@@ -1,8 +1,12 @@
 package kr.rvs.mclibrary.util.bukkit.player;
 
+import kr.rvs.mclibrary.util.Static;
+import kr.rvs.mclibrary.util.bukkit.MCUtils;
 import kr.rvs.mclibrary.util.general.Wrapper;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+
+import java.lang.reflect.Field;
 
 /**
  * Created by Junhyeong Lim on 2017-07-29.
@@ -22,5 +26,18 @@ public class PlayerWrapper extends Wrapper<Player> {
 
     public boolean takeItem(ItemStack item, int takeAmount) {
         return PlayerUtils.takeItem(getHandle(), item, takeAmount);
+    }
+
+    public ContainerWrapper getContainer() {
+        Object internalPlayer = MCUtils.getHandle(getHandle());
+        ContainerWrapper ret = null;
+        try {
+            Field containerField = internalPlayer.getClass().getField("activeContainer");
+            ret = new ContainerWrapper(containerField.get(internalPlayer));
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            Static.log(e);
+        }
+
+        return ret;
     }
 }

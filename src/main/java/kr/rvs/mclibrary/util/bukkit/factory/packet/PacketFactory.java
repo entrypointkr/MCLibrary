@@ -1,9 +1,7 @@
-package kr.rvs.mclibrary.util.bukkit.factory;
+package kr.rvs.mclibrary.util.bukkit.factory.packet;
 
 import com.comphenix.protocol.events.PacketContainer;
 import org.bukkit.inventory.ItemStack;
-
-import java.util.List;
 
 /**
  * Created by Junhyeong Lim on 2017-08-26.
@@ -11,5 +9,5 @@ import java.util.List;
 public interface PacketFactory {
     PacketContainer createSetSlot(int windowId, int itemSlot, ItemStack item);
 
-    PacketContainer createWindowItems(int windowId, List<ItemStack> items);
+    PacketContainer createWindowItems(int windowId, ItemStack[] items);
 }
