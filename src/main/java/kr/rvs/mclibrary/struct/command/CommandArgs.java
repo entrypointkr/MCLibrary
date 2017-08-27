@@ -13,11 +13,11 @@ import java.lang.annotation.Target;
 public @interface CommandArgs {
     CommandType type() default CommandType.DEFAULT;
 
+    String args() default "";
+
     String usage() default "";
 
     String desc() default "";
-
-    String args() default "";
 
     String perm() default "";
 

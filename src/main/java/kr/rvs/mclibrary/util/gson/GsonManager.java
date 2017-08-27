@@ -3,6 +3,8 @@ package kr.rvs.mclibrary.util.gson;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import kr.rvs.mclibrary.util.bukkit.gson.ItemStackAdapterFactory;
+import kr.rvs.mclibrary.util.bukkit.gson.MaterialAndDataAdapter;
+import kr.rvs.mclibrary.util.bukkit.item.MaterialAndData;
 
 import java.lang.reflect.Type;
 
@@ -18,7 +20,8 @@ public class GsonManager {
 
     public GsonManager() {
         this(new GsonBuilder().setPrettyPrinting()
-                .registerTypeAdapterFactory(new ItemStackAdapterFactory()));
+                .registerTypeAdapterFactory(new ItemStackAdapterFactory())
+                .registerTypeAdapter(MaterialAndData.class, new MaterialAndDataAdapter()));
     }
 
     public Gson getGson() {
