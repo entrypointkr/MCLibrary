@@ -2,7 +2,7 @@ package kr.rvs.mclibrary.util.gson;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import kr.rvs.mclibrary.util.bukkit.gson.ItemStackAdapterFactory;
+import kr.rvs.mclibrary.util.bukkit.gson.BukkitTypeAdapterFactory;
 import kr.rvs.mclibrary.util.bukkit.gson.MaterialAndDataAdapter;
 import kr.rvs.mclibrary.util.bukkit.item.MaterialAndData;
 
@@ -20,7 +20,7 @@ public class GsonManager {
 
     public GsonManager() {
         this(new GsonBuilder().setPrettyPrinting()
-                .registerTypeAdapterFactory(new ItemStackAdapterFactory())
+                .registerTypeAdapterFactory(new BukkitTypeAdapterFactory())
                 .registerTypeAdapter(MaterialAndData.class, new MaterialAndDataAdapter()));
     }
 
