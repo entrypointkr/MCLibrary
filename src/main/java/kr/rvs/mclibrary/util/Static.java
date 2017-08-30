@@ -16,7 +16,7 @@ public class Static {
         if (MCLibrary.getPlugin().getConfig().getBoolean(ConfigKeys.STACKTRACE)) {
             Logger.getGlobal().log(Level.WARNING, "[MCLibrary] 에러가 발생했습니다.", ex);
         } else {
-            log(Level.WARNING, "[MCLibrary] 에러가 발생했습니다. " + ex.toString());
+            log(Level.WARNING, "에러가 발생했습니다. " + ex.toString());
         }
     }
 
