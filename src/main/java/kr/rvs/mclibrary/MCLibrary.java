@@ -60,6 +60,7 @@ public class MCLibrary extends JavaPlugin {
         saveDefaultConfig();
         getCommandManager().registerCommand(new LibraryCommand(), this);
 
+        getConfig().options().copyDefaults(true);
         configInit();
     }
 
@@ -74,6 +75,7 @@ public class MCLibrary extends JavaPlugin {
     @Override
     public void onDisable() {
         settingManager.save();
+        saveConfig();
     }
 
     @CommandIgnore
