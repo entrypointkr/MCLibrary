@@ -68,20 +68,7 @@ public class CommandProcessor extends Command implements PluginIdentifiableComma
 
     @Override
     public List<String> tabComplete(CommandSender sender, String alias, String[] args) throws IllegalArgumentException {
-        List<String> ret = new ArrayList<>();
-        SubCommand subCommand = this.subCommand;
-        for (int i = 0; i < args.length - 1; i++) {
-            if (subCommand == null)
-                break;
-
-            subCommand = subCommand.get(args[i]);
-        }
-
-        if (subCommand != null) {
-            String last = args[args.length - 1];
-            ret.addAll(subCommand.getStartsWithKeys(last));
-        }
-
+        List<String> ret = subCommand.tabComplete(0, args);
         return ret.isEmpty() ? super.tabComplete(sender, alias, args) : ret;
     }
 

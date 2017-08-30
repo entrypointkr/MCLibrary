@@ -11,6 +11,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.*;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
@@ -115,6 +116,11 @@ public class GUI {
                 gui.notify(e);
                 guiMap.remove(e.getPlayer());
             });
+        }
+
+        @EventHandler
+        public void onQuit(PlayerQuitEvent e) {
+            guiMap.remove(e.getPlayer());
         }
     }
 }

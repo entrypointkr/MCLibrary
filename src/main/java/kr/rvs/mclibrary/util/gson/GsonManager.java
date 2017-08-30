@@ -20,6 +20,7 @@ public class GsonManager {
 
     public GsonManager() {
         this(new GsonBuilder().setPrettyPrinting()
+                .disableHtmlEscaping()
                 .registerTypeAdapterFactory(new BukkitTypeAdapterFactory())
                 .registerTypeAdapter(MaterialAndData.class, new MaterialAndDataAdapter()));
     }

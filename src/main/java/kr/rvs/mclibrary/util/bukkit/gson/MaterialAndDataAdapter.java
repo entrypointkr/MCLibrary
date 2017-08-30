@@ -13,11 +13,13 @@ import java.io.IOException;
  */
 public class MaterialAndDataAdapter extends TypeAdapter<MaterialAndData> {
     @Override
+    @SuppressWarnings({"unchecked", "deprecation"})
     public void write(JsonWriter out, MaterialAndData value) throws IOException {
         out.value(value.getMaterial().getId() + ":" + value.getData());
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public MaterialAndData read(JsonReader in) throws IOException {
         if (in.hasNext()) {
             String[] split = in.nextString().split(":", 1);

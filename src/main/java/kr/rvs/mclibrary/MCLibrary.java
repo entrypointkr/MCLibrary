@@ -1,6 +1,7 @@
 package kr.rvs.mclibrary;
 
 import kr.rvs.mclibrary.struct.command.CommandArgs;
+import kr.rvs.mclibrary.struct.command.CommandIgnore;
 import kr.rvs.mclibrary.struct.command.CommandType;
 import kr.rvs.mclibrary.struct.command.MCCommand;
 import kr.rvs.mclibrary.util.bukkit.MCUtils;
@@ -64,7 +65,7 @@ public class MCLibrary extends JavaPlugin {
 
     private void configInit() {
         if (MCUtils.isEnabled("ProtocolLib")
-                && getConfig().getBoolean("packet-debug", false)) {
+                && getConfig().getBoolean(ConfigKeys.PACKET_DEBUG, false)) {
             MCUtils.getProtocolManager().removePacketListeners(this);
             MCUtils.getProtocolManager().addPacketListener(new PacketMonitoringListener());
         }
@@ -75,7 +76,8 @@ public class MCLibrary extends JavaPlugin {
         settingManager.save();
     }
 
-    class LibraryCommand implements MCCommand {
+    @CommandIgnore
+    public class LibraryCommand implements MCCommand {
         @Override
         public String label() {
             return "mclibrary";

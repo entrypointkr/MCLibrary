@@ -36,6 +36,10 @@ public abstract class Settings {
                 Static.log(e);
             }
 
+            if (ret != null) {
+                GsonUtils.write(file, ret, Exception::printStackTrace);
+            }
+
             return ret;
         });
     }

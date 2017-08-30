@@ -6,7 +6,11 @@ import kr.rvs.mclibrary.util.collection.VolatileArrayList;
 import org.bukkit.command.CommandSender;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Created by Junhyeong Lim on 2017-08-26.
@@ -63,7 +67,19 @@ public class SubCommand {
         return new CommandResult(CommandResult.State.HELP, storage);
     }
 
-    public SubCommand put(String cmd, SubCommand command) {
+    List<String> tabComplete(int index, String[] args) {
+        String cmd = args[index];
+        SubCommand sub = get(cmd);
+
+        return sub != null ?
+                sub.tabComplete(++index, args) :
+                subCommandMap.keySet()
+                        .stream()
+                        .filter(key -> key.startsWith(cmd))
+                        .collect(Collectors.toList());
+    }
+
+    SubCommand put(String cmd, SubCommand command) {
         return this.subCommandMap.put(cmd, command);
     }
 
@@ -71,17 +87,8 @@ public class SubCommand {
         return this.subCommandMap.get(cmd);
     }
 
-    public boolean contains(String key) {
+    boolean contains(String key) {
         return this.subCommandMap.containsKey(key);
-    }
-
-    public List<String> getStartsWithKeys(String cmd) {
-        List<String> ret = new ArrayList<>();
-        subCommandMap.keySet().forEach(key -> {
-            if (key.startsWith(cmd))
-                ret.add(key);
-        });
-        return ret;
     }
 
     public SubCommand remove(String cmd) {
@@ -92,7 +99,7 @@ public class SubCommand {
         return storage;
     }
 
-    public void setStorage(CommandStorage storage) {
+    void setStorage(CommandStorage storage) {
         this.storage = storage;
     }
 }

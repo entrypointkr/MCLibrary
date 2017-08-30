@@ -1,5 +1,6 @@
 package kr.rvs.mclibrary.util.bukkit.command;
 
+import kr.rvs.mclibrary.struct.command.CommandIgnore;
 import kr.rvs.mclibrary.struct.command.CommandProcessor;
 import kr.rvs.mclibrary.struct.command.MCCommand;
 import kr.rvs.mclibrary.util.Static;
@@ -8,7 +9,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
-import java.util.List;
+import java.util.logging.Level;
 
 /**
  * Created by Junhyeong Lim on 2017-07-26.
@@ -25,9 +26,10 @@ public class CommandManager {
         );
 
         CommandUtils.registerCommand(plugin.getName(), processor);
+        Static.log(Level.INFO, "Register command \"/" + command.label() + "\" from " + plugin.getName());
     }
 
-    public void registerCommand(String packageName, JavaPlugin plugin) {
+    public void registerCommands(String packageName, JavaPlugin plugin) {
         ClassLoader pluginCL = null;
 
         try {
@@ -38,16 +40,20 @@ public class CommandManager {
             e.printStackTrace();
         }
 
-        ClassProbe probe = new ClassProbe(packageName,
-                Thread.currentThread().getContextClassLoader(), getClass().getClassLoader(), pluginCL);
-        List<Class<? extends MCCommand>> classes = probe.getSubTypesOf(MCCommand.class);
+        new ClassProbe(packageName, Thread.currentThread().getContextClassLoader(), getClass().getClassLoader(), pluginCL).getSubTypesOf(MCCommand.class)
+                .stream()
+                .filter(aClass -> !aClass.isInterface() && !aClass.isAnnotationPresent(CommandIgnore.class))
+                .forEach(aClass -> {
+                    try {
+                        registerCommand(aClass.newInstance(), plugin);
+                    } catch (InstantiationException | IllegalAccessException e) {
+                        Static.log(e);
+                    }
+                });
+    }
 
-        classes.stream().filter(aClass -> !aClass.isInterface()).forEach(aClass -> {
-            try {
-                registerCommand(aClass.newInstance(), plugin);
-            } catch (InstantiationException | IllegalAccessException e) {
-                Static.log(e);
-            }
-        });
+    public void registerCommands(JavaPlugin plugin) {
+        String mainName = plugin.getDescription().getMain();
+        registerCommands(mainName.substring(0, mainName.indexOf('.')), plugin);
     }
 }
