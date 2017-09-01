@@ -1,17 +1,13 @@
 package kr.rvs.mclibrary.util.reflection;
 
+import kr.rvs.mclibrary.util.Static;
+
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -33,7 +29,12 @@ public class ClassProbe {
         this.winPackageName = packageName
                 .replace('.', '\\')
                 .replace(".class", "");
-        init(loaders);
+
+        try {
+            init(loaders);
+        } catch (Exception e) {
+            Static.log(e);
+        }
     }
 
     public ClassProbe(String packageName) {
@@ -47,24 +48,20 @@ public class ClassProbe {
         };
     }
 
-    private void init(ClassLoader... loaders) {
+    private void init(ClassLoader... loaders) throws Exception {
         for (ClassLoader loader : loaders) {
             if (loader == null)
                 continue;
 
-            try {
-                Enumeration<URL> urlEnum = loader.getResources(rscPackageName);
-                while (urlEnum.hasMoreElements()) {
-                    cachedClasses.addAll(
-                            getClassesFromUrl(urlEnum.nextElement()));
-                }
-            } catch (IOException e) {
-                // Ignore
+            Enumeration<URL> urlEnum = loader.getResources(rscPackageName);
+            while (urlEnum.hasMoreElements()) {
+                cachedClasses.addAll(
+                        getClassesFromUrl(urlEnum.nextElement()));
             }
         }
     }
 
-    private Set<Class<?>> getClassesFromUrl(URL url) throws UnsupportedEncodingException {
+    private Set<Class<?>> getClassesFromUrl(URL url) throws Exception {
         Set<Class<?>> ret = new HashSet<>();
 
         if (url.getProtocol().equals("jar")) {
@@ -78,15 +75,9 @@ public class ClassProbe {
                         ret.add(Class.forName(className.substring(0, className.indexOf(".class"))));
                     }
                 }
-            } catch (Exception ex) {
-                // Ignore
             }
         } else {
-            try {
-                ret.addAll(getClassesFromDirectory(new File(url.toURI()).listFiles()));
-            } catch (Exception e) {
-                // Ignore
-            }
+            ret.addAll(getClassesFromDirectory(new File(url.toURI()).listFiles()));
         }
 
         return ret;

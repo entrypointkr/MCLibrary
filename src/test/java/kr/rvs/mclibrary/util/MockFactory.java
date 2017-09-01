@@ -8,6 +8,8 @@ import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemFactory;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.SimplePluginManager;
@@ -25,8 +27,14 @@ public class MockFactory extends Mockito {
         when(server.getPluginManager()).thenReturn(
                 new SimplePluginManager(server, new SimpleCommandMap(server)));
         when(server.getItemFactory()).thenReturn(new MockItemFactory());
+        when(server.createInventory(any(), anyInt(), anyString())).thenReturn(createInventory());
 
         return server;
+    }
+
+    public static Inventory createInventory() {
+        Inventory inv = mock(Inventory.class);
+        return inv;
     }
 
     public static CommandSender createCommandSender() {
@@ -44,6 +52,17 @@ public class MockFactory extends Mockito {
             return null;
         }).when(sender).sendMessage(anyString());
         return sender;
+    }
+
+    public static Player createPlayer() {
+        Player player = mock(Player.class);
+        when(player.getOpenInventory()).thenReturn(createInventoryView());
+        return player;
+    }
+
+    public static InventoryView createInventoryView() {
+        InventoryView view = mock(InventoryView.class);
+        return view;
     }
 
     public static ItemFactory createItemFactory() {

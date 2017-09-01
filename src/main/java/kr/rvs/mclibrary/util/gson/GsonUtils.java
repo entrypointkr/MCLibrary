@@ -26,7 +26,7 @@ public class GsonUtils {
 
         if (file.isFile()) {
             try {
-                JsonReader reader = new JsonReader(new BufferedReader(new FileReader(file)));
+                JsonReader reader = new JsonReader(new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF-8")));
                 ret = gson.fromJson(reader, type);
             } catch (Exception ex) {
                 // Ignore
@@ -39,7 +39,7 @@ public class GsonUtils {
     public static void write(File file, Object obj, Consumer<Exception> callback) {
         try {
             FileUtils.ensure(file);
-            Writer writer = new BufferedWriter(new FileWriter(file));
+            Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), "UTF-8"));
             Gson gson = MCLibrary.getGsonManager().getGson();
             gson.toJson(obj, writer);
             writer.close();

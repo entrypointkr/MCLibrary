@@ -26,7 +26,7 @@ public class CommandManager {
         );
 
         CommandUtils.registerCommand(plugin.getName(), processor);
-        Static.log(Level.INFO, "&eRegister command \"/" + command.label() + "\" from " + plugin.getName());
+        Static.log(Level.INFO, "&eRegistered command \"/" + command.label() + "\" from " + plugin.getName());
     }
 
     public void registerCommands(String packageName, JavaPlugin plugin) {
