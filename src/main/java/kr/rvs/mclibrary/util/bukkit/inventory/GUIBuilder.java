@@ -86,6 +86,14 @@ public class GUIBuilder {
         return this;
     }
 
+    public GUIBuilder item(Collection<ItemStack> items) {
+        int index = 0;
+        for (ItemStack item : items) {
+            item(index++, item);
+        }
+        return this;
+    }
+
     public GUIBuilder handler(GUIHandler... handlers) {
         this.handlers.addAll(Arrays.asList(handlers));
         return this;

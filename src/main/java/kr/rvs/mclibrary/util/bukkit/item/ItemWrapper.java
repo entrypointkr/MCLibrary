@@ -1,5 +1,6 @@
 package kr.rvs.mclibrary.util.bukkit.item;
 
+import kr.rvs.mclibrary.util.bukkit.MCUtils;
 import kr.rvs.mclibrary.util.general.Wrapper;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -7,9 +8,9 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.List;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import static kr.rvs.mclibrary.util.bukkit.MCUtils.asColorizeList;
-import static kr.rvs.mclibrary.util.bukkit.MCUtils.colorize;
 
 /**
  * Created by Junhyeong Lim on 2017-07-27.
@@ -52,10 +53,11 @@ public class ItemWrapper extends Wrapper<ItemStack> {
     public ItemWrapper setLore(Function<String, String> function) {
         ItemMeta meta = getHandle().getItemMeta();
         List<String> lores = meta.getLore();
-        for (int i = 0; i < lores.size(); i++) {
-            lores.set(i, colorize(function.apply(lores.get(i))));
+        if (lores != null) {
+            meta.setLore(lores.parallelStream()
+                    .map(lore -> MCUtils.colorize(function.apply(lore)))
+                    .collect(Collectors.toList()));
         }
-        meta.setLore(lores);
         getHandle().setItemMeta(meta);
 
         return this;

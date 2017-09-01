@@ -20,6 +20,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.List;
 
+// TODO: 서브커맨드 도움말, 직렬화
 /**
  * Created by Junhyeong Lim on 2017-07-26.
  */

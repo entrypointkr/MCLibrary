@@ -6,6 +6,7 @@ import kr.rvs.mclibrary.MCLibrary;
 import kr.rvs.mclibrary.util.general.FileUtils;
 
 import java.io.*;
+import java.lang.reflect.Type;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -14,12 +15,12 @@ import java.util.function.Supplier;
  * Created by Junhyeong Lim on 2017-08-21.
  */
 public class GsonUtils {
-    public static <T> T read(File file, Class<T> type, Supplier<T> def) {
+    public static <T> T read(File file, Type type, Supplier<T> def) {
         Optional<T> ret = read(file, type);
         return ret.orElseGet(def);
     }
 
-    public static <T> Optional<T> read(File file, Class<T> type) {
+    public static <T> Optional<T> read(File file, Type type) {
         Gson gson = MCLibrary.getGsonManager().getGson();
         T ret = null;
 

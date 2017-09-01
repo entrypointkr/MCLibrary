@@ -1,15 +1,21 @@
 package kr.rvs.mclibrary.util.bukkit.item;
 
-import kr.rvs.mclibrary.util.general.Storage;
+import com.google.common.collect.Lists;
+import kr.rvs.mclibrary.util.bukkit.MCUtils;
+import kr.rvs.mclibrary.util.general.VarargsParser;
+import org.apache.commons.lang.Validate;
 import org.bukkit.Material;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.function.UnaryOperator;
+import java.util.function.Consumer;
+import java.util.stream.Collectors;
+
+import static kr.rvs.mclibrary.util.bukkit.MCUtils.colorize;
 
 /**
  * Created by Junhyeong Lim on 2017-07-27.
@@ -19,7 +25,7 @@ public class ItemBuilder {
     private int amount = 1;
     private short data = 0;
 
-    private List<UnaryOperator<ItemMeta>> metaProcessors = new ArrayList<>();
+    private List<Consumer<ItemMeta>> metaProcessors = new ArrayList<>();
 
     public ItemBuilder(Material material) {
         this.material = material;
@@ -46,7 +52,14 @@ public class ItemBuilder {
         this.amount = item.getAmount();
         this.data = item.getDurability();
 
-        metaProcessors.add(meta -> item.getItemMeta());
+        ItemMeta meta = item.getItemMeta();
+        String displayName = meta.getDisplayName();
+        List<String> lore = meta.getLore();
+
+        if (displayName != null)
+            display(displayName);
+        if (lore != null)
+            lore(meta.getLore());
     }
 
     public ItemBuilder(ItemWrapper wrapped) {
@@ -64,22 +77,31 @@ public class ItemBuilder {
     }
 
     public ItemBuilder display(String displayName) {
-        metaProcessors.add((MetaProcessor) meta -> meta.setDisplayName(displayName));
+        Validate.notNull(displayName);
+        metaProcessors.add(meta -> meta.setDisplayName(colorize(displayName)));
         return this;
     }
 
     public ItemBuilder lore(String... lores) {
-        metaProcessors.add((MetaProcessor) meta -> meta.setLore(Arrays.asList(lores)));
+        Validate.notNull(lores);
+        lore(Lists.newArrayList(lores));
         return this;
     }
 
     public ItemBuilder lore(List<String> lores) {
-        metaProcessors.add((MetaProcessor) meta -> meta.setLore(lores));
+        Validate.notNull(lores);
+        metaProcessors.add(meta ->
+                meta.setLore(lores.parallelStream()
+                        .map(MCUtils::colorize)
+                        .collect(Collectors.toList())));
         return this;
     }
 
     public ItemBuilder setSkullOwner(String owner) {
-        metaProcessors.add((MetaProcessor) meta -> {
+        Validate.isTrue(material == Material.SKULL_ITEM);
+
+        data = 3;
+        metaProcessors.add(meta -> {
             if (meta instanceof SkullMeta) {
                 SkullMeta skullMeta = (SkullMeta) meta;
                 skullMeta.setOwner(owner);
@@ -88,29 +110,57 @@ public class ItemBuilder {
         return this;
     }
 
+    public ItemBuilder setSkullOwner(HumanEntity human) {
+        return setSkullOwner(human.getName());
+    }
+
+    public ItemBuilder addReplacements(Object... args) {
+        VarargsParser parser = new VarargsParser(args);
+        List<VarargsParser.Section> sections = new ArrayList<>();
+        parser.parse(sections::add);
+
+        metaProcessors.add(meta -> {
+            String display = meta.getDisplayName();
+            List<String> lores = meta.getLore();
+            boolean hasDisplay = display != null;
+            boolean hasLore = lores != null;
+
+            if (!hasDisplay && !hasLore)
+                return;
+
+            for (VarargsParser.Section section : sections) {
+                String target = section.get(0);
+                String replacement = section.get(1);
+
+                if (hasDisplay)
+                    display = display.replace(target, replacement);
+
+                if (hasLore) {
+                    for (int i = 0; i < lores.size(); i++) {
+                        lores.set(i, lores.get(i).replace(target, replacement));
+                    }
+                }
+            }
+
+            meta.setDisplayName(display);
+            meta.setLore(lores);
+        });
+
+        return this;
+    }
+
     public ItemStack build() {
         ItemStack itemStack = new ItemStack(material, amount, data);
-        Storage<ItemMeta> storage = new Storage<>(itemStack.getItemMeta());
+        ItemMeta meta = itemStack.getItemMeta();
 
-        metaProcessors.forEach(operator ->
-                storage.setValue(operator.apply(storage.getValue())));
+        metaProcessors.forEach(consumer ->
+                consumer.accept(meta));
 
-        itemStack.setItemMeta(storage.getValue());
+        itemStack.setItemMeta(meta);
         return itemStack;
     }
 
     public ItemWrapper buildAndWrapping() {
         return new ItemWrapper(build());
-    }
-
-    @FunctionalInterface
-    interface MetaProcessor extends UnaryOperator<ItemMeta> {
-        void process(ItemMeta meta);
-
-        @Override
-        default ItemMeta apply(ItemMeta itemMeta) {
-            process(itemMeta);
-            return itemMeta;
-        }
     }
 }

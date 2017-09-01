@@ -15,7 +15,7 @@ import static org.apache.commons.lang.StringUtils.isNotEmpty;
  * Created by Junhyeong Lim on 2017-08-10.
  */
 public abstract class PagingCommandLayout implements CommandLayout {
-    private static final int PAGE_LINE = 5;
+    private static final int PAGE_LINE = 8;
 
     @Override
     public void writeHelpMessage(CommandLayoutStorage storage) {
