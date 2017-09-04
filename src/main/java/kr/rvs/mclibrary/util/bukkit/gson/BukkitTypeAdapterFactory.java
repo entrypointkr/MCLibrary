@@ -17,10 +17,7 @@ public class BukkitTypeAdapterFactory implements TypeAdapterFactory {
     public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> type) {
         Class<?> rawType = type.getRawType();
         if (ConfigurationSerializable.class.isAssignableFrom(rawType)) {
-            return (TypeAdapter<T>) new ConfigurationSerializableAdapter(
-                    gson.getAdapter(Map.class),
-                    (Class<? extends ConfigurationSerializable>) rawType
-            );
+            return (TypeAdapter<T>) new ConfigurationSerializableAdapter(gson.getAdapter(Map.class));
         }
         return null;
     }

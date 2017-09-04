@@ -17,13 +17,12 @@ import static org.bukkit.configuration.serialization.ConfigurationSerialization.
 /**
  * Created by Junhyeong Lim on 2017-08-28.
  */
+@SuppressWarnings("unchecked")
 public class ConfigurationSerializableAdapter extends TypeAdapter<ConfigurationSerializable> {
     private final TypeAdapter<Map> mapAdapter;
-    private final Class<? extends ConfigurationSerializable> type;
 
-    public ConfigurationSerializableAdapter(TypeAdapter<Map> mapAdapter, Class<? extends ConfigurationSerializable> type) {
+    public ConfigurationSerializableAdapter(TypeAdapter<Map> mapAdapter) {
         this.mapAdapter = mapAdapter;
-        this.type = type;
     }
 
     @Override
@@ -31,15 +30,13 @@ public class ConfigurationSerializableAdapter extends TypeAdapter<ConfigurationS
         mapAdapter.write(out, serialize(value));
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public ConfigurationSerializable read(JsonReader in) throws IOException {
-        return deserialize(mapAdapter.read(in), type);
+        return deserialize(mapAdapter.read(in));
     }
 
     private Map<String, Object> serialize(ConfigurationSerializable serializable) {
         Map<String, Object> serialized = new HashMap<>();
-        serialized.put(SERIALIZED_TYPE_KEY, ConfigurationSerialization.getAlias(serializable.getClass()));
         serialized.putAll(serializable.serialize());
         for (Map.Entry<String, Object> entry : serialized.entrySet()) {
             String key = entry.getKey();
@@ -49,10 +46,11 @@ public class ConfigurationSerializableAdapter extends TypeAdapter<ConfigurationS
                 serialized.put(key, serialize((ConfigurationSerializable) val));
             }
         }
+        serialized.put(SERIALIZED_TYPE_KEY, ConfigurationSerialization.getAlias(serializable.getClass()));
         return serialized;
     }
 
-    private ConfigurationSerializable deserialize(Map<String, Object> map, Class<? extends ConfigurationSerializable> type) {
+    private ConfigurationSerializable deserialize(Map<String, Object> map) {
         for (Map.Entry<String, Object> entry : map.entrySet()) {
             String key = entry.getKey();
             Object val = entry.getValue();
@@ -61,13 +59,11 @@ public class ConfigurationSerializableAdapter extends TypeAdapter<ConfigurationS
                 continue;
 
             Map<String, Object> subMap = (Map<String, Object>) val;
-            Object subKey = subMap.remove(SERIALIZED_TYPE_KEY);
-            if (subKey instanceof String) {
-                map.put(key, deserialize(subMap,
-                        ConfigurationSerialization.getClassByAlias((String) subKey)));
+            if (subMap.containsKey(SERIALIZED_TYPE_KEY)) {
+                map.put(key, deserialize(subMap));
             }
         }
-        return ConfigurationSerialization.deserializeObject(map, type);
+        return ConfigurationSerialization.deserializeObject(map);
     }
 
     private Class<? extends ConfigurationSerializable> getType(Class<? extends ConfigurationSerializable> type, String name) {
