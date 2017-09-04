@@ -1,5 +1,9 @@
 package kr.rvs.mclibrary.util.reflection;
 
+import org.apache.commons.lang.ArrayUtils;
+
+import java.lang.reflect.Field;
+
 /**
  * Created by Junhyeong Lim on 2017-07-31.
  */
@@ -22,5 +26,9 @@ public class ReflectionUtils {
 
     public static Class<?> getSuperClass(Class<?> aClass, String superClassName) {
         return getSuperClass(aClass, superClassName, false);
+    }
+
+    public static Field[] getFields(Class<?> aClass) {
+        return (Field[]) ArrayUtils.addAll(aClass.getDeclaredFields(), aClass.getFields());
     }
 }

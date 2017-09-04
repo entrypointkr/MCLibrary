@@ -23,13 +23,14 @@ public class ItemTest extends Assert {
     public void itemTest() {
         ItemBuilder builder = new ItemBuilder(Material.DIAMOND)
                 .display("Test diamond")
-                .lore(
-                        "Test",
-                        "Lore"
+                .loreWithLineBreak(
+                        "Pneumonoultramicroscopic",
+                        "Silicovolcanoconiosis"
                 );
 
         ItemStack item = builder.build();
         assertEquals(item.getItemMeta().getDisplayName(), "Test diamond");
+        System.out.println(item.getItemMeta().getLore().toString());
 
         ItemWrapper wrapper = builder.buildAndWrapping();
         wrapper.setName("Test diamond B");

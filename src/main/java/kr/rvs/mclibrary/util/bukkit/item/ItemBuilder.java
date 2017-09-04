@@ -1,7 +1,7 @@
 package kr.rvs.mclibrary.util.bukkit.item;
 
-import com.google.common.collect.Lists;
 import kr.rvs.mclibrary.util.bukkit.MCUtils;
+import kr.rvs.mclibrary.util.general.StringUtil;
 import kr.rvs.mclibrary.util.general.VarargsParser;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Material;
@@ -11,6 +11,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -82,12 +84,6 @@ public class ItemBuilder {
         return this;
     }
 
-    public ItemBuilder lore(String... lores) {
-        Validate.notNull(lores);
-        lore(Lists.newArrayList(lores));
-        return this;
-    }
-
     public ItemBuilder lore(List<String> lores) {
         Validate.notNull(lores);
         metaProcessors.add(meta ->
@@ -95,6 +91,34 @@ public class ItemBuilder {
                         .map(MCUtils::colorize)
                         .collect(Collectors.toList())));
         return this;
+    }
+
+    public ItemBuilder lore(String... lores) {
+        Validate.notNull(lores);
+        lore(Arrays.asList(lores));
+        return this;
+    }
+
+    public ItemBuilder loreWithLineBreak(int count, Collection<String> lores) {
+        metaProcessors.add(meta -> {
+            List<String> loreList = new ArrayList<>();
+            StringBuilder serialized = new StringBuilder(lores.size());
+            lores.forEach(serialized::append);
+            meta.setLore(StringUtil.lineBreak(serialized, count));
+        });
+        return this;
+    }
+
+    public ItemBuilder loreWithLineBreak(int count, String... lores) {
+        return loreWithLineBreak(count, Arrays.asList(lores));
+    }
+
+    public ItemBuilder loreWithLineBreak(Collection<String> lores) {
+        return loreWithLineBreak(15, lores);
+    }
+
+    public ItemBuilder loreWithLineBreak(String... lores) {
+        return loreWithLineBreak(Arrays.asList(lores));
     }
 
     public ItemBuilder setSkullOwner(String owner) {
@@ -129,8 +153,8 @@ public class ItemBuilder {
                 return;
 
             for (VarargsParser.Section section : sections) {
-                String target = section.get(0);
-                String replacement = section.get(1);
+                String target = String.valueOf(section.<Object>get(0));
+                String replacement = String.valueOf(section.<Object>get(1));
 
                 if (hasDisplay)
                     display = display.replace(target, replacement);

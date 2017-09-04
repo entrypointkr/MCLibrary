@@ -2,6 +2,7 @@ package kr.rvs.mclibrary.util.bukkit.gson;
 
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
 import kr.rvs.mclibrary.util.bukkit.item.MaterialAndData;
 import org.bukkit.Material;
@@ -21,7 +22,7 @@ public class MaterialAndDataAdapter extends TypeAdapter<MaterialAndData> {
     @Override
     @SuppressWarnings("deprecation")
     public MaterialAndData read(JsonReader in) throws IOException {
-        if (in.hasNext()) {
+        if (in.hasNext() && in.peek() == JsonToken.STRING) {
             String[] split = in.nextString().split(":", 1);
             return new MaterialAndData(Material.getMaterial(Integer.parseInt(split[0])), Short.parseShort(split[1]));
         }

@@ -3,6 +3,7 @@ package kr.rvs.mclibrary.util.gson;
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 import kr.rvs.mclibrary.MCLibrary;
+import kr.rvs.mclibrary.util.Static;
 import kr.rvs.mclibrary.util.general.FileUtils;
 
 import java.io.*;
@@ -29,7 +30,7 @@ public class GsonUtils {
                 JsonReader reader = new JsonReader(new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF-8")));
                 ret = gson.fromJson(reader, type);
             } catch (Exception ex) {
-                // Ignore
+                Static.log(ex);
             }
         }
 
