@@ -1,53 +1,58 @@
 package kr.rvs.mclibrary.util.bukkit.inventory.factory;
 
 import kr.rvs.mclibrary.util.bukkit.inventory.GUI;
-import org.apache.commons.lang.Validate;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Created by Junhyeong Lim on 2017-08-18.
  */
 public abstract class InventoryFactory {
+    private GUI gui;
     private InventoryType type;
     private String title;
-    private int size;
+    private Integer size;
     private Map<Integer, ItemStack> contents;
 
-    public void initialize(InventoryType type, String title, int size, Map<Integer, ItemStack> contents) {
+    public abstract Inventory create(HumanEntity viewer);
+
+    public void initialize(GUI gui, InventoryType type, String title, int size, Map<Integer, ItemStack> contents) {
+        this.gui = gui;
         this.type = type;
         this.title = title;
         this.size = size;
         this.contents = contents;
     }
 
+    protected Inventory createDefaultInventory() {
+        return getType() == InventoryType.CHEST ?
+                Bukkit.createInventory(null, getSize(), getTitle()) :
+                Bukkit.createInventory(null, getType(), getTitle());
+    }
+
+    public GUI getGui() {
+        return gui;
+    }
+
     public InventoryType getType() {
-        validate(type);
-        return type;
+        return Objects.requireNonNull(type);
     }
 
     public String getTitle() {
-        validate(title);
-        return title;
+        return Objects.requireNonNull(title);
     }
 
     public int getSize() {
-        validate(size);
-        return size;
+        return Objects.requireNonNull(size);
     }
 
     public Map<Integer, ItemStack> getContents() {
-        validate(contents);
-        return contents;
+        return Objects.requireNonNull(contents);
     }
-
-    private void validate(Object obj) {
-        Validate.notNull(obj, "Not initialized yet.");
-    }
-
-    public abstract Inventory create(GUI gui, HumanEntity viewer);
 }

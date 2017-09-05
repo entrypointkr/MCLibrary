@@ -1,8 +1,8 @@
 package kr.rvs.mclibrary.util.bukkit.inventory;
 
+import kr.rvs.mclibrary.util.bukkit.inventory.factory.CachedInventoryFactory;
 import kr.rvs.mclibrary.util.bukkit.inventory.factory.DefaultInventoryFactory;
 import kr.rvs.mclibrary.util.bukkit.inventory.factory.InventoryFactory;
-import kr.rvs.mclibrary.util.bukkit.inventory.factory.SingleInventoryFactory;
 import kr.rvs.mclibrary.util.bukkit.inventory.handler.EventCancelHandler;
 import kr.rvs.mclibrary.util.general.VarargsParser;
 import org.apache.commons.lang.Validate;
@@ -105,8 +105,8 @@ public class GUIBuilder {
     }
 
     public GUI build() {
-        factory.initialize(type, colorize(title), size, itemMap);
         GUI ret = new GUI(factory);
+        factory.initialize(ret, type, colorize(title), size, itemMap);
         ret.addHandlers(handlers);
 
         return ret;
@@ -123,7 +123,7 @@ public class GUIBuilder {
                         4, new ItemStack(Material.BEDROCK)
                 )
                 .handler(new EventCancelHandler())
-                .factory(new SingleInventoryFactory(new DefaultInventoryFactory()))
+                .factory(new CachedInventoryFactory(new DefaultInventoryFactory()))
                 .build();
 
         Player player = null;

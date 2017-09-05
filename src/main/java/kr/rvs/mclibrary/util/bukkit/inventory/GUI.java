@@ -51,6 +51,11 @@ public class GUI {
         this.handlers.addAll(handlers);
     }
 
+    public void addHandlerIfAbsent(GUIHandler handler) {
+        if (!handlers.contains(handler))
+            addHandler(handler);
+    }
+
     public void removeHandler(GUIHandler handler) {
         handlers.remove(handler);
     }
@@ -61,9 +66,9 @@ public class GUI {
                 topInv.getSize() == factory.getSize() &&
                 topInv.getType() == factory.getType() &&
                 topInv.getTitle().equals(factory.getTitle())) {
-            topInv.setContents(factory.create(this, human).getContents());
+            topInv.setContents(factory.create(human).getContents());
         } else {
-            human.openInventory(factory.create(this, human));
+            human.openInventory(factory.create(human));
         }
         guiMap.put(human, this);
     }
@@ -71,7 +76,7 @@ public class GUI {
     public void notify(InventoryEvent e) {
         Consumer<GUIHandler> consumer;
         if (e instanceof InventoryClickEvent) {
-            consumer = handler -> handler.onClick(new GUIClickEvent((InventoryClickEvent) e));
+            consumer = handler -> handler.onClick(new GUIClickEvent((InventoryClickEvent) e, this));
         } else if (e instanceof InventoryCloseEvent) {
             consumer = handler -> handler.onClose((InventoryCloseEvent) e);
         } else if (e instanceof InventoryDragEvent) {
