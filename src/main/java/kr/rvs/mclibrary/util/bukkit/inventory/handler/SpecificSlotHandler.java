@@ -1,8 +1,8 @@
 package kr.rvs.mclibrary.util.bukkit.inventory.handler;
 
-import kr.rvs.mclibrary.util.bukkit.inventory.GUIHandler;
 import kr.rvs.mclibrary.util.bukkit.inventory.InventoryUtils;
 import kr.rvs.mclibrary.util.bukkit.inventory.event.GUIClickEvent;
+import kr.rvs.mclibrary.util.bukkit.inventory.gui.GUIHandler;
 import org.bukkit.event.inventory.InventoryAction;
 
 import java.util.Arrays;

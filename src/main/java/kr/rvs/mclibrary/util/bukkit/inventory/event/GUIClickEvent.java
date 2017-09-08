@@ -1,7 +1,7 @@
 package kr.rvs.mclibrary.util.bukkit.inventory.event;
 
 import kr.rvs.mclibrary.MCLibrary;
-import kr.rvs.mclibrary.util.bukkit.inventory.GUI;
+import kr.rvs.mclibrary.util.bukkit.inventory.gui.GUI;
 import kr.rvs.mclibrary.util.bukkit.item.ItemBuilder;
 import kr.rvs.mclibrary.util.bukkit.item.ItemWrapper;
 import kr.rvs.mclibrary.util.collection.OptionalHashMap;

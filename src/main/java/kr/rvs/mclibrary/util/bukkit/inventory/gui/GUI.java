@@ -1,9 +1,11 @@
-package kr.rvs.mclibrary.util.bukkit.inventory;
+package kr.rvs.mclibrary.util.bukkit.inventory.gui;
 
 import kr.rvs.mclibrary.MCLibrary;
 import kr.rvs.mclibrary.util.bukkit.collection.EntityHashMap;
 import kr.rvs.mclibrary.util.bukkit.inventory.event.GUIClickEvent;
+import kr.rvs.mclibrary.util.bukkit.inventory.factory.DefaultInventoryFactory;
 import kr.rvs.mclibrary.util.bukkit.inventory.factory.InventoryFactory;
+import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.HumanEntity;
@@ -24,56 +26,85 @@ import java.util.function.Consumer;
 /**
  * Created by Junhyeong Lim on 2017-08-17.
  */
-public class GUI {
+public abstract class GUI implements GUISignature {
     private static final EntityHashMap<GUI> guiMap = new EntityHashMap<>();
     private static final Listener internalListener = new InternalListener();
-    private final InventoryFactory factory;
     private final List<GUIHandler> handlers = new ArrayList<>();
+    private InventoryFactory factory;
 
     public static void init() {
         HandlerList.unregisterAll(internalListener);
         Bukkit.getPluginManager().registerEvents(internalListener, MCLibrary.getPlugin());
     }
 
+    public GUI() {
+        Collection<GUIHandler> handlers = handlers();
+        if (handlers != null)
+            handlers.addAll(this.handlers);
+    }
+
     public static Optional<GUI> getOptional(Entity entity) {
         return guiMap.getOptional(entity);
     }
 
-    public GUI(InventoryFactory factory) {
-        this.factory = factory;
+    public InventoryType type() {
+        return InventoryType.CHEST;
     }
 
-    public void addHandler(GUIHandler handler) {
+    public int size() {
+        return lineSize() * 9;
+    }
+
+    public int lineSize() {
+        return type().getDefaultSize() / 9;
+    }
+
+    public String title() {
+        return type().getDefaultTitle();
+    }
+
+    public InventoryFactory factory() {
+        return new DefaultInventoryFactory();
+    }
+
+    @Override
+    public Collection<GUIHandler> handlers() {
+        return null;
+    }
+
+    public InventoryFactory getFactory() {
+        if (factory == null) {
+            factory = factory();
+            factory.initialize(this, type(), title(), size(), contents());
+        }
+        return factory;
+    }
+
+    public final void addHandler(GUIHandler handler) {
         handlers.add(handler);
     }
 
-    public void addHandlers(Collection<GUIHandler> handlers) {
+    public final void addHandlers(Collection<GUIHandler> handlers) {
         this.handlers.addAll(handlers);
     }
 
-    public void addHandlerIfAbsent(GUIHandler handler) {
-        if (!handlers.contains(handler))
-            addHandler(handler);
-    }
-
-    public void removeHandler(GUIHandler handler) {
+    public final void removeHandler(GUIHandler handler) {
         handlers.remove(handler);
     }
 
-    public void open(HumanEntity human) {
+    public final void open(HumanEntity human) {
+        Validate.notNull(getFactory());
+
         Inventory topInv = human.getOpenInventory().getTopInventory();
-        if (topInv != null &&
-                topInv.getSize() == factory.getSize() &&
-                topInv.getType() == factory.getType() &&
-                topInv.getTitle().equals(factory.getTitle())) {
-            topInv.setContents(factory.create(human).getContents());
+        if (getFactory().isSimilar(topInv)) {
+            getFactory().getContents().forEach(topInv::setItem);
         } else {
-            human.openInventory(factory.create(human));
+            human.openInventory(getFactory().create(human));
         }
         guiMap.put(human, this);
     }
 
-    public void notify(InventoryEvent e) {
+    public final void notify(InventoryEvent e) {
         Consumer<GUIHandler> consumer;
         if (e instanceof InventoryClickEvent) {
             consumer = handler -> handler.onClick(new GUIClickEvent((InventoryClickEvent) e, this));

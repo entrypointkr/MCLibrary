@@ -1,4 +1,4 @@
-package kr.rvs.mclibrary.util.bukkit.inventory;
+package kr.rvs.mclibrary.util.bukkit.inventory.gui;
 
 import kr.rvs.mclibrary.util.bukkit.inventory.event.GUIClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;

@@ -1,19 +1,18 @@
-package kr.rvs.mclibrary.util.bukkit.inventory;
+package kr.rvs.mclibrary.util.bukkit.inventory.gui;
 
 import kr.rvs.mclibrary.util.bukkit.inventory.factory.CachedInventoryFactory;
 import kr.rvs.mclibrary.util.bukkit.inventory.factory.DefaultInventoryFactory;
 import kr.rvs.mclibrary.util.bukkit.inventory.factory.InventoryFactory;
 import kr.rvs.mclibrary.util.bukkit.inventory.handler.EventCancelHandler;
-import kr.rvs.mclibrary.util.general.VarargsParser;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.*;
-
-import static kr.rvs.mclibrary.util.bukkit.MCUtils.colorize;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by Junhyeong Lim on 2017-08-17.
@@ -23,14 +22,15 @@ public class GUIBuilder {
     private int size;
     private String title;
     private InventoryFactory factory;
+    private GUIContents contents;
 
-    private final Map<Integer, ItemStack> itemMap = new HashMap<>();
     private final List<GUIHandler> handlers = new ArrayList<>();
 
     public GUIBuilder(InventoryType type) {
         this.type = type;
         this.size = type.getDefaultSize();
         this.title = type.getDefaultTitle();
+        this.contents = new GUIContents();
 
         factory(new DefaultInventoryFactory());
     }
@@ -53,44 +53,8 @@ public class GUIBuilder {
         return this;
     }
 
-    public GUIBuilder item(Integer index, ItemStack item) {
-        itemMap.put(index, item);
-        return this;
-    }
-
-    public GUIBuilder item(ItemStack item, Integer... indexes) {
-        for (Integer index : indexes) {
-            item(index, item);
-        }
-        return this;
-    }
-
-    public GUIBuilder item(ItemStack... items) {
-        for (int i = 0; i < items.length; i++) {
-            item(i, items[i]);
-        }
-        return this;
-    }
-
-    /**
-     * This method can use two types of multiple args.
-     * For example, item(1, item, 2, item, 10, item)
-     *
-     * @param args (int slot, ItemStack item)...
-     */
-    public GUIBuilder item(Object... args) {
-        VarargsParser parser = new VarargsParser(args);
-        parser.parse(section ->
-                item(section.<Integer>get(0), section.get(1)));
-
-        return this;
-    }
-
-    public GUIBuilder item(Collection<ItemStack> items) {
-        int index = 0;
-        for (ItemStack item : items) {
-            item(index++, item);
-        }
+    public GUIBuilder contents(GUIContents contents) {
+        this.contents = contents;
         return this;
     }
 
@@ -105,11 +69,7 @@ public class GUIBuilder {
     }
 
     public GUI build() {
-        GUI ret = new GUI(factory);
-        factory.initialize(ret, type, colorize(title), size, itemMap);
-        ret.addHandlers(handlers);
-
-        return ret;
+        return new GUIAdapter(type, title, size, contents, handlers, factory);
     }
 
     public static void main(String[] args) {
@@ -117,11 +77,11 @@ public class GUIBuilder {
         GUI gui = new GUIBuilder(InventoryType.CHEST)
                 .size(54)
                 .title("test")
-                .item(
+                .contents(new GUIContents().item(
                         0, new ItemStack(Material.STONE),
                         1, new ItemStack(Material.APPLE),
                         4, new ItemStack(Material.BEDROCK)
-                )
+                ))
                 .handler(new EventCancelHandler())
                 .factory(new CachedInventoryFactory(new DefaultInventoryFactory()))
                 .build();

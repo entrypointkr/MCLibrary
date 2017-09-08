@@ -1,13 +1,12 @@
 package kr.rvs.mclibrary.util.bukkit.inventory.factory;
 
-import kr.rvs.mclibrary.util.bukkit.inventory.GUI;
+import kr.rvs.mclibrary.util.bukkit.inventory.gui.GUI;
+import kr.rvs.mclibrary.util.bukkit.inventory.gui.GUIContents;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
 
-import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -18,11 +17,9 @@ public abstract class InventoryFactory {
     private InventoryType type;
     private String title;
     private Integer size;
-    private Map<Integer, ItemStack> contents;
+    private GUIContents contents;
 
-    public abstract Inventory create(HumanEntity viewer);
-
-    public void initialize(GUI gui, InventoryType type, String title, int size, Map<Integer, ItemStack> contents) {
+    public void initialize(GUI gui, InventoryType type, String title, int size, GUIContents contents) {
         this.gui = gui;
         this.type = type;
         this.title = title;
@@ -30,10 +27,19 @@ public abstract class InventoryFactory {
         this.contents = contents;
     }
 
+    public abstract Inventory create(HumanEntity viewer);
+
     protected Inventory createDefaultInventory() {
         return getType() == InventoryType.CHEST ?
                 Bukkit.createInventory(null, getSize(), getTitle()) :
                 Bukkit.createInventory(null, getType(), getTitle());
+    }
+
+    public boolean isSimilar(Inventory inv) {
+        return inv != null &&
+                inv.getSize() == getSize() &&
+                inv.getType() == getType() &&
+                inv.getTitle().equals(getTitle());
     }
 
     public GUI getGui() {
@@ -52,7 +58,7 @@ public abstract class InventoryFactory {
         return Objects.requireNonNull(size);
     }
 
-    public Map<Integer, ItemStack> getContents() {
+    public GUIContents getContents() {
         return Objects.requireNonNull(contents);
     }
 }

@@ -7,7 +7,7 @@ import kr.rvs.mclibrary.struct.command.MCCommand;
 import kr.rvs.mclibrary.util.bukkit.MCUtils;
 import kr.rvs.mclibrary.util.bukkit.command.CommandManager;
 import kr.rvs.mclibrary.util.bukkit.command.CommandSenderWrapper;
-import kr.rvs.mclibrary.util.bukkit.inventory.GUI;
+import kr.rvs.mclibrary.util.bukkit.inventory.gui.GUI;
 import kr.rvs.mclibrary.util.bukkit.protocol.PacketMonitoringListener;
 import kr.rvs.mclibrary.util.general.Version;
 import kr.rvs.mclibrary.util.gson.GsonManager;

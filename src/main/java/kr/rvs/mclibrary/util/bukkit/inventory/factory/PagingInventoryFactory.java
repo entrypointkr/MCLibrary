@@ -1,8 +1,9 @@
 package kr.rvs.mclibrary.util.bukkit.inventory.factory;
 
-import kr.rvs.mclibrary.util.bukkit.inventory.GUI;
 import kr.rvs.mclibrary.util.bukkit.inventory.InventoryUtils;
 import kr.rvs.mclibrary.util.bukkit.inventory.event.GUIClickEvent;
+import kr.rvs.mclibrary.util.bukkit.inventory.gui.GUI;
+import kr.rvs.mclibrary.util.bukkit.inventory.gui.GUIContents;
 import kr.rvs.mclibrary.util.bukkit.inventory.handler.SpecificSlotHandler;
 import kr.rvs.mclibrary.util.bukkit.item.ItemBuilder;
 import org.bukkit.Material;
@@ -52,7 +53,7 @@ public class PagingInventoryFactory extends InventoryFactory {
     }
 
     @Override
-    public void initialize(GUI gui, InventoryType type, String title, int size, Map<Integer, ItemStack> contents) {
+    public void initialize(GUI gui, InventoryType type, String title, int size, GUIContents contents) {
         super.initialize(gui, type, title, size, contents);
         gui.addHandler(new PagingHandler(49, 51));
     }

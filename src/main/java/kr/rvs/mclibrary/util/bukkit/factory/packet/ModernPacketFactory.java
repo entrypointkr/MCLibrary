@@ -9,7 +9,7 @@ import org.bukkit.inventory.ItemStack;
 /**
  * Created by Junhyeong Lim on 2017-08-27.
  */
-public class Upper1_11PacketFactory extends DefaultPacketFactory {
+public class ModernPacketFactory extends DefaultPacketFactory {
     @Override
     public PacketContainer createWindowItems(int windowId, ItemStack[] items) {
         PacketContainer packet = MCUtils.getProtocolManager().createPacket(PacketType.Play.Server.WINDOW_ITEMS);
