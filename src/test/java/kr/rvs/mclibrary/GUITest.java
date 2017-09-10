@@ -32,7 +32,7 @@ public class GUITest {
                 .item(createRandomItems())).open(player);
     }
 
-    ItemStack[] createRandomItems() {
+    private ItemStack[] createRandomItems() {
         ItemStack[] items = new ItemStack[random.nextInt(27)];
         for (int i = 0; i < items.length; i++) {
             items[i] = createRandomItem();
@@ -40,7 +40,7 @@ public class GUITest {
         return items;
     }
 
-    ItemStack createRandomItem() {
+    private ItemStack createRandomItem() {
         Material[] materials = Material.values();
         return new ItemStack(materials[random.nextInt(materials.length)]);
     }
