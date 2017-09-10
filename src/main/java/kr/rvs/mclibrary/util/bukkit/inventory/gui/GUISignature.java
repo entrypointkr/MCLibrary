@@ -1,23 +1,27 @@
 package kr.rvs.mclibrary.util.bukkit.inventory.gui;
 
-import kr.rvs.mclibrary.util.bukkit.inventory.factory.InventoryFactory;
 import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 
-import java.util.Collection;
+import java.util.Map;
 
 /**
- * Created by Junhyeong Lim on 2017-09-07.
+ * Created by Junhyeong Lim on 2017-09-10.
  */
 public interface GUISignature {
-    InventoryType type();
+    InventoryType getType();
 
-    int size();
+    String getTitle();
 
-    String title();
+    int getSize();
 
-    InventoryFactory factory();
+    Map<Integer, ItemStack> getContents();
 
-    Collection<GUIHandler> handlers();
-
-    GUIContents contents();
+    default boolean isSimilar(Inventory inv) {
+        return inv != null &&
+                getType() == inv.getType() &&
+                getTitle().equals(inv.getTitle()) &&
+                getSize() == inv.getSize();
+    }
 }

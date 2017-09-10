@@ -23,6 +23,7 @@ public abstract class SpecificSlotHandler implements GUIHandler {
         this.slots = new HashSet<>(Arrays.asList(slots));
     }
 
+    @Override
     public void onClick(GUIClickEvent e) {
         if (e.getAction() != InventoryAction.NOTHING
                 && this.slots.contains(InventoryUtils.movedSlot(e))) {

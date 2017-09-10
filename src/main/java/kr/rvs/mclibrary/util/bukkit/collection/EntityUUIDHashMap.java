@@ -11,19 +11,19 @@ import java.util.function.Function;
 /**
  * Created by Junhyeong Lim on 2017-07-28.
  */
-public class EntityHashMap<V> extends OptionalHashMap<UUID, V> {
-    public EntityHashMap(int initialCapacity, float loadFactor) {
+public class EntityUUIDHashMap<V> extends OptionalHashMap<UUID, V> {
+    public EntityUUIDHashMap(int initialCapacity, float loadFactor) {
         super(initialCapacity, loadFactor);
     }
 
-    public EntityHashMap(int initialCapacity) {
+    public EntityUUIDHashMap(int initialCapacity) {
         super(initialCapacity);
     }
 
-    public EntityHashMap() {
+    public EntityUUIDHashMap() {
     }
 
-    public EntityHashMap(Map<? extends UUID, ? extends V> m) {
+    public EntityUUIDHashMap(Map<? extends UUID, ? extends V> m) {
         super(m);
     }
 

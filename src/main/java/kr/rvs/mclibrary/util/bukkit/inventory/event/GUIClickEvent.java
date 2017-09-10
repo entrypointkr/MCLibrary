@@ -1,7 +1,6 @@
 package kr.rvs.mclibrary.util.bukkit.inventory.event;
 
 import kr.rvs.mclibrary.MCLibrary;
-import kr.rvs.mclibrary.util.bukkit.inventory.gui.GUI;
 import kr.rvs.mclibrary.util.bukkit.item.ItemBuilder;
 import kr.rvs.mclibrary.util.bukkit.item.ItemWrapper;
 import kr.rvs.mclibrary.util.collection.OptionalHashMap;
@@ -24,13 +23,11 @@ import java.util.List;
  */
 public class GUIClickEvent extends InventoryClickEvent {
     private static final OptionalHashMap<Integer, ItemStack> messageItemMap = new OptionalHashMap<>();
-    private final GUI gui;
     private final InventoryClickEvent delegate;
 
-    public GUIClickEvent(InventoryClickEvent delegate, GUI gui) {
+    public GUIClickEvent(InventoryClickEvent delegate) {
         super(delegate.getView(), delegate.getSlotType(), delegate.getRawSlot(), delegate.getClick(), delegate.getAction(), delegate.getHotbarButton());
         this.delegate = delegate;
-        this.gui = gui;
     }
 
     public void sendMessage(int tick, String title, String... messages) {
@@ -56,10 +53,6 @@ public class GUIClickEvent extends InventoryClickEvent {
 
     public void sendMessage(String title, String... messages) {
         sendMessage(60, title, messages);
-    }
-
-    public GUI getGui() {
-        return gui;
     }
 
     @Override

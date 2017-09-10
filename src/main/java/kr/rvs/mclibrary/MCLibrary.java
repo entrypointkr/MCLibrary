@@ -7,20 +7,28 @@ import kr.rvs.mclibrary.struct.command.MCCommand;
 import kr.rvs.mclibrary.util.bukkit.MCUtils;
 import kr.rvs.mclibrary.util.bukkit.command.CommandManager;
 import kr.rvs.mclibrary.util.bukkit.command.CommandSenderWrapper;
+import kr.rvs.mclibrary.util.bukkit.inventory.event.GUIClickEvent;
 import kr.rvs.mclibrary.util.bukkit.inventory.gui.GUI;
+import kr.rvs.mclibrary.util.bukkit.inventory.gui.GUISignatureAdapter;
+import kr.rvs.mclibrary.util.bukkit.inventory.handler.EventCancelHandler;
+import kr.rvs.mclibrary.util.bukkit.inventory.handler.SpecificSlotHandler;
+import kr.rvs.mclibrary.util.bukkit.item.ItemBuilder;
 import kr.rvs.mclibrary.util.bukkit.protocol.PacketMonitoringListener;
 import kr.rvs.mclibrary.util.general.Version;
 import kr.rvs.mclibrary.util.gson.GsonManager;
 import kr.rvs.mclibrary.util.gson.SettingManager;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.List;
 
 // TODO: 서브커맨드 도움말, 직렬화
+
 /**
  * Created by Junhyeong Lim on 2017-07-26.
  */
@@ -57,7 +65,7 @@ public class MCLibrary extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        GUI.init();
+        GUI.init(this);
         saveDefaultConfig();
         getCommandManager().registerCommand(new LibraryCommand(), this);
 
@@ -109,6 +117,30 @@ public class MCLibrary extends JavaPlugin {
                     .stream()
                     .filter(entity -> entity instanceof Creature)
                     .forEach(Entity::remove);
+        }
+
+        @CommandArgs(
+                type = CommandType.PLAYER_ONLY,
+                perm = "mclibrary.gui",
+                args = "gui",
+                desc = "Open a gui"
+        )
+        public void onGui(CommandSenderWrapper sender, List<String> args) {
+            new GUI(
+                    new GUISignatureAdapter(InventoryType.CHEST)
+                            .title("MCLibrary GUI")
+                            .item(13, new ItemBuilder(Material.MAP).display("MCLibrary version").build()),
+                    new EventCancelHandler(),
+                    new SpecificSlotHandler(13) {
+                        @Override
+                        public void receive(GUIClickEvent e) {
+                            e.sendMessage(
+                                    "&aHello,",
+                                    "&e" + getDescription().getFullName()
+                            );
+                        }
+                    }
+            ).open(sender.getPlayer());
         }
     }
 }
