@@ -18,7 +18,7 @@ public class GUI {
     private static final EntityNameHashMap<GUI> GUI_MAP = new EntityNameHashMap<>();
     private final GUISignature signature;
     private final InventoryFactory factory;
-    private final GUIHandlers handlers = new GUIHandlers();
+    private final GUIHandlers handlers = new GUIHandlers(this);
 
     public static void init(Plugin plugin) {
         HandlerList.unregisterAll(LISTENER);

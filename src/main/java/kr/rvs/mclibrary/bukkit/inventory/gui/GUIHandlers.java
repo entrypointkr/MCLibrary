@@ -17,6 +17,12 @@ import java.util.logging.Level;
  * Created by Junhyeong Lim on 2017-09-10.
  */
 public class GUIHandlers {
+    private final GUI gui;
+
+    public GUIHandlers(GUI gui) {
+        this.gui = gui;
+    }
+
     private final List<GUIHandler> handlers = new ArrayList<>();
 
     public void addHandler(GUIHandler... handlers) {
@@ -30,7 +36,7 @@ public class GUIHandlers {
     public void notify(InventoryEvent event) {
         Consumer<GUIHandler> consumer;
         if (event instanceof InventoryClickEvent) {
-            consumer = handler -> handler.onClick(new GUIClickEvent((InventoryClickEvent) event));
+            consumer = handler -> handler.onClick(new GUIClickEvent((InventoryClickEvent) event, gui));
         } else if (event instanceof InventoryCloseEvent) {
             consumer = handler -> handler.onClose((InventoryCloseEvent) event);
         } else if (event instanceof InventoryDragEvent) {
