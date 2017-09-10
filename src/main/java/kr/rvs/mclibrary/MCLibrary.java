@@ -28,6 +28,8 @@ import java.util.List;
  * Created by Junhyeong Lim on 2017-07-26.
  */
 public class MCLibrary extends JavaPlugin {
+    public static final String PACKET_DEBUG = "packet-debug";
+    public static final String DETAIL_LOG = "detail-log";
     private static final CommandManager commandManager = new CommandManager();
     private static final GsonManager gsonManager = new GsonManager();
     private static final SettingManager settingManager = new SettingManager();
@@ -70,7 +72,7 @@ public class MCLibrary extends JavaPlugin {
 
     private void configInit() {
         if (MCUtils.isEnabled("ProtocolLib")
-                && getConfig().getBoolean(ConfigKeys.PACKET_DEBUG, false)) {
+                && getConfig().getBoolean(PACKET_DEBUG, false)) {
             MCUtils.getProtocolManager().removePacketListeners(this);
             MCUtils.getProtocolManager().addPacketListener(new PacketMonitoringListener());
         }

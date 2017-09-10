@@ -6,7 +6,7 @@ import org.bukkit.Bukkit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static kr.rvs.mclibrary.ConfigKeys.DETAIL_LOG;
+import static kr.rvs.mclibrary.MCLibrary.DETAIL_LOG;
 
 /**
  * Created by Junhyeong Lim on 2017-07-26.
