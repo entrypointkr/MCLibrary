@@ -1,12 +1,12 @@
 package kr.rvs.mclibrary;
 
-import kr.rvs.mclibrary.struct.command.CommandArgs;
-import kr.rvs.mclibrary.struct.command.CommandProcessor;
-import kr.rvs.mclibrary.struct.command.CommandType;
-import kr.rvs.mclibrary.struct.command.MCCommand;
-import kr.rvs.mclibrary.util.Injector;
-import kr.rvs.mclibrary.util.MockFactory;
-import kr.rvs.mclibrary.util.collection.VolatileArrayList;
+import kr.rvs.mclibrary.bukkit.command.CommandArgs;
+import kr.rvs.mclibrary.bukkit.command.CommandProcessor;
+import kr.rvs.mclibrary.bukkit.command.CommandType;
+import kr.rvs.mclibrary.bukkit.command.MCCommand;
+import kr.rvs.mclibrary.collection.VolatileArrayList;
+import kr.rvs.mclibrary.struct.Injector;
+import kr.rvs.mclibrary.struct.MockFactory;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.SimpleCommandMap;
 import org.junit.Assert;

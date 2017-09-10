@@ -1,9 +1,9 @@
 package kr.rvs.mclibrary;
 
-import kr.rvs.mclibrary.util.Injector;
-import kr.rvs.mclibrary.util.MockFactory;
-import kr.rvs.mclibrary.util.bukkit.inventory.gui.GUI;
-import kr.rvs.mclibrary.util.bukkit.inventory.gui.GUISignatureAdapter;
+import kr.rvs.mclibrary.bukkit.inventory.gui.GUI;
+import kr.rvs.mclibrary.bukkit.inventory.gui.GUISignatureAdapter;
+import kr.rvs.mclibrary.struct.Injector;
+import kr.rvs.mclibrary.struct.MockFactory;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;

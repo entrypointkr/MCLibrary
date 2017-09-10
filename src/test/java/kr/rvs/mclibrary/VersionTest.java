@@ -1,6 +1,6 @@
 package kr.rvs.mclibrary;
 
-import kr.rvs.mclibrary.util.general.Version;
+import kr.rvs.mclibrary.general.Version;
 import org.junit.Assert;
 import org.junit.Test;
 

@@ -1,9 +1,9 @@
 package kr.rvs.mclibrary;
 
-import kr.rvs.mclibrary.util.Injector;
-import kr.rvs.mclibrary.util.MockFactory;
-import kr.rvs.mclibrary.util.bukkit.item.ItemBuilder;
-import kr.rvs.mclibrary.util.bukkit.item.ItemWrapper;
+import kr.rvs.mclibrary.bukkit.item.ItemBuilder;
+import kr.rvs.mclibrary.bukkit.item.ItemWrapper;
+import kr.rvs.mclibrary.struct.Injector;
+import kr.rvs.mclibrary.struct.MockFactory;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.junit.Assert;
