@@ -55,7 +55,7 @@ public class PagingInventoryProcessor implements InventoryProcessor, Initializab
     @Override
     public void initialize(GUI gui) {
         int size = gui.getSignature().getSize();
-        Validate.isTrue(size > 18);
+        Validate.isTrue(size >= 18);
         int lastKey = gui.getSignature().getContents().lastKey();
         this.size = size - 9;
         this.maxPage = lastKey / size + lastKey % size > 0 ? 1 : 0;
