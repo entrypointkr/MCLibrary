@@ -1,10 +1,8 @@
 package kr.rvs.mclibrary.bukkit.inventory.gui;
 
+import kr.rvs.mclibrary.bukkit.inventory.ItemContents;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
-
-import java.util.Map;
 
 /**
  * Created by Junhyeong Lim on 2017-09-10.
@@ -16,7 +14,7 @@ public interface GUISignature {
 
     int getSize();
 
-    Map<Integer, ItemStack> getContents();
+    ItemContents getContents();
 
     default boolean isSimilar(Inventory inv) {
         return inv != null &&

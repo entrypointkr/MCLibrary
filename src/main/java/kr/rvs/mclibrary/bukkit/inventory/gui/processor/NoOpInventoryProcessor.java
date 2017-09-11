@@ -1,6 +1,7 @@
 package kr.rvs.mclibrary.bukkit.inventory.gui.processor;
 
-import kr.rvs.mclibrary.bukkit.inventory.gui.GUI;
+import kr.rvs.mclibrary.bukkit.inventory.gui.GUISignature;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.inventory.Inventory;
 
 /**
@@ -8,12 +9,7 @@ import org.bukkit.inventory.Inventory;
  */
 public class NoOpInventoryProcessor implements InventoryProcessor {
     @Override
-    public void initialize(GUI gui) {
-        // NoOp
-    }
+    public void process(HumanEntity viewer, GUISignature signature, Inventory inv) {
 
-    @Override
-    public void process(Inventory inv) {
-        // NoOp
     }
 }

@@ -24,7 +24,7 @@ public class GUITest {
     }
 
     @Test
-    public void test() {
+    public void generalTest() {
         Player player = MockFactory.createPlayer();
 
         new GUI(new GUISignatureAdapter(InventoryType.CHEST)
@@ -38,6 +38,11 @@ public class GUITest {
             items[i] = createRandomItem();
         }
         return items;
+    }
+
+    @Test
+    public void pagingTest() {
+
     }
 
     private ItemStack createRandomItem() {

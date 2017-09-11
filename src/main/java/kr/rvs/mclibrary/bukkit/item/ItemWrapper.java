@@ -2,7 +2,6 @@ package kr.rvs.mclibrary.bukkit.item;
 
 import kr.rvs.mclibrary.bukkit.MCUtils;
 import kr.rvs.mclibrary.general.Wrapper;
-import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -30,7 +29,7 @@ public class ItemWrapper extends Wrapper<ItemStack> {
     }
 
     public boolean isEmpty() {
-        return getHandle() == null || getHandle().getType() == Material.AIR;
+        return ItemUtils.isEmpty(getHandle());
     }
 
     public boolean isNotEmpty() {

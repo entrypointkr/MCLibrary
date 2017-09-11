@@ -1,12 +1,11 @@
 package kr.rvs.mclibrary.bukkit.inventory.gui;
 
+import kr.rvs.mclibrary.bukkit.inventory.ItemContents;
 import kr.rvs.mclibrary.general.VarargsParser;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by Junhyeong Lim on 2017-09-09.
@@ -15,7 +14,7 @@ public class GUISignatureAdapter implements GUISignature {
     private final InventoryType type;
     private String title;
     private int size;
-    private final Map<Integer, ItemStack> contents = new HashMap<>();
+    private final ItemContents contents = new ItemContents();
 
     public GUISignatureAdapter(InventoryType type) {
         this.type = type;
@@ -90,7 +89,7 @@ public class GUISignatureAdapter implements GUISignature {
     }
 
     @Override
-    public Map<Integer, ItemStack> getContents() {
+    public ItemContents getContents() {
         return contents;
     }
 }
