@@ -32,6 +32,7 @@ public class MockFactory extends Mockito {
         when(server.getItemFactory()).thenReturn(new MockItemFactory());
         doAnswer(invocation -> new MockInventory(InventoryType.CHEST, invocation.getArgument(1), invocation.getArgument(2)))
                 .when(server).createInventory(any(), anyInt(), anyString());
+        when(server.getBukkitVersion()).thenReturn("1.0");
 
         return server;
     }

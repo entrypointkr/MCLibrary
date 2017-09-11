@@ -27,7 +27,7 @@ public class MockItemFactory implements ItemFactory {
 
     @Override
     public boolean equals(ItemMeta meta1, ItemMeta meta2) throws IllegalArgumentException {
-        return false;
+        return meta1 != null && meta2 != null && meta1.equals(meta2);
     }
 
     @Override

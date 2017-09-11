@@ -1,7 +1,6 @@
 package kr.rvs.mclibrary.gson;
 
 import com.google.gson.Gson;
-import com.google.gson.stream.JsonReader;
 import kr.rvs.mclibrary.MCLibrary;
 import kr.rvs.mclibrary.Static;
 import kr.rvs.mclibrary.general.FileUtils;
@@ -16,35 +15,46 @@ import java.util.function.Supplier;
  * Created by Junhyeong Lim on 2017-08-21.
  */
 public class GsonUtils {
-    public static <T> T read(File file, Type type, Supplier<T> def) {
-        Optional<T> ret = read(file, type);
-        return ret.orElseGet(def);
+    public static <T> T read(Reader reader, Type type) {
+        Gson gson = MCLibrary.getGsonManager().getGson();
+        return gson.fromJson(reader, type);
     }
 
     public static <T> Optional<T> read(File file, Type type) {
-        Gson gson = MCLibrary.getGsonManager().getGson();
         T ret = null;
 
         if (file.isFile()) {
             try {
-                JsonReader reader = new JsonReader(new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF-8")));
-                ret = gson.fromJson(reader, type);
-            } catch (Exception ex) {
-                Static.log(ex);
+                ret = read(new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF-8")), type);
+            } catch (UnsupportedEncodingException | FileNotFoundException e) {
+                Static.log(e);
             }
         }
 
         return Optional.ofNullable(ret);
     }
 
-    public static void write(File file, Object obj, Consumer<Exception> callback) {
+    public static <T> T read(File file, Type type, Supplier<T> def) {
+        Optional<T> ret = read(file, type);
+        return ret.orElseGet(def);
+    }
+
+    public static void write(Writer writer, Object obj, Consumer<Exception> callback) {
         try {
-            FileUtils.ensure(file);
-            Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), "UTF-8"));
             Gson gson = MCLibrary.getGsonManager().getGson();
             gson.toJson(obj, writer);
             writer.close();
         } catch (IOException e) {
+            if (callback != null)
+                callback.accept(e);
+        }
+    }
+
+    public static void write(File file, Object obj, Consumer<Exception> callback) {
+        FileUtils.ensure(file);
+        try {
+            write(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), "UTF-8")), obj, callback);
+        } catch (UnsupportedEncodingException | FileNotFoundException e) {
             if (callback != null)
                 callback.accept(e);
         }

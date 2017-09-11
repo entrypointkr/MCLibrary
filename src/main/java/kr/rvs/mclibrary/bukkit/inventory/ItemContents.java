@@ -32,4 +32,6 @@ public class ItemContents extends HashMap<Integer, ItemStack> {
         }
         return ret;
     }
+
+
 }

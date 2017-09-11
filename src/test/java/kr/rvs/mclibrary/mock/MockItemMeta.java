@@ -4,10 +4,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by Junhyeong Lim on 2017-07-27.
@@ -138,6 +135,34 @@ public class MockItemMeta implements ItemMeta {
 
     @Override
     public Map<String, Object> serialize() {
-        return null;
+        Map<String, Object> map = new HashMap<>();
+        map.put("display", displayName);
+        map.put("lore", lore);
+        return map;
+    }
+
+    public static MockItemMeta deserialize(Map<String, Object> map) {
+        MockItemMeta meta = new MockItemMeta();
+        meta.setDisplayName((String) map.get("display"));
+        meta.setLore((List<String>) map.get("lore"));
+        return meta;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        MockItemMeta that = (MockItemMeta) o;
+
+        if (displayName != null ? !displayName.equals(that.displayName) : that.displayName != null) return false;
+        return lore != null ? lore.equals(that.lore) : that.lore == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = displayName != null ? displayName.hashCode() : 0;
+        result = 31 * result + (lore != null ? lore.hashCode() : 0);
+        return result;
     }
 }
