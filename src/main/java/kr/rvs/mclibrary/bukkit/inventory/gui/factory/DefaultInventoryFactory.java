@@ -12,7 +12,7 @@ import org.bukkit.inventory.Inventory;
  */
 public class DefaultInventoryFactory implements InventoryFactory {
     @Override
-    public Inventory create(GUISignature signature, HumanEntity human) {
+    public Inventory create(GUISignature signature, HumanEntity viewer) {
         String title = MCUtils.colorize(signature.getTitle());
         Inventory inv = signature.getType() == InventoryType.CHEST ?
                 Bukkit.createInventory(null, signature.getSize(), title) :

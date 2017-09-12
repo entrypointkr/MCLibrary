@@ -23,9 +23,9 @@ public abstract class DelegateInventoryFactory implements InventoryFactory, Init
     }
 
     @Override
-    public Inventory create(GUISignature signature, HumanEntity human) {
-        return create0(signature, human, delegate);
+    public Inventory create(GUISignature signature, HumanEntity viewer) {
+        return create0(signature, viewer, delegate);
     }
 
-    public abstract Inventory create0(GUISignature signature, HumanEntity human, InventoryFactory delegate);
+    public abstract Inventory create0(GUISignature signature, HumanEntity viewer, InventoryFactory delegate);
 }

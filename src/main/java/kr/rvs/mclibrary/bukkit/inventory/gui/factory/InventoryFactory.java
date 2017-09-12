@@ -8,5 +8,5 @@ import org.bukkit.inventory.Inventory;
  * Created by Junhyeong Lim on 2017-09-09.
  */
 public interface InventoryFactory {
-    Inventory create(GUISignature signature, HumanEntity human);
+    Inventory create(GUISignature signature, HumanEntity viewer);
 }
