@@ -78,7 +78,7 @@ public class GUISignatureTypeAdapter extends TypeAdapter<GUISignature> {
                     break;
                 case "handlerIndexes":
                     for (Number index : (Collection<Number>) collectionAdapter.read(in)) {
-                        signature.addHandlerIndex(index.intValue());
+                        signature.addHandlerIndexes(index.intValue());
                     }
                     break;
                 case "contents":

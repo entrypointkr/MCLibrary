@@ -30,14 +30,18 @@ public class GsonTest extends Assert {
 
     @Test
     public void guiSignature() {
-        ItemStack item = ItemFactory.createRandomItem();
+        ItemStack itemA = ItemFactory.createRandomItem();
+        ItemStack itemB = ItemFactory.createRandomItem();
         GUISignature signature = new GUISignatureAdapter(InventoryType.CHEST)
                 .title("Serialize Test")
                 .size(18)
-                .addHandlerIndex(1, 2, 3)
-                .item(item, 0)
-                .item(item, 1)
-                .item(ItemFactory.createRandomItem(), 2);
+                .addHandlerIndexes(1, 2, 3)
+                .item(itemA, 0)
+                .item(itemA, 1)
+                .item(ItemFactory.createRandomItem(), 2)
+                .item(itemB, 3)
+                .item(itemB, 4)
+                .item(ItemFactory.createRandomItem(), 5);
         StringWriter writer = new StringWriter();
         GsonUtils.write(writer, signature, e -> {
             throw new AssertionError(e);

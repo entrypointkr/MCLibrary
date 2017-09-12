@@ -26,6 +26,7 @@ public class GUISignatureAdapter implements GUISignature {
     }
 
     public GUISignatureAdapter() {
+        this(InventoryType.CHEST);
     }
 
     public GUISignatureAdapter type(InventoryType type) {
@@ -48,7 +49,7 @@ public class GUISignatureAdapter implements GUISignature {
         return this;
     }
 
-    public GUISignatureAdapter addHandlerIndex(Integer... indexes) {
+    public GUISignatureAdapter addHandlerIndexes(Integer... indexes) {
         this.handlerIndexes.addAll(Arrays.asList(indexes));
         return this;
     }
