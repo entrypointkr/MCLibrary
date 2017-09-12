@@ -17,6 +17,7 @@ import java.util.Map;
 /**
  * Created by Junhyeong Lim on 2017-09-11.
  */
+@SuppressWarnings("unchecked")
 public class GUISignatureTypeAdapter extends TypeAdapter<GUISignature> {
     private final TypeAdapter<Map> mapAdapter;
     private final TypeAdapter<Collection> collectionAdapter;

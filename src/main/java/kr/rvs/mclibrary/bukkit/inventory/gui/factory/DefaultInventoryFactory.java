@@ -10,7 +10,7 @@ import org.bukkit.inventory.Inventory;
 /**
  * Created by Junhyeong Lim on 2017-09-09.
  */
-public class DefaultInventoryFactory extends InventoryFactory {
+public class DefaultInventoryFactory implements InventoryFactory {
     @Override
     public Inventory create(GUISignature signature, HumanEntity human) {
         String title = MCUtils.colorize(signature.getTitle());

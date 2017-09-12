@@ -9,6 +9,7 @@ import java.util.*;
 /**
  * Created by Junhyeong Lim on 2017-07-27.
  */
+@SuppressWarnings("unchecked")
 public class MockItemMeta implements ItemMeta {
     String displayName = "";
     List<String> lore = new ArrayList<>();
