@@ -5,14 +5,14 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import kr.rvs.mclibrary.bukkit.inventory.gui.GUISignature;
 import kr.rvs.mclibrary.bukkit.inventory.gui.GUISignatureAdapter;
-import kr.rvs.mclibrary.collection.NullableArrayList;
-import org.bukkit.Material;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.ItemStack;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by Junhyeong Lim on 2017-09-11.
@@ -26,13 +26,27 @@ public class GUISignatureTypeAdapter extends TypeAdapter<GUISignature> {
         this.collectionAdapter = collectionAdapter;
     }
 
+    private Object value(Map<Integer, Object> contents, ItemStack item, Map<Integer, Integer> hashCodeMap) {
+        int itemHash = item.hashCode();
+        Object value = item;
+        for (Map.Entry<Integer, Object> entry : contents.entrySet()) {
+            int hashCode = hashCodeMap.computeIfAbsent(entry.getKey(), k -> entry.getValue().hashCode());
+            if (itemHash == hashCode) {
+                value = entry.getKey();
+                break;
+            }
+        }
+
+        return value;
+    }
+
     @Override
     public void write(JsonWriter out, GUISignature value) throws IOException {
-        Map<Integer, Integer> contents = new HashMap<>();
-        List<ItemStack> items = new ArrayList<>();
-        for (Map.Entry<Integer, ItemStack> entry : value.getContents().entrySet()) {
-            int index = add(items, entry.getValue());
-            contents.put(entry.getKey(), index);
+        Map<Integer, Integer> hashCodeMap = new HashMap<>();
+        Map<Integer, Object> contents = new HashMap<>();
+        Map<Integer, ItemStack> itemMap = value.getContents();
+        for (Map.Entry<Integer, ItemStack> entry : itemMap.entrySet()) {
+            contents.put(entry.getKey(), value(contents, entry.getValue(), hashCodeMap));
         }
 
         out.beginObject();
@@ -41,8 +55,6 @@ public class GUISignatureTypeAdapter extends TypeAdapter<GUISignature> {
         out.name("size").value(value.getSize());
         out.name("contents");
         mapAdapter.write(out, contents);
-        out.name("items");
-        collectionAdapter.write(out, items);
         out.name("handlerIndexes");
         collectionAdapter.write(out, value.getHandlerIndexes());
         out.endObject();
@@ -51,8 +63,7 @@ public class GUISignatureTypeAdapter extends TypeAdapter<GUISignature> {
     @Override
     public GUISignature read(JsonReader in) throws IOException {
         GUISignatureAdapter signature = new GUISignatureAdapter();
-        Map<String, Number> contents = new HashMap<>();
-        NullableArrayList<ItemStack> items = new NullableArrayList<>();
+        Map<String, Object> contents = new HashMap<>();
         in.beginObject();
         while (in.hasNext()) {
             switch (in.nextName()) {
@@ -73,34 +84,21 @@ public class GUISignatureTypeAdapter extends TypeAdapter<GUISignature> {
                 case "contents":
                     contents = mapAdapter.read(in);
                     break;
-                case "items":
-                    Collection<Map> itemMaps = collectionAdapter.read(in);
-                    for (Map itemMap : itemMaps) {
-                        items.add((ItemStack) ConfigurationSerialization.deserializeObject(itemMap));
-                    }
-                    break;
             }
         }
 
-        for (Map.Entry<String, Number> entry : contents.entrySet()) {
-            signature.item(
-                    Integer.parseInt(entry.getKey()),
-                    items.get(entry.getValue().intValue(), new ItemStack(Material.AIR))
-            );
+        for (Map.Entry<String, Object> entry : contents.entrySet()) {
+            Integer key = Integer.parseInt(entry.getKey());
+            Object value = entry.getValue();
+            if (value instanceof Map) {
+                signature.item(key, ConfigurationSerialization.deserializeObject((Map<String, ?>) entry.getValue()));
+            } else {
+                Number numVal = (Number) value;
+                signature.item(key, signature.getContents().get(numVal.intValue()));
+            }
         }
         in.endObject();
 
         return signature;
-    }
-
-    private int add(List<ItemStack> items, ItemStack item) {
-        for (int i = 0; i < items.size(); i++) {
-            ItemStack elm = items.get(i);
-            if (item.equals(elm))
-                return i;
-        }
-        int ret = items.size();
-        items.add(item);
-        return ret;
     }
 }
