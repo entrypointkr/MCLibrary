@@ -44,7 +44,7 @@ public class GUI {
 
     public void open(HumanEntity human) {
         Inventory topInv = human.getOpenInventory().getTopInventory();
-        Inventory newInv = factory.create(signature, human);
+        Inventory newInv = factory.create(this, human);
 
         if (signature.isSimilar(topInv)) {
             topInv.setContents(newInv.getContents());
