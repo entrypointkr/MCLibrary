@@ -1,7 +1,8 @@
 package kr.rvs.mclibrary.bukkit.inventory.gui;
 
 import kr.rvs.mclibrary.bukkit.collection.EntityNameHashMap;
-import kr.rvs.mclibrary.bukkit.inventory.gui.factory.DefaultInventoryFactory;
+import kr.rvs.mclibrary.bukkit.inventory.gui.factory.BaseInventoryFactory;
+import kr.rvs.mclibrary.bukkit.inventory.gui.factory.DefaultInventoryProcessor;
 import kr.rvs.mclibrary.bukkit.inventory.gui.factory.InventoryFactory;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.HumanEntity;
@@ -38,7 +39,7 @@ public class GUI {
     }
 
     public GUI(GUISignature signature, GUIHandler... handlers) {
-        this(signature, new DefaultInventoryFactory(), handlers);
+        this(signature, new DefaultInventoryProcessor(new BaseInventoryFactory()), handlers);
     }
 
     public void open(HumanEntity human) {

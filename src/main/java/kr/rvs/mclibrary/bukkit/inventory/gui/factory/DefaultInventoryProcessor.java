@@ -1,10 +1,19 @@
 package kr.rvs.mclibrary.bukkit.inventory.gui.factory;
 
+import kr.rvs.mclibrary.bukkit.inventory.gui.GUI;
+import org.bukkit.entity.HumanEntity;
+import org.bukkit.inventory.Inventory;
+
 /**
  * Created by Junhyeong Lim on 2017-09-13.
  */
-public abstract class DefaultInventoryProcessor extends InventoryProcessor {
-    public DefaultInventoryProcessor() {
-        super(new DefaultInventoryFactory());
+public class DefaultInventoryProcessor extends InventoryProcessor {
+    public DefaultInventoryProcessor(InventoryFactory baseFactory) {
+        super(baseFactory);
+    }
+
+    @Override
+    public void process(GUI gui, HumanEntity viewer, Inventory baseInv) {
+        gui.getSignature().getContents().forEach(baseInv::setItem);
     }
 }

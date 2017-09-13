@@ -3,6 +3,7 @@ package kr.rvs.mclibrary.bukkit.inventory.gui.factory;
 import kr.rvs.mclibrary.bukkit.inventory.event.GUIClickEvent;
 import kr.rvs.mclibrary.bukkit.inventory.gui.GUI;
 import kr.rvs.mclibrary.bukkit.inventory.gui.Initializable;
+import kr.rvs.mclibrary.bukkit.inventory.handler.EventCancelHandler;
 import kr.rvs.mclibrary.bukkit.inventory.handler.SpecificSlotHandler;
 import kr.rvs.mclibrary.bukkit.item.ItemBuilder;
 import kr.rvs.mclibrary.bukkit.item.ItemUtils;
@@ -27,8 +28,8 @@ public class PagingInventoryProcessor extends InventoryProcessor implements Init
     private int size = -1;
     private int maxPage = -1;
 
-    public PagingInventoryProcessor(InventoryFactory delegate, ItemStack prevPageBtn, ItemStack pageInfoBtn, ItemStack nextPageBtn, int prevPageIndex, int pageInfoIndex, int nextPageIndex) {
-        super(delegate);
+    public PagingInventoryProcessor(InventoryFactory factory, ItemStack prevPageBtn, ItemStack pageInfoBtn, ItemStack nextPageBtn, int prevPageIndex, int pageInfoIndex, int nextPageIndex) {
+        super(factory);
         this.prevPageBtn = prevPageBtn;
         this.pageInfoBtn = pageInfoBtn;
         this.nextPageBtn = nextPageBtn;
@@ -37,24 +38,24 @@ public class PagingInventoryProcessor extends InventoryProcessor implements Init
         this.nextPageIndex = nextPageIndex;
     }
 
-    public PagingInventoryProcessor(InventoryFactory delegate) {
+    public PagingInventoryProcessor(InventoryFactory factory) {
         this(
-                delegate,
+                factory,
                 new ItemBuilder(Material.DIODE)
                         .display("&7이전 페이지")
                         .build(),
                 new ItemBuilder(Material.PAPER)
-                        .display("&6현재 페이지: " + PAGE)
+                        .display("&e현재 페이지: &a" + PAGE)
                         .build(),
                 new ItemBuilder(Material.REDSTONE_COMPARATOR)
                         .display("&a다음 페이지")
                         .build(),
-                49, 50, 51
+                3, 4, 5
         );
     }
 
     public PagingInventoryProcessor() {
-        this(new DefaultInventoryFactory());
+        this(new BaseInventoryFactory());
     }
 
     @Override
@@ -65,9 +66,22 @@ public class PagingInventoryProcessor extends InventoryProcessor implements Init
         this.size = size - 9;
         this.maxPage = lastKey / size + lastKey % size > 0 ? 1 : 0;
         gui.getHandlers().addHandler(
-                new PrevPageHandler(prevPageIndex),
-                new NextPageHandler(nextPageIndex)
+                new EventCancelHandler(),
+                new PrevPageHandler(getPrevPageIndex()),
+                new NextPageHandler(getNextPageIndex())
         );
+    }
+
+    private int getPrevPageIndex() {
+        return prevPageIndex + size;
+    }
+
+    private int getPageInfoIndex() {
+        return pageInfoIndex + size;
+    }
+
+    private int getNextPageIndex() {
+        return nextPageIndex + size;
     }
 
     @Override
@@ -80,13 +94,13 @@ public class PagingInventoryProcessor extends InventoryProcessor implements Init
         for (int i = start; i < end; i++) {
             inv.setItem(i - start, gui.getSignature().getContents().get(i));
         }
-        inv.setItem(prevPageIndex, new ItemBuilder(prevPageBtn)
+        inv.setItem(getPrevPageIndex(), new ItemBuilder(prevPageBtn)
                 .addReplacements(PAGE, currentPage)
                 .build());
-        inv.setItem(pageInfoIndex, new ItemBuilder(pageInfoBtn)
+        inv.setItem(getPageInfoIndex(), new ItemBuilder(pageInfoBtn)
                 .addReplacements(PAGE, currentPage)
                 .build());
-        inv.setItem(nextPageIndex, new ItemBuilder(nextPageBtn)
+        inv.setItem(getNextPageIndex(), new ItemBuilder(nextPageBtn)
                 .addReplacements(PAGE, currentPage)
                 .build());
     }

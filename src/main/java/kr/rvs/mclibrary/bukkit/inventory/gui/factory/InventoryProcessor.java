@@ -1,20 +1,29 @@
 package kr.rvs.mclibrary.bukkit.inventory.gui.factory;
 
 import kr.rvs.mclibrary.bukkit.inventory.gui.GUI;
+import kr.rvs.mclibrary.bukkit.inventory.gui.Initializable;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.inventory.Inventory;
 
 /**
- * Created by Junhyeong Lim on 2017-09-12.
+ * Created by Junhyeong Lim on 2017-09-13.
  */
-public abstract class InventoryProcessor extends DelegateInventoryFactory {
-    public InventoryProcessor(InventoryFactory delegate) {
-        super(delegate);
+public abstract class InventoryProcessor implements InventoryFactory, Initializable {
+    private final InventoryFactory baseFactory;
+
+    public InventoryProcessor(InventoryFactory baseFactory) {
+        this.baseFactory = baseFactory;
     }
 
     @Override
-    public Inventory create0(GUI gui, HumanEntity viewer, InventoryFactory delegate) {
-        Inventory baseInv = delegate.create(gui, viewer);
+    public void initialize(GUI gui) {
+        if (baseFactory instanceof Initializable)
+            ((Initializable) baseFactory).initialize(gui);
+    }
+
+    @Override
+    public Inventory create(GUI gui, HumanEntity viewer) {
+        Inventory baseInv = baseFactory.create(gui, viewer);
         process(gui, viewer, baseInv);
         return baseInv;
     }
