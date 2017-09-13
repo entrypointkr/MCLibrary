@@ -18,6 +18,7 @@ public class GUI {
     private static final EntityNameHashMap<GUI> GUI_MAP = new EntityNameHashMap<>();
     private final GUISignature signature;
     private InventoryFactory factory;
+    private boolean factoryInit = false;
     private final GUIHandlers handlers = new GUIHandlers(this);
 
     public static void init(Plugin plugin) {
@@ -33,8 +34,6 @@ public class GUI {
         this.signature = signature;
         this.factory = factory;
 
-        if (factory instanceof Initializable)
-            ((Initializable) factory).initialize(this);
         this.handlers.addHandler(handlers);
     }
 
@@ -43,6 +42,11 @@ public class GUI {
     }
 
     public void open(HumanEntity human) {
+        if (!factoryInit && factory instanceof Initializable) {
+            ((Initializable) factory).initialize(this);
+            factoryInit = true;
+        }
+
         Inventory topInv = human.getOpenInventory().getTopInventory();
         Inventory newInv = factory.create(this, human);
 
@@ -64,5 +68,6 @@ public class GUI {
 
     public void setFactory(InventoryFactory factory) {
         this.factory = factory;
+        this.factoryInit = false;
     }
 }
