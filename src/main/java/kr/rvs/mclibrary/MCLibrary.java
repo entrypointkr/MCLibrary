@@ -29,7 +29,7 @@ import java.util.List;
  */
 public class MCLibrary extends JavaPlugin {
     public static final String PACKET_DEBUG = "packet-debug";
-    public static final String DETAIL_LOG = "detail-log";
+    public static final String DETAIL_LOG = "stacktrace";
     private static final CommandManager commandManager = new CommandManager();
     private static final GsonManager gsonManager = new GsonManager();
     private static final SettingManager settingManager = new SettingManager();
