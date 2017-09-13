@@ -92,6 +92,7 @@ public class MCLibrary extends JavaPlugin {
         }
 
         @CommandArgs(
+                perm = "mclibrary.reload",
                 args = "reload",
                 desc = "Reload config file"
         )
