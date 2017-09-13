@@ -29,8 +29,12 @@ public class GUIHandlers {
         this.handlers.addAll(Arrays.asList(handlers));
     }
 
-    public void removeHandler(GUIHandler handler) {
-        this.handlers.remove(handler);
+    public void removeHandler(GUIHandler... handlers) {
+        this.handlers.removeAll(Arrays.asList(handlers));
+    }
+
+    public void clear() {
+        this.handlers.clear();
     }
 
     public void notify(InventoryEvent event) {
