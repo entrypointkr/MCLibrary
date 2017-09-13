@@ -1,7 +1,6 @@
 package kr.rvs.mclibrary.bukkit.inventory.gui.factory;
 
 import kr.rvs.mclibrary.bukkit.inventory.gui.GUI;
-import kr.rvs.mclibrary.bukkit.inventory.gui.GUISignature;
 import kr.rvs.mclibrary.bukkit.inventory.gui.Initializable;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.inventory.Inventory;
@@ -23,9 +22,9 @@ public abstract class DelegateInventoryFactory implements InventoryFactory, Init
     }
 
     @Override
-    public Inventory create(GUISignature signature, HumanEntity viewer) {
-        return create0(signature, viewer, delegate);
+    public Inventory create(GUI gui, HumanEntity viewer) {
+        return create0(gui, viewer, delegate);
     }
 
-    public abstract Inventory create0(GUISignature signature, HumanEntity viewer, InventoryFactory delegate);
+    public abstract Inventory create0(GUI gui, HumanEntity viewer, InventoryFactory delegate);
 }

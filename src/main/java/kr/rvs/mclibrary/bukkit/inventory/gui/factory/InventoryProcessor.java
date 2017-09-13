@@ -1,6 +1,6 @@
 package kr.rvs.mclibrary.bukkit.inventory.gui.factory;
 
-import kr.rvs.mclibrary.bukkit.inventory.gui.GUISignature;
+import kr.rvs.mclibrary.bukkit.inventory.gui.GUI;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.inventory.Inventory;
 
@@ -13,11 +13,11 @@ public abstract class InventoryProcessor extends DelegateInventoryFactory {
     }
 
     @Override
-    public Inventory create0(GUISignature signature, HumanEntity viewer, InventoryFactory delegate) {
-        Inventory baseInv = delegate.create(signature, viewer);
-        process(signature, viewer, baseInv);
+    public Inventory create0(GUI gui, HumanEntity viewer, InventoryFactory delegate) {
+        Inventory baseInv = delegate.create(gui, viewer);
+        process(gui, viewer, baseInv);
         return baseInv;
     }
 
-    public abstract void process(GUISignature signature, HumanEntity viewer, Inventory baseInv);
+    public abstract void process(GUI gui, HumanEntity viewer, Inventory baseInv);
 }

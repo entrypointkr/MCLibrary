@@ -2,7 +2,6 @@ package kr.rvs.mclibrary.bukkit.inventory.gui.factory;
 
 import kr.rvs.mclibrary.bukkit.inventory.event.GUIClickEvent;
 import kr.rvs.mclibrary.bukkit.inventory.gui.GUI;
-import kr.rvs.mclibrary.bukkit.inventory.gui.GUISignature;
 import kr.rvs.mclibrary.bukkit.inventory.gui.Initializable;
 import kr.rvs.mclibrary.bukkit.inventory.handler.SpecificSlotHandler;
 import kr.rvs.mclibrary.bukkit.item.ItemBuilder;
@@ -72,14 +71,14 @@ public class PagingInventoryProcessor extends InventoryProcessor implements Init
     }
 
     @Override
-    public void process(GUISignature signature, HumanEntity viewer, Inventory inv) {
+    public void process(GUI gui, HumanEntity viewer, Inventory inv) {
         Validate.isTrue(size != -1 && maxPage != -1);
 
         int start = (currentPage - 1) * size;
         int end = currentPage * size;
 
         for (int i = start; i < end; i++) {
-            inv.setItem(i - start, signature.getContents().get(i));
+            inv.setItem(i - start, gui.getSignature().getContents().get(i));
         }
         inv.setItem(prevPageIndex, new ItemBuilder(prevPageBtn)
                 .addReplacements(PAGE, currentPage)
