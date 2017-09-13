@@ -8,11 +8,12 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Map;
 
 /**
  * Created by Junhyeong Lim on 2017-09-09.
  */
-public class GUISignatureAdapter implements GUISignature {
+public class GUISignatureAdapter implements GUISignature, Cloneable {
     private InventoryType type;
     private String title;
     private int size;
@@ -49,9 +50,13 @@ public class GUISignatureAdapter implements GUISignature {
         return this;
     }
 
-    public GUISignatureAdapter addHandlerIndexes(Integer... indexes) {
-        this.handlerIndexes.addAll(Arrays.asList(indexes));
+    public GUISignatureAdapter addHandlerIndexes(Collection<Integer> indexes) {
+        this.handlerIndexes.addAll(indexes);
         return this;
+    }
+
+    public GUISignatureAdapter addHandlerIndexes(Integer... indexes) {
+        return addHandlerIndexes(Arrays.asList(indexes));
     }
 
     public GUISignatureAdapter item(Integer index, ItemStack item) {
@@ -92,6 +97,11 @@ public class GUISignatureAdapter implements GUISignature {
         for (ItemStack item : items) {
             item(index++, item);
         }
+        return this;
+    }
+
+    public GUISignatureAdapter item(Map<Integer, ItemStack> itemMap) {
+        this.contents.putAll(itemMap);
         return this;
     }
 
@@ -157,5 +167,14 @@ public class GUISignatureAdapter implements GUISignature {
                 ", contents=" + contents +
                 ", handlerIndexes=" + handlerIndexes +
                 '}';
+    }
+
+    @Override
+    public Object clone() {
+        return new GUISignatureAdapter(type)
+                .title(title)
+                .size(size)
+                .item(contents)
+                .addHandlerIndexes(handlerIndexes);
     }
 }
