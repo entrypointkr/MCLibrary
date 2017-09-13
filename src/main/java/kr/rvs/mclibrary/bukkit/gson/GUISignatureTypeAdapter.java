@@ -5,7 +5,6 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import kr.rvs.mclibrary.bukkit.inventory.gui.GUISignature;
 import kr.rvs.mclibrary.bukkit.inventory.gui.GUISignatureAdapter;
-import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.ItemStack;
 
@@ -92,7 +91,7 @@ public class GUISignatureTypeAdapter extends TypeAdapter<GUISignature> {
             Integer key = Integer.parseInt(entry.getKey());
             Object value = entry.getValue();
             if (value instanceof Map) {
-                signature.item(key, ConfigurationSerialization.deserializeObject((Map<String, ?>) entry.getValue()));
+                signature.item(key, ConfigurationSerializableAdapter.deserialize((Map<String, Object>) entry.getValue()));
             } else {
                 Number numVal = (Number) value;
                 signature.item(key, signature.getContents().get(numVal.intValue()));

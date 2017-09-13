@@ -35,7 +35,7 @@ public class ConfigurationSerializableAdapter extends TypeAdapter<ConfigurationS
         return deserialize(mapAdapter.read(in));
     }
 
-    private Map<String, Object> serialize(ConfigurationSerializable serializable) {
+    public static Map<String, Object> serialize(ConfigurationSerializable serializable) {
         Map<String, Object> serialized = new HashMap<>();
         serialized.putAll(serializable.serialize());
         for (Map.Entry<String, Object> entry : serialized.entrySet()) {
@@ -50,7 +50,7 @@ public class ConfigurationSerializableAdapter extends TypeAdapter<ConfigurationS
         return serialized;
     }
 
-    private ConfigurationSerializable deserialize(Map<String, Object> map) {
+    public static ConfigurationSerializable deserialize(Map<String, Object> map) {
         for (Map.Entry<String, Object> entry : map.entrySet()) {
             String key = entry.getKey();
             Object val = entry.getValue();

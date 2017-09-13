@@ -3,13 +3,13 @@ package kr.rvs.mclibrary;
 import kr.rvs.mclibrary.bukkit.inventory.gui.GUISignature;
 import kr.rvs.mclibrary.bukkit.inventory.gui.GUISignatureAdapter;
 import kr.rvs.mclibrary.gson.GsonUtils;
+import kr.rvs.mclibrary.mock.MockItemMeta;
 import kr.rvs.mclibrary.struct.Injector;
 import kr.rvs.mclibrary.struct.ItemFactory;
 import kr.rvs.mclibrary.struct.MockFactory;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -25,7 +25,7 @@ public class GsonTest extends Assert {
     public void inject() {
         Injector.injectServer(MockFactory.createMockServer());
         ConfigurationSerialization.registerClass(ItemStack.class);
-        ConfigurationSerialization.registerClass(ItemMeta.class);
+        ConfigurationSerialization.registerClass(MockItemMeta.class);
     }
 
     @Test
