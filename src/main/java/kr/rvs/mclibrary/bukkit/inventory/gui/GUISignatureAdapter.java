@@ -17,8 +17,8 @@ public class GUISignatureAdapter implements GUISignature, Cloneable {
     private InventoryType type;
     private String title;
     private int size;
-    private final ItemContents contents = new ItemContents();
-    private final NullableArrayList<Integer> handlerIndexes = new NullableArrayList<>();
+    private ItemContents contents = new ItemContents();
+    private NullableArrayList<Integer> handlerIndexes = new NullableArrayList<>();
 
     public GUISignatureAdapter(InventoryType type) {
         this.type = type;
@@ -164,17 +164,19 @@ public class GUISignatureAdapter implements GUISignature, Cloneable {
                 "type=" + type +
                 ", title='" + title + '\'' +
                 ", size=" + size +
-                ", contents=" + contents +
                 ", handlerIndexes=" + handlerIndexes +
                 '}';
     }
 
     @Override
-    public Object clone() {
-        return new GUISignatureAdapter(type)
-                .title(title)
-                .size(size)
-                .item(contents)
-                .addHandlerIndexes(handlerIndexes);
+    public GUISignatureAdapter clone() {
+        try {
+            GUISignatureAdapter adapter = (GUISignatureAdapter) super.clone();
+            adapter.contents = (ItemContents) contents.clone();
+            adapter.handlerIndexes = (NullableArrayList<Integer>) handlerIndexes.clone();
+            return adapter;
+        } catch (CloneNotSupportedException e) {
+            throw new IllegalStateException(e);
+        }
     }
 }
