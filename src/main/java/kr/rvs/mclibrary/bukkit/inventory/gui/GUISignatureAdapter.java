@@ -168,6 +168,7 @@ public class GUISignatureAdapter implements GUISignature, Cloneable {
                 '}';
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public GUISignatureAdapter clone() {
         try {
