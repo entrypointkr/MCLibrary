@@ -7,8 +7,8 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryEvent;
 
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.logging.Level;
@@ -23,10 +23,16 @@ public class GUIHandlers {
         this.gui = gui;
     }
 
-    private final List<GUIHandler> handlers = new ArrayList<>();
+    private final List<GUIHandler> handlers = new LinkedList<>();
 
-    public void addHandler(GUIHandler... handlers) {
+    public GUIHandlers addFirst(GUIHandler... handlers) {
+        this.handlers.addAll(0, Arrays.asList(handlers));
+        return this;
+    }
+
+    public GUIHandlers addLast(GUIHandler... handlers) {
         this.handlers.addAll(Arrays.asList(handlers));
+        return this;
     }
 
     public void removeHandler(GUIHandler... handlers) {
@@ -40,7 +46,11 @@ public class GUIHandlers {
     public void notify(InventoryEvent event) {
         Consumer<GUIHandler> consumer;
         if (event instanceof InventoryClickEvent) {
-            consumer = handler -> handler.onClick(new GUIClickEvent((InventoryClickEvent) event, gui));
+            GUIClickEvent clickEvent = new GUIClickEvent((InventoryClickEvent) event, gui);
+            consumer = handler -> {
+                if (!clickEvent.isIgnore())
+                    handler.onClick(clickEvent);
+            };
         } else if (event instanceof InventoryCloseEvent) {
             consumer = handler -> handler.onClose((InventoryCloseEvent) event);
         } else if (event instanceof InventoryDragEvent) {

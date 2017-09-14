@@ -2,6 +2,7 @@ package kr.rvs.mclibrary.bukkit.inventory.gui.factory;
 
 import kr.rvs.mclibrary.bukkit.inventory.event.GUIClickEvent;
 import kr.rvs.mclibrary.bukkit.inventory.gui.GUI;
+import kr.rvs.mclibrary.bukkit.inventory.gui.GUIHandler;
 import kr.rvs.mclibrary.bukkit.inventory.gui.Initializable;
 import kr.rvs.mclibrary.bukkit.inventory.handler.EventCancelHandler;
 import kr.rvs.mclibrary.bukkit.inventory.handler.SpecificSlotHandler;
@@ -64,11 +65,12 @@ public class PagingInventoryProcessor extends InventoryProcessor implements Init
         Validate.isTrue(size > 18);
         int lastKey = gui.getSignature().getContents().lastKey();
         this.size = size - 9;
-        this.maxPage = lastKey / size + lastKey % size > 0 ? 1 : 0;
-        gui.getHandlers().addHandler(
+        this.maxPage = lastKey / size + (lastKey % size > 0 ? 1 : 0);
+        gui.getHandlers().addFirst(
                 new EventCancelHandler(),
                 new PrevPageHandler(getPrevPageIndex()),
-                new NextPageHandler(getNextPageIndex())
+                new NextPageHandler(getNextPageIndex()),
+                new EventSlotModerator()
         );
     }
 
@@ -103,6 +105,18 @@ public class PagingInventoryProcessor extends InventoryProcessor implements Init
         inv.setItem(getNextPageIndex(), new ItemBuilder(nextPageBtn)
                 .addReplacements(PAGE, currentPage)
                 .build());
+    }
+
+    class EventSlotModerator implements GUIHandler {
+        @Override
+        public void onClick(GUIClickEvent e) {
+            int slot = e.getRawSlot();
+            if (slot >= 0 && slot < size) {
+                e.setRawSlot(e.getRawSlot() + (currentPage - 1) * size);
+            }
+            if (slot > size)
+                e.setIgnore(true);
+        }
     }
 
     class PrevPageHandler extends SpecificSlotHandler {

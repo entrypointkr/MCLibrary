@@ -26,11 +26,16 @@ public class GUIClickEvent extends InventoryClickEvent {
     private static final OptionalHashMap<Integer, ItemStack> messageItemMap = new OptionalHashMap<>();
     private final InventoryClickEvent delegate;
     private final GUI gui;
+    private int rawSlot;
+    private int slot;
+    private boolean ignore = false;
 
     public GUIClickEvent(InventoryClickEvent delegate, GUI gui) {
         super(delegate.getView(), delegate.getSlotType(), delegate.getRawSlot(), delegate.getClick(), delegate.getAction(), delegate.getHotbarButton());
         this.delegate = delegate;
         this.gui = gui;
+        this.rawSlot = delegate.getRawSlot();
+        this.slot = delegate.getSlot();
     }
 
     public void sendMessage(int tick, String title, String... messages) {
@@ -60,6 +65,22 @@ public class GUIClickEvent extends InventoryClickEvent {
 
     public GUI getGui() {
         return gui;
+    }
+
+    public void setRawSlot(int rawSlot) {
+        this.rawSlot = rawSlot;
+    }
+
+    public void setSlot(int slot) {
+        this.slot = slot;
+    }
+
+    public boolean isIgnore() {
+        return ignore;
+    }
+
+    public void setIgnore(boolean ignore) {
+        this.ignore = ignore;
     }
 
     @Override
@@ -110,12 +131,12 @@ public class GUIClickEvent extends InventoryClickEvent {
 
     @Override
     public int getSlot() {
-        return delegate.getSlot();
+        return slot;
     }
 
     @Override
     public int getRawSlot() {
-        return delegate.getRawSlot();
+        return rawSlot;
     }
 
     @Override
