@@ -126,7 +126,7 @@ public class PagingInventoryProcessor extends InventoryProcessor implements Init
             if (slot >= 0 && slot < size) {
                 e.setRawSlot(e.getRawSlot() + (currentPage - 1) * size);
             }
-            if (slot > size)
+            if (slot >= size)
                 e.setIgnore(true);
         }
     }
