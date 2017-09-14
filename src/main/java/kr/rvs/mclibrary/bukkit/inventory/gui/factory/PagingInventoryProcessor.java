@@ -19,6 +19,7 @@ import org.bukkit.inventory.ItemStack;
  */
 public class PagingInventoryProcessor extends InventoryProcessor implements Initializable {
     public static final String PAGE = "%page%";
+    public static final String MAX_PAGE = "%max-page%";
     private final ItemStack prevPageBtn;
     private final ItemStack pageInfoBtn;
     private final ItemStack nextPageBtn;
@@ -46,7 +47,7 @@ public class PagingInventoryProcessor extends InventoryProcessor implements Init
                         .display("&7이전 페이지")
                         .build(),
                 new ItemBuilder(Material.PAPER)
-                        .display("&e현재 페이지: &a" + PAGE)
+                        .display(String.format("&e페이지: &a%s/%s", PAGE, MAX_PAGE))
                         .build(),
                 new ItemBuilder(Material.REDSTONE_COMPARATOR)
                         .display("&a다음 페이지")
@@ -97,13 +98,23 @@ public class PagingInventoryProcessor extends InventoryProcessor implements Init
             inv.setItem(i - start, gui.getSignature().getContents().get(i));
         }
         inv.setItem(getPrevPageIndex(), new ItemBuilder(prevPageBtn)
-                .addReplacements(PAGE, currentPage)
+                .addReplacements(
+                        PAGE, currentPage,
+                        MAX_PAGE, maxPage
+                )
                 .build());
         inv.setItem(getPageInfoIndex(), new ItemBuilder(pageInfoBtn)
-                .addReplacements(PAGE, currentPage)
+                .addReplacements(
+                        PAGE, currentPage,
+                        MAX_PAGE, maxPage
+                )
+                .amount(currentPage)
                 .build());
         inv.setItem(getNextPageIndex(), new ItemBuilder(nextPageBtn)
-                .addReplacements(PAGE, currentPage)
+                .addReplacements(
+                        PAGE, currentPage,
+                        MAX_PAGE, maxPage
+                )
                 .build());
     }
 
