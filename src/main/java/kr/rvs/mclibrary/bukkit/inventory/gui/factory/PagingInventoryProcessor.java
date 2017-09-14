@@ -62,6 +62,7 @@ public class PagingInventoryProcessor extends InventoryProcessor implements Init
 
     @Override
     public void initialize(GUI gui) {
+        super.initialize(gui);
         int size = gui.getSignature().getSize();
         Validate.isTrue(size > 18);
         int lastKey = gui.getSignature().getContents().lastKey();
