@@ -67,7 +67,7 @@ public class PagingInventoryProcessor extends InventoryProcessor implements Init
         Validate.isTrue(size > 18);
         int lastKey = gui.getSignature().getContents().lastKey();
         this.size = size - 9;
-        this.maxPage = lastKey / size + (lastKey % size > 0 ? 1 : 0);
+        this.maxPage = lastKey / this.size + (lastKey + 1 % this.size > 0 ? 1 : 0);
         gui.getHandlers().addFirst(
                 new EventCancelHandler(),
                 new PrevPageHandler(getPrevPageIndex()),
@@ -138,11 +138,12 @@ public class PagingInventoryProcessor extends InventoryProcessor implements Init
 
         @Override
         public void receive(GUIClickEvent e) {
-            if (ItemUtils.isEmpty(e.getCurrentItem()) || currentPage < 2)
-                return;
-
-            currentPage--;
-            e.getGui().open(e.getWhoClicked());
+            if (!ItemUtils.isEmpty(e.getCurrentItem()) && currentPage >= 2) {
+                currentPage--;
+                e.getGui().open(e.getWhoClicked());
+            } else {
+                e.sendMessage("&c페이지의 끝입니다.");
+            }
         }
     }
 
@@ -153,11 +154,12 @@ public class PagingInventoryProcessor extends InventoryProcessor implements Init
 
         @Override
         public void receive(GUIClickEvent e) {
-            if (ItemUtils.isEmpty(e.getCurrentItem()) || currentPage >= maxPage)
-                return;
-
-            currentPage++;
-            e.getGui().open(e.getWhoClicked());
+            if (!ItemUtils.isEmpty(e.getCurrentItem()) && currentPage < maxPage) {
+                currentPage++;
+                e.getGui().open(e.getWhoClicked());
+            } else {
+                e.sendMessage("&c페이지의 끝입니다.");
+            }
         }
     }
 }

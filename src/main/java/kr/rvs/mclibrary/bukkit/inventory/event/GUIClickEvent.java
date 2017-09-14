@@ -48,8 +48,10 @@ public class GUIClickEvent extends InventoryClickEvent {
             ItemStack newItem = new ItemBuilder(clickedItem)
                     .display(title)
                     .lore(messages).build();
+
             getInventory().setItem(getSlot(), newItem);
 
+            // Delay & Restore
             Bukkit.getScheduler().runTaskLater(MCLibrary.getPlugin(), () -> {
                 messageItemMap.getOptional(getSlot()).ifPresent(item -> {
                     getInventory().setItem(getSlot(), item);
