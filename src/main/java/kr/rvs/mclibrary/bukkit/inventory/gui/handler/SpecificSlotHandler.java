@@ -1,6 +1,5 @@
 package kr.rvs.mclibrary.bukkit.inventory.gui.handler;
 
-import kr.rvs.mclibrary.bukkit.inventory.InventoryUtils;
 import kr.rvs.mclibrary.bukkit.inventory.event.GUIClickEvent;
 import kr.rvs.mclibrary.bukkit.inventory.gui.GUIHandler;
 import org.bukkit.event.inventory.InventoryAction;
@@ -27,7 +26,7 @@ public abstract class SpecificSlotHandler implements GUIHandler {
     @Override
     public void onClick(GUIClickEvent e) {
         if (e.getAction() != InventoryAction.NOTHING
-                && this.slots.contains(InventoryUtils.movedSlot(e))) {
+                && this.slots.contains(e.getRawSlot())) {
             this.receive(e);
         }
     }
