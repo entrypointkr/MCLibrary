@@ -118,7 +118,6 @@ public class PagingInventoryProcessor extends InventoryProcessor implements Init
                 )
                 .build());
     }
-
     class EventSlotModerator implements GUIHandler {
         @Override
         public void onClick(GUIClickEvent e) {
