@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import static kr.rvs.mclibrary.bukkit.MCUtils.colorize;
@@ -26,8 +25,7 @@ public class ItemBuilder {
     private final Material material;
     private int amount = 1;
     private short data = 0;
-
-    private List<Consumer<ItemMeta>> metaProcessors = new ArrayList<>();
+    private final MetaProcessors metaProcessors = new MetaProcessors();
 
     public ItemBuilder(Material material) {
         this.material = material;
@@ -139,47 +137,16 @@ public class ItemBuilder {
     }
 
     public ItemBuilder addReplacements(Object... args) {
-        VarargsParser parser = new VarargsParser(args);
-        List<VarargsParser.Section> sections = new ArrayList<>();
-        parser.parse(sections::add);
-
-        metaProcessors.add(meta -> {
-            String display = meta.getDisplayName();
-            List<String> lores = meta.getLore();
-            boolean hasDisplay = display != null;
-            boolean hasLore = lores != null;
-
-            if (!hasDisplay && !hasLore)
-                return;
-
-            for (VarargsParser.Section section : sections) {
-                String target = String.valueOf(section.<Object>get(0));
-                String replacement = String.valueOf(section.<Object>get(1));
-
-                if (hasDisplay)
-                    display = display.replace(target, replacement);
-
-                if (hasLore) {
-                    for (int i = 0; i < lores.size(); i++) {
-                        lores.set(i, lores.get(i).replace(target, replacement));
-                    }
-                }
-            }
-
-            meta.setDisplayName(display);
-            meta.setLore(lores);
-        });
-
+        metaProcessors.add(meta ->
+                new VarargsParser(args).parse(section ->
+                        ItemUtils.replaceString(meta, section.getString(0), section.getString(1))));
         return this;
     }
 
     public ItemStack build() {
         ItemStack itemStack = new ItemStack(material, amount, data);
         ItemMeta meta = itemStack.getItemMeta();
-
-        metaProcessors.forEach(consumer ->
-                consumer.accept(meta));
-
+        metaProcessors.process(meta);
         itemStack.setItemMeta(meta);
         return itemStack;
     }

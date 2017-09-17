@@ -5,7 +5,9 @@ import kr.rvs.mclibrary.general.Wrapper;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -36,11 +38,6 @@ public class ItemWrapper extends Wrapper<ItemStack> {
         return !isEmpty();
     }
 
-    @Override
-    public ItemWrapper clone() {
-        return new ItemWrapper(getHandle().clone());
-    }
-
     public ItemWrapper setLore(String... lores) {
         ItemMeta meta = getHandle().getItemMeta();
         meta.setLore(asColorizeList(lores));
@@ -64,8 +61,9 @@ public class ItemWrapper extends Wrapper<ItemStack> {
 
     public ItemWrapper addLore(String... lores) {
         ItemMeta meta = getHandle().getItemMeta();
-        List<String> loreList = meta.getLore();
+        List<String> loreList = Optional.ofNullable(meta.getLore()).orElse(new ArrayList<>());
         loreList.addAll(asColorizeList(lores));
+        meta.setLore(loreList);
         getHandle().setItemMeta(meta);
 
         return this;
@@ -88,5 +86,15 @@ public class ItemWrapper extends Wrapper<ItemStack> {
         ItemMeta meta = getHandle().getItemMeta();
         String displayName = meta.getDisplayName();
         return displayName != null ? displayName : def;
+    }
+
+    public ItemWrapper replaceString(Object... args) {
+        ItemUtils.replaceString(getHandle(), args);
+        return this;
+    }
+
+    @Override
+    public ItemWrapper clone() {
+        return new ItemWrapper(getHandle().clone());
     }
 }

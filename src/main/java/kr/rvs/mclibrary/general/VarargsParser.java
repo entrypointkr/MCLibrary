@@ -48,6 +48,11 @@ public class VarargsParser {
             return value != null ? (T) value : null;
         }
 
+        public String getString(Integer index) {
+            Object value = values.get(index);
+            return value != null ? String.valueOf(value) : null;
+        }
+
         public <T> Optional<T> getOptional(Integer index) {
             return Optional.ofNullable(get(index));
         }
