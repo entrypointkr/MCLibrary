@@ -9,7 +9,7 @@ import kr.rvs.mclibrary.gson.SettingManager;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
-// TODO: 서브커맨드 도움말, 직렬화
+// TODO: �꽌釉뚯빱留⑤뱶 �룄��留�, 吏곷젹�솕
 
 /**
  * Created by Junhyeong Lim on 2017-07-26.
@@ -17,7 +17,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class MCLibrary extends JavaPlugin {
     public static final String PACKET_DEBUG = "packet-debug";
     public static final String DETAIL_LOG = "stacktrace";
-//    private static final CommandManager commandManager = new CommandManager();
+    //    private static final CommandManager commandManager = new CommandManager();
     private static final GsonManager gsonManager = new GsonManager();
     private static final SettingManager settingManager = new SettingManager();
     private static final Version bukkitVersion = new Version(Bukkit.getBukkitVersion());
@@ -69,6 +69,11 @@ public class MCLibrary extends JavaPlugin {
     public void onDisable() {
         settingManager.save();
         saveConfig();
+        test(null);
+    }
+
+    public void test(String abc) {
+        System.out.println(abc.length());
     }
 
 //    @CommandIgnore

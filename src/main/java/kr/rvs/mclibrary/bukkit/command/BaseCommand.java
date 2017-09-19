@@ -1,12 +1,6 @@
 package kr.rvs.mclibrary.bukkit.command;
 
-import kr.rvs.mclibrary.bukkit.command.internal.ICommand;
-import kr.rvs.mclibrary.bukkit.player.CommandSenderWrapper;
-import kr.rvs.mclibrary.collection.VolatileArrayList;
-
-import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -36,59 +30,7 @@ public abstract class BaseCommand {
         return this;
     }
 
-    public static void main(String[] args) {
-        CommandCompiler compiler = new CommandCompiler();
-        compiler.addCommand(new SubCommand() {
-            @Override
-            public String args() {
-                return "awefawef awf";
-            }
-
-            @Override
-            public void execute(CommandSenderWrapper sender, String label, VolatileArrayList args) {
-                System.out.println(args.toString());
-            }
-        });
-//        compiler.addCommand(
-//                new SubCommand() {
-//                    @Override
-//                    public String args() {
-//                        return "a b c";
-//                    }
-//
-//                    @Override
-//                    public void execute(CommandSenderWrapper sender, String label, VolatileArrayList args) {
-//
-//                    }
-//                }
-//        );
-//        compiler.addCommand(
-//                new SubCommand() {
-//                    @Override
-//                    public String args() {
-//                        return "a b d";
-//                    }
-//
-//                    @Override
-//                    public void execute(CommandSenderWrapper sender, String label, VolatileArrayList args) {
-//
-//                    }
-//                }
-//        );
-//        compiler.addCommand(
-//                new SubCommand() {
-//                    @Override
-//                    public String args() {
-//                        return "c a d";
-//                    }
-//
-//                    @Override
-//                    public void execute(CommandSenderWrapper sender, String label, VolatileArrayList args) {
-//
-//                    }
-//                }
-//        );
-        ICommand command = compiler.getCommand();
-        command.execute(null, "test", new ArrayDeque<>(Arrays.asList("awefawef", "aw")));
+    public CommandCompiler getCompiler() {
+        return compiler;
     }
 }

@@ -1,12 +1,9 @@
 package kr.rvs.mclibrary.bukkit.command;
 
-import kr.rvs.mclibrary.bukkit.player.CommandSenderWrapper;
-import kr.rvs.mclibrary.collection.VolatileArrayList;
-
 /**
  * Created by Junhyeong Lim on 2017-09-19.
  */
-public interface SubCommand {
+public interface SubCommand extends CommandExecutable {
     String args();
 
     default int min() {
@@ -16,6 +13,4 @@ public interface SubCommand {
     default int max() {
         return 0;
     }
-
-    void execute(CommandSenderWrapper sender, String label, VolatileArrayList args);
 }

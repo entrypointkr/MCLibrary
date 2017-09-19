@@ -1,8 +1,6 @@
 package kr.rvs.mclibrary.bukkit.command;
 
 import kr.rvs.mclibrary.bukkit.command.internal.CommandProcessor;
-import kr.rvs.mclibrary.bukkit.player.CommandSenderWrapper;
-import kr.rvs.mclibrary.collection.VolatileArrayList;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandMap;
 import org.bukkit.plugin.Plugin;
@@ -27,33 +25,10 @@ public class CommandManager {
         }
     }
 
-    public void registerCommand(Plugin plugin, BaseCommand... commands) {
+    public void registerCommands(Plugin plugin, BaseCommand... commands) {
         for (BaseCommand command : commands) {
-            CommandProcessor processor = new CommandProcessor(
-                    command,
-                    null,
-                    plugin
-            );
+            CommandProcessor processor = new CommandProcessor(command, plugin);
             commandMap.register(command.label(), plugin.getName(), processor);
-        }
-    }
-
-    static class TestCommand extends BaseCommand {
-        @Override
-        public String label() {
-            return "test";
-        }
-    }
-
-    static class TestSubCommand implements SubCommand {
-        @Override
-        public String args() {
-            return "a b";
-        }
-
-        @Override
-        public void execute(CommandSenderWrapper sender, String label, VolatileArrayList args) {
-            System.out.println(args.toString());
         }
     }
 }
