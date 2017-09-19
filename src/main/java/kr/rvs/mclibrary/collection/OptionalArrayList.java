@@ -21,4 +21,8 @@ public class OptionalArrayList<E> extends NullableArrayList<E> {
     public Optional<E> getOptional(int index) {
         return Optional.ofNullable(get(index));
     }
+
+    public Optional<E> removeOptional(int index) {
+        return Optional.ofNullable(remove(index));
+    }
 }

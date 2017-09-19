@@ -1,56 +1,59 @@
 package kr.rvs.mclibrary.bukkit.command;
 
-import kr.rvs.mclibrary.Static;
-import kr.rvs.mclibrary.reflection.ClassProbe;
-import org.bukkit.plugin.java.JavaPlugin;
+import kr.rvs.mclibrary.bukkit.command.internal.CommandProcessor;
+import kr.rvs.mclibrary.bukkit.player.CommandSenderWrapper;
+import kr.rvs.mclibrary.collection.VolatileArrayList;
+import org.bukkit.Bukkit;
+import org.bukkit.command.CommandMap;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.PluginManager;
 
 import java.lang.reflect.Field;
-import java.util.Arrays;
-import java.util.logging.Level;
 
 /**
- * Created by Junhyeong Lim on 2017-07-26.
+ * Created by Junhyeong Lim on 2017-09-19.
  */
 public class CommandManager {
-    public void registerCommand(MCCommand command, JavaPlugin plugin) {
-        CommandProcessor processor = new CommandProcessor(
-                command.label(),
-                command.description(),
-                command.usage(),
-                Arrays.asList(command.aliases()),
-                plugin,
-                command
-        );
+    private final CommandMap commandMap;
 
-        CommandUtils.registerCommand(plugin.getName(), processor);
-        Static.log(Level.INFO, "&eRegistered command \"/" + command.label() + "\" from " + plugin.getName());
+    public CommandManager() {
+        try {
+            PluginManager manager = Bukkit.getPluginManager();
+            Field field = manager.getClass().getDeclaredField("commandMap");
+            field.setAccessible(true);
+            commandMap = (CommandMap) field.get(manager);
+        } catch (Exception ex) {
+            throw new IllegalStateException(ex);
+        }
     }
 
-    public void registerCommands(String packageName, JavaPlugin plugin) {
-        ClassLoader pluginCL = null;
+    public void registerCommand(Plugin plugin, BaseCommand... commands) {
+        for (BaseCommand command : commands) {
+            CommandProcessor processor = new CommandProcessor(
+                    command,
+                    null,
+                    plugin
+            );
+            commandMap.register(command.label(), plugin.getName(), processor);
+        }
+    }
 
-        try {
-            Field field = JavaPlugin.class.getDeclaredField("classLoader");
-            field.setAccessible(true);
-            pluginCL = (ClassLoader) field.get(plugin);
-        } catch (NoSuchFieldException | IllegalAccessException e) {
-            e.printStackTrace();
+    static class TestCommand extends BaseCommand {
+        @Override
+        public String label() {
+            return "test";
+        }
+    }
+
+    static class TestSubCommand implements SubCommand {
+        @Override
+        public String args() {
+            return "a b";
         }
 
-        new ClassProbe(packageName, Thread.currentThread().getContextClassLoader(), getClass().getClassLoader(), pluginCL).getSubTypesOf(MCCommand.class)
-                .stream()
-                .filter(aClass -> !aClass.isInterface() && !aClass.isAnnotationPresent(CommandIgnore.class))
-                .forEach(aClass -> {
-                    try {
-                        registerCommand(aClass.newInstance(), plugin);
-                    } catch (InstantiationException | IllegalAccessException e) {
-                        Static.log(e);
-                    }
-                });
-    }
-
-    public void registerCommands(JavaPlugin plugin) {
-        String mainName = plugin.getDescription().getMain();
-        registerCommands(mainName.substring(0, mainName.indexOf('.')), plugin);
+        @Override
+        public void execute(CommandSenderWrapper sender, String label, VolatileArrayList args) {
+            System.out.println(args.toString());
+        }
     }
 }
