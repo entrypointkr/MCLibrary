@@ -7,10 +7,10 @@ public interface SubCommand extends CommandExecutable {
     String args();
 
     default int min() {
-        return Integer.MAX_VALUE;
+        return 0;
     }
 
     default int max() {
-        return 0;
+        return Integer.MAX_VALUE;
     }
 }

@@ -23,7 +23,7 @@ public abstract class BaseCommand {
         return new ArrayList<>();
     }
 
-    public BaseCommand addCommand(SubCommand... commands) {
+    public BaseCommand addCommands(SubCommand... commands) {
         for (SubCommand command : commands) {
             compiler.addCommand(command);
         }
