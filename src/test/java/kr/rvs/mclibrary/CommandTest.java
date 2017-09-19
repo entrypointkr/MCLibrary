@@ -40,7 +40,7 @@ public class CommandTest extends Assert {
 
     @Test
     public void commandTest() throws InterruptedException {
-        commandMap.dispatch(mockSender, "test a b c");
+        commandMap.dispatch(mockSender, "test a b c 1 2 3");
 
         if (!latch.await(3, TimeUnit.SECONDS)) {
             throw new Error("Command testing fail");
@@ -74,6 +74,16 @@ public class CommandTest extends Assert {
         @Override
         public String args() {
             return "a b c";
+        }
+
+        @Override
+        public int min() {
+            return 3;
+        }
+
+        @Override
+        public int max() {
+            return 3;
         }
 
         @Override
