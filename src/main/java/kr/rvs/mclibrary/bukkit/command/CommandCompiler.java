@@ -19,15 +19,14 @@ public class CommandCompiler {
         CommandArguments args = new CommandArguments(Arrays.asList(ARGS_PATTERN.split(subCommand.args())));
         int lastIndex = args.size() - 1;
         String lastArg = lastIndex >= 0 && args.get(0) != null ? args.remove(lastIndex--) : "";
-        CompositeCommand ctx = command.computeIfAbsent(args, k -> new CompositeCommand());
-        ctx.put(lastArg, new ExecutableCommand(subCommand));
+        CompositeCommand ctx = this.command;
 
-        for (int i = lastIndex - 1; i >= 0; i--) {
+        for (int i = 0; i <= lastIndex; i++) {
             String arg = args.get(i);
-            CompositeCommand newCtx = new CompositeCommand();
-            newCtx.put(arg, ctx);
-            ctx = newCtx;
+            ctx = ctx.computeIfAbsent(arg, k -> new CompositeCommand());
         }
+
+        ctx.put(lastArg, new ExecutableCommand(subCommand));
     }
 
     public ICommand getCommand() {

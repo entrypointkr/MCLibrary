@@ -48,16 +48,4 @@ public class CompositeCommand extends OptionalHashMap<String, ICommand> implemen
 
         return (CompositeCommand) command;
     }
-
-    public CompositeCommand computeIfAbsent(CommandArguments args, Function<String, CompositeCommand> function) {
-        String firstArg = args.peekFirst();
-        CompositeCommand composite = computeIfAbsent(firstArg, function);
-
-        for (int i = 1; i < args.size(); i++) {
-            String arg = args.get(i);
-            composite = composite.computeIfAbsent(arg, k -> new CompositeCommand());
-        }
-
-        return composite;
-    }
 }
