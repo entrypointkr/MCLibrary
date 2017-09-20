@@ -1,9 +1,6 @@
 package kr.rvs.mclibrary.bukkit.command;
 
-import kr.rvs.mclibrary.bukkit.command.internal.CommandArguments;
-import kr.rvs.mclibrary.bukkit.command.internal.CompositeCommand;
-import kr.rvs.mclibrary.bukkit.command.internal.ExecutableCommand;
-import kr.rvs.mclibrary.bukkit.command.internal.ICommand;
+import kr.rvs.mclibrary.bukkit.command.internal.*;
 
 import java.util.Arrays;
 import java.util.regex.Pattern;
@@ -26,7 +23,8 @@ public class CommandCompiler {
             ctx = ctx.computeIfAbsent(arg, k -> new CompositeCommand());
         }
 
-        ctx.put(lastArg, new ExecutableCommand(subCommand));
+        SubCommand proxy = new SubCommandProxy(subCommand);
+        ctx.put(lastArg, new ExecutableCommand(proxy, proxy));
     }
 
     public ICommand getCommand() {

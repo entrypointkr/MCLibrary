@@ -23,14 +23,14 @@ public abstract class BaseCommand {
         return new ArrayList<>();
     }
 
-    public BaseCommand addCommands(SubCommand... commands) {
+    public final BaseCommand addCommands(SubCommand... commands) {
         for (SubCommand command : commands) {
             compiler.addCommand(command);
         }
         return this;
     }
 
-    public CommandCompiler getCompiler() {
+    public final CommandCompiler getCompiler() {
         return compiler;
     }
 }
