@@ -11,8 +11,6 @@ import kr.rvs.mclibrary.plugin.LibraryCommand;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
-// TODO: �꽌釉뚯빱留⑤뱶 �룄��留�, 吏곷젹�솕
-
 /**
  * Created by Junhyeong Lim on 2017-07-26.
  */
