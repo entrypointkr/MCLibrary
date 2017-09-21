@@ -26,16 +26,20 @@ public class LibraryCommand extends BaseCommand {
 
     public LibraryCommand(MCLibrary instance) {
         this.instance = instance;
-        addCommands(
-                new ReloadCommand(),
-                new KillAllCommand(),
-                new GUICommand()
-        );
     }
 
     @Override
     public String label() {
         return "mclibrary";
+    }
+
+    @Override
+    public SubCommand[] commands() {
+        return new SubCommand[] {
+                new ReloadCommand(),
+                new KillAllCommand(),
+                new GUICommand()
+        };
     }
 
     class ReloadCommand implements SubCommand {
@@ -50,12 +54,12 @@ public class LibraryCommand extends BaseCommand {
         }
 
         @Override
-        public void execute(CommandSenderWrapper sender, String label, VolatileArrayList args) {
+        public void execute(CommandSenderWrapper wrapper, String label, VolatileArrayList args) {
             FileConfiguration config = instance.getConfig();
             instance.reloadConfig();
             instance.configInit();
             for (String key : config.getKeys(true)) {
-                sender.sendMessage(key + ": " + config.get(key));
+                wrapper.sendMessage(key + ": " + config.get(key));
             }
         }
     }
@@ -77,8 +81,8 @@ public class LibraryCommand extends BaseCommand {
         }
 
         @Override
-        public void execute(CommandSenderWrapper sender, String label, VolatileArrayList args) {
-            sender.getPlayer().getWorld().getEntities().stream()
+        public void execute(CommandSenderWrapper wrapper, String label, VolatileArrayList args) {
+            wrapper.getPlayer().getWorld().getEntities().stream()
                     .filter(entity -> entity instanceof Creature)
                     .forEach(Entity::remove);
         }
@@ -101,7 +105,7 @@ public class LibraryCommand extends BaseCommand {
         }
 
         @Override
-        public void execute(CommandSenderWrapper sender, String label, VolatileArrayList args) {
+        public void execute(CommandSenderWrapper wrapper, String label, VolatileArrayList args) {
             new GUI(
                     new GUISignatureAdapter(InventoryType.CHEST)
                             .title("MCLibrary GUI")
@@ -116,7 +120,7 @@ public class LibraryCommand extends BaseCommand {
                             );
                         }
                     }
-            ).open(sender.getPlayer());
+            ).open(wrapper.getPlayer());
         }
     }
 }

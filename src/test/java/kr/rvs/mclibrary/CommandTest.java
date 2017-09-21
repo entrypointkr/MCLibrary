@@ -30,11 +30,8 @@ public class CommandTest extends Assert {
     @Before
     public void register() throws NoSuchMethodException {
         Injector.injectServer(MockFactory.createMockServer());
-        BaseCommand command = new TestCommand().addCommands(
-                new TestSubCommand(),
-                new TabCompleteTestSubCommand()
-        );
-        CommandProcessor processor = new CommandProcessor(command, MockFactory.createPlugin());
+
+        CommandProcessor processor = new CommandProcessor(new TestCommand(), MockFactory.createPlugin());
         commandMap.register(processor.getLabel(), processor);
     }
 
@@ -50,7 +47,8 @@ public class CommandTest extends Assert {
     @Test
     public void commandHelp() {
         // Help message
-        commandMap.dispatch(mockSender, "test awe faw");
+        commandMap.dispatch(mockSender, "test help -1");
+        commandMap.dispatch(mockSender, "test help");
         commandMap.dispatch(mockSender, "test help 2");
     }
 
@@ -67,6 +65,11 @@ public class CommandTest extends Assert {
         @Override
         public String label() {
             return "test";
+        }
+
+        @Override
+        public SubCommand[] commands() {
+            return new SubCommand[]{new TestSubCommand(), new TabCompleteTestSubCommand()};
         }
     }
 
@@ -87,7 +90,7 @@ public class CommandTest extends Assert {
         }
 
         @Override
-        public void execute(CommandSenderWrapper sender, String label, VolatileArrayList args) {
+        public void execute(CommandSenderWrapper wrapper, String label, VolatileArrayList args) {
             latch.countDown();
         }
     }
@@ -99,7 +102,7 @@ public class CommandTest extends Assert {
         }
 
         @Override
-        public void execute(CommandSenderWrapper sender, String label, VolatileArrayList args) {
+        public void execute(CommandSenderWrapper wrapper, String label, VolatileArrayList args) {
 
         }
 

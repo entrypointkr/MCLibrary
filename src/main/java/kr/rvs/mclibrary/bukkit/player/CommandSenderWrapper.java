@@ -26,6 +26,10 @@ public class CommandSenderWrapper {
         }
     }
 
+    public void sendMessage(StringBuilder builder) {
+        sendMessage(builder.toString());
+    }
+
     public CommandSender getSender() {
         return sender;
     }

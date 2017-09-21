@@ -39,17 +39,17 @@ public class SubCommandProxy implements SubCommand, TabCompletable {
     }
 
     @Override
-    public void execute(CommandSenderWrapper sender, String label, VolatileArrayList args) {
+    public void execute(CommandSenderWrapper wrapper, String label, VolatileArrayList args) {
         if (command.min() > args.size() || command.max() < args.size()
-                || !command.type().isValid(sender))
+                || !command.type().isValid(wrapper))
             return;
 
         String perm = command.perm();
-        if (!StringUtils.isEmpty(perm) && !sender.getSender().hasPermission(perm)) {
+        if (!StringUtils.isEmpty(perm) && !wrapper.getSender().hasPermission(perm)) {
             return;
         }
 
-        command.execute(sender, label, args);
+        command.execute(wrapper, label, args);
     }
 
     @Override

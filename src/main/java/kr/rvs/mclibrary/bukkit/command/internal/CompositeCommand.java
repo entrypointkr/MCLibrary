@@ -15,8 +15,8 @@ import java.util.stream.Collectors;
 public class CompositeCommand extends OptionalHashMap<String, ICommand> implements ICommand {
     @Override
     public void execute(CommandSender sender, String label, CommandArguments args) {
-        getOptional(args.pollFirst()).ifPresent(mcCommand ->
-                mcCommand.execute(sender, label, args));
+        getOptional(args.pollFirst()).ifPresent(command ->
+                command.execute(sender, label, args));
     }
 
     @Override

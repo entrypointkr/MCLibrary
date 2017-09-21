@@ -10,11 +10,11 @@ import java.util.List;
  * Created by Junhyeong Lim on 2017-09-19.
  */
 public interface SubCommand extends CommandExecutable, TabCompletable {
-    String args();
-
     default CommandType type() {
         return CommandType.DEFAULT;
     }
+
+    String args();
 
     default String perm() {
         return null;
@@ -26,6 +26,14 @@ public interface SubCommand extends CommandExecutable, TabCompletable {
 
     default int max() {
         return Integer.MAX_VALUE;
+    }
+
+    default String usage() {
+        return "";
+    }
+
+    default String desc() {
+        return "";
     }
 
     @Override

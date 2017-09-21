@@ -18,9 +18,9 @@ public class ReflectionExecutor extends MethodWrapper implements CommandExecutab
     }
 
     @Override
-    public void execute(CommandSenderWrapper sender, String label, VolatileArrayList args) {
+    public void execute(CommandSenderWrapper wrapper, String label, VolatileArrayList args) {
         try {
-            getMethod().invoke(getHandle(), sender, label, args);
+            getMethod().invoke(getHandle(), wrapper, label, args);
         } catch (IllegalAccessException | InvocationTargetException e) {
             Static.log(e);
         }

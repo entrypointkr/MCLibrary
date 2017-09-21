@@ -38,10 +38,12 @@ public class MockFactory extends Mockito {
     }
 
     public static CommandSender createCommandSender() {
+        Server server = createMockServer();
         CommandSender sender = mock(
                 CommandSender.class,
                 withSettings().extraInterfaces(Player.class)
         );
+        when(sender.getServer()).thenReturn(server);
         doAnswer(invocation -> {
             String fixed = StringUtils.join((String[]) invocation.getArguments()[0], '\n');
             System.out.println(ChatColor.stripColor(fixed));

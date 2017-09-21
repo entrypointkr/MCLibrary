@@ -28,7 +28,7 @@ public class CommandManager {
     public void registerCommands(Plugin plugin, BaseCommand... commands) {
         for (BaseCommand command : commands) {
             CommandProcessor processor = new CommandProcessor(command, plugin);
-            commandMap.register(command.label(), plugin.getName(), processor);
+            commandMap.register(command.getLabel(), plugin.getName(), processor);
         }
     }
 }

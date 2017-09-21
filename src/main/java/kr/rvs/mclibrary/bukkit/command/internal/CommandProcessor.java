@@ -16,10 +16,14 @@ public class CommandProcessor extends Command implements PluginIdentifiableComma
     private final ICommand command;
     private final Plugin plugin;
 
-    public CommandProcessor(BaseCommand base, Plugin plugin) {
-        super(base.label(), base.description(), base.usage(), base.aliases());
-        this.command = base.getCompiler().getCommand();
+    public CommandProcessor(BaseCommand base, ICommand command, Plugin plugin) {
+        super(base.getLabel(), base.description(), base.usage(), base.aliases());
+        this.command = command;
         this.plugin = plugin;
+    }
+
+    public CommandProcessor(BaseCommand base, Plugin plugin) {
+        this(base, new CommandCompiler(base).compile(), plugin);
     }
 
     @Override
@@ -31,7 +35,7 @@ public class CommandProcessor extends Command implements PluginIdentifiableComma
     @Override
     public List<String> tabComplete(CommandSender sender, String alias, String[] args) throws IllegalArgumentException {
         List<String> ret = command.tabComplete(sender, alias, new CommandArguments(Arrays.asList(args)));
-        return ret.isEmpty() ? super.tabComplete(sender, alias, args) : ret;
+        return ret != null && ret.isEmpty() ? super.tabComplete(sender, alias, args) : ret;
     }
 
     @Override
