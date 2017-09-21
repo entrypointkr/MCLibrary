@@ -35,7 +35,7 @@ public class HelpSubCommand implements SubCommand {
             wrapper.sendMessage(header);
 
             for (SubCommand command : subCommands) {
-                wrapper.sendMessage(commandUsage(label, command));
+                wrapper.sendMessage(commandUsage(sender, label, command));
             }
         } else {
             int currPage = Math.max(args.getInt(0, 1), 1);
@@ -51,7 +51,7 @@ public class HelpSubCommand implements SubCommand {
             wrapper.sendMessage(String.format("&7'/%s %s [페이지]' 를 입력할 수 있습니다.", label, this.args));
 
             for (int i = start; i < end; i++) {
-                wrapper.sendMessage(commandUsage(label, subCommands[i]));
+                wrapper.sendMessage(commandUsage(sender, label, subCommands[i]));
             }
         }
     }
@@ -62,16 +62,22 @@ public class HelpSubCommand implements SubCommand {
         }
     }
 
-    private String commandUsage(String label, SubCommand command) {
+    private String commandUsage(CommandSender sender, String label, SubCommand command) {
+        boolean useable = sender.hasPermission(command.perm());
         StringBuilder contents = new StringBuilder()
-                .append("&6/").append(label);
+                .append(useable ? "&6" : "&c").append("/").append(label);
         if (StringUtils.isNotEmpty(command.args()))
             contents.append(' ').append(command.args());
         if (StringUtils.isNotEmpty(command.usage()))
             contents.append(' ').append(command.usage());
-        if (StringUtils.isNotEmpty(command.desc())) {
-            contents.append(": &f");
-            contents.append(' ').append(command.desc());
+
+        if (useable) {
+            if (StringUtils.isNotEmpty(command.desc())) {
+                contents.append(": &f");
+                contents.append(' ').append(command.desc());
+            }
+        } else {
+            contents.append(": &f").append(command.perm()).append(" &c권한 필요");
         }
         return contents.toString();
     }

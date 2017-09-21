@@ -6,6 +6,7 @@ import kr.rvs.mclibrary.bukkit.command.exception.PermissionDeniedException;
 import kr.rvs.mclibrary.bukkit.player.CommandSenderWrapper;
 import kr.rvs.mclibrary.collection.VolatileArrayList;
 import org.apache.commons.lang.StringUtils;
+import org.bukkit.command.CommandSender;
 
 /**
  * Created by Junhyeong Lim on 2017-09-21.
@@ -34,7 +35,7 @@ public class DefaultCommandExceptionHandler extends CommandExceptionHandlerAdapt
             wrapper.sendMessage(header.toString());
 
             for (SubCommand command : baseCommand.commands()) {
-                wrapper.sendMessage(commandUsage(baseCommand.getLabel(), command));
+                wrapper.sendMessage(commandUsage(wrapper.getSender(), baseCommand.getLabel(), command));
             }
         }
     }
@@ -43,7 +44,7 @@ public class DefaultCommandExceptionHandler extends CommandExceptionHandlerAdapt
     public void handle(InvalidUsageException ex) {
         CommandSenderWrapper wrapper = ex.getSender();
         wrapper.sendMessage("&c명령어를 잘못 사용하셨습니다. 올바른 사용법:");
-        wrapper.sendMessage(commandUsage(ex.getCommand().getLabel(), ex.getSubCommand()));
+        wrapper.sendMessage(commandUsage(wrapper.getSender(), ex.getCommand().getLabel(), ex.getSubCommand()));
     }
 
     @Override
@@ -52,16 +53,22 @@ public class DefaultCommandExceptionHandler extends CommandExceptionHandlerAdapt
         wrapper.sendMessage("&c권한 &f" + ex.getPermissionNode() + " &c이 필요합니다.");
     }
 
-    private String commandUsage(String label, SubCommand command) {
+    private String commandUsage(CommandSender sender, String label, SubCommand command) {
+        boolean useable = sender.hasPermission(command.perm());
         StringBuilder contents = new StringBuilder()
-                .append("&6/").append(label);
+                .append(useable ? "&6" : "&c").append("/").append(label);
         if (StringUtils.isNotEmpty(command.args()))
             contents.append(' ').append(command.args());
         if (StringUtils.isNotEmpty(command.usage()))
             contents.append(' ').append(command.usage());
-        if (StringUtils.isNotEmpty(command.desc())) {
-            contents.append(": &f");
-            contents.append(' ').append(command.desc());
+
+        if (useable) {
+            if (StringUtils.isNotEmpty(command.desc())) {
+                contents.append(": &f");
+                contents.append(' ').append(command.desc());
+            }
+        } else {
+            contents.append(": &f").append(command.perm()).append(" &c권한 필요");
         }
         return contents.toString();
     }
