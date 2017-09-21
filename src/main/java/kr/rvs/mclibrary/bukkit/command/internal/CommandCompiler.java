@@ -1,7 +1,6 @@
 package kr.rvs.mclibrary.bukkit.command.internal;
 
 import kr.rvs.mclibrary.bukkit.command.BaseCommand;
-import kr.rvs.mclibrary.bukkit.command.HelpSubCommand;
 import kr.rvs.mclibrary.bukkit.command.SubCommand;
 
 import java.util.Arrays;
@@ -18,17 +17,9 @@ public class CommandCompiler {
         this.baseCommand = baseCommand;
     }
 
-    private void put(CompositeCommand composite, String arg, SubCommand command) {
-        SubCommand proxy = new SubCommandProxy(command);
-        composite.put(arg, new ExecutableCommand(proxy, proxy));
-    }
-
     public ICommand compile() {
         CompositeCommand ret = new CompositeCommand();
         SubCommand[] subCommands = baseCommand.commands();
-
-        if (baseCommand.helpCommand())
-            put(ret, "help", new HelpSubCommand(subCommands, baseCommand));
 
         for (SubCommand command : subCommands) {
             CommandArguments args = new CommandArguments(Arrays.asList(ARGS_PATTERN.split(command.args())));
@@ -41,7 +32,8 @@ public class CommandCompiler {
                 ctx = ctx.computeIfAbsent(arg, k -> new CompositeCommand());
             }
 
-            put(ctx, lastArg, command);
+            SubCommandProxy proxy = new SubCommandProxy(command);
+            ctx.put(lastArg, new ExecutableCommand(proxy, proxy));
         }
 
         return ret;

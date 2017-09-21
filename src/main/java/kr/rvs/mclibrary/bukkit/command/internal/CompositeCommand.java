@@ -1,6 +1,9 @@
 package kr.rvs.mclibrary.bukkit.command.internal;
 
 import kr.rvs.mclibrary.Static;
+import kr.rvs.mclibrary.bukkit.command.BaseCommand;
+import kr.rvs.mclibrary.bukkit.command.exception.CommandNotFoundException;
+import kr.rvs.mclibrary.bukkit.player.CommandSenderWrapper;
 import kr.rvs.mclibrary.collection.OptionalHashMap;
 import org.bukkit.command.CommandSender;
 
@@ -14,9 +17,13 @@ import java.util.stream.Collectors;
  */
 public class CompositeCommand extends OptionalHashMap<String, ICommand> implements ICommand {
     @Override
-    public void execute(CommandSender sender, String label, CommandArguments args) {
-        getOptional(args.pollFirst()).ifPresent(command ->
-                command.execute(sender, label, args));
+    public void execute(CommandSender sender, BaseCommand cmd, String label, CommandArguments args) {
+        ICommand command = get(args.pollFirst());
+        if (command != null) {
+            command.execute(sender, cmd, label, args);
+        } else {
+            throw new CommandNotFoundException(cmd, this, new CommandSenderWrapper(sender));
+        }
     }
 
     @Override

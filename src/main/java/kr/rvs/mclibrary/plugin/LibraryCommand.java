@@ -54,7 +54,7 @@ public class LibraryCommand extends BaseCommand {
         }
 
         @Override
-        public void execute(CommandSenderWrapper wrapper, String label, VolatileArrayList args) {
+        public void execute(CommandSenderWrapper wrapper, BaseCommand cmd, String label, VolatileArrayList args) {
             FileConfiguration config = instance.getConfig();
             instance.reloadConfig();
             instance.configInit();
@@ -81,7 +81,7 @@ public class LibraryCommand extends BaseCommand {
         }
 
         @Override
-        public void execute(CommandSenderWrapper wrapper, String label, VolatileArrayList args) {
+        public void execute(CommandSenderWrapper wrapper, BaseCommand cmd, String label, VolatileArrayList args) {
             wrapper.getPlayer().getWorld().getEntities().stream()
                     .filter(entity -> entity instanceof Creature)
                     .forEach(Entity::remove);
@@ -105,7 +105,7 @@ public class LibraryCommand extends BaseCommand {
         }
 
         @Override
-        public void execute(CommandSenderWrapper wrapper, String label, VolatileArrayList args) {
+        public void execute(CommandSenderWrapper wrapper, BaseCommand cmd, String label, VolatileArrayList args) {
             new GUI(
                     new GUISignatureAdapter(InventoryType.CHEST)
                             .title("MCLibrary GUI")

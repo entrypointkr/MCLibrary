@@ -8,6 +8,7 @@ import java.util.List;
  */
 public abstract class BaseCommand {
     private String label;
+    private String helpArg;
 
     public abstract String label();
 
@@ -31,7 +32,7 @@ public abstract class BaseCommand {
 
     public abstract SubCommand[] commands();
 
-    public boolean helpCommand() {
-        return true;
+    public CommandExceptionHandler exceptionHandler() {
+        return CommandExceptionHandler.DEFAULT;
     }
 }

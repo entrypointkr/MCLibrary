@@ -24,7 +24,7 @@ public class ReflectionTabCompletor extends MethodWrapper implements TabCompleta
         List<String> ret = new ArrayList<>();
 
         try {
-            Collection<String> completes = (Collection<String>) getMethod().invoke(getHandle(), sender, label, args);
+            Collection<String> completes = (Collection<String>) getMethod().invoke(get(), sender, label, args);
             ret.addAll(completes);
         } catch (Exception ignore) {
 

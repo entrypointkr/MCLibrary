@@ -1,5 +1,6 @@
 package kr.rvs.mclibrary.bukkit.command.internal;
 
+import kr.rvs.mclibrary.bukkit.command.BaseCommand;
 import kr.rvs.mclibrary.bukkit.command.CommandExecutable;
 import kr.rvs.mclibrary.bukkit.command.TabCompletable;
 import kr.rvs.mclibrary.bukkit.player.CommandSenderWrapper;
@@ -21,8 +22,8 @@ public class ExecutableCommand implements ICommand {
     }
 
     @Override
-    public void execute(CommandSender sender, String label, CommandArguments args) {
-        executable.execute(new CommandSenderWrapper(sender), label, new VolatileArrayList(args));
+    public void execute(CommandSender sender, BaseCommand cmd, String label, CommandArguments args) {
+        executable.execute(new CommandSenderWrapper(sender), cmd, label, new VolatileArrayList(args));
     }
 
     @Override

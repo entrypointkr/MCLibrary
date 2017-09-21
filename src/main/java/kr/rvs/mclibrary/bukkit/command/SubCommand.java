@@ -29,11 +29,11 @@ public interface SubCommand extends CommandExecutable, TabCompletable {
     }
 
     default String usage() {
-        return "";
+        return null;
     }
 
     default String desc() {
-        return "";
+        return null;
     }
 
     @Override

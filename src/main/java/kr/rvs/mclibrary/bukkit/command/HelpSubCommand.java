@@ -10,17 +10,11 @@ import org.bukkit.command.ConsoleCommandSender;
  * Created by Junhyeong Lim on 2017-09-20.
  */
 public class HelpSubCommand implements SubCommand {
-    private final SubCommand[] subCommands;
     private final String args;
     private int line = 8;
 
-    public HelpSubCommand(SubCommand[] subCommands, String args) {
-        this.subCommands = subCommands;
-        this.args = args;
-    }
-
-    public HelpSubCommand(SubCommand[] subCommands, BaseCommand baseCommand) {
-        this(subCommands, StringUtils.isAlphanumeric(baseCommand.getLabel()) ? "help" : "도움말");
+    public HelpSubCommand(BaseCommand baseCommand) {
+        this.args = StringUtils.isAlphanumeric(baseCommand.getLabel()) ? "help" : "도움말";
     }
 
     @Override
@@ -29,7 +23,8 @@ public class HelpSubCommand implements SubCommand {
     }
 
     @Override
-    public void execute(CommandSenderWrapper wrapper, String label, VolatileArrayList args) {
+    public void execute(CommandSenderWrapper wrapper, BaseCommand cmd, String label, VolatileArrayList args) {
+        SubCommand[] subCommands = cmd.commands();
         CommandSender sender = wrapper.getSender();
         StringBuilder header = new StringBuilder()
                 .append("&e--------- ").append("&f도움말: /").append(label).append(' ');

@@ -1,6 +1,7 @@
 package kr.rvs.mclibrary;
 
 import kr.rvs.mclibrary.bukkit.command.BaseCommand;
+import kr.rvs.mclibrary.bukkit.command.HelpSubCommand;
 import kr.rvs.mclibrary.bukkit.command.SubCommand;
 import kr.rvs.mclibrary.bukkit.command.TabCompletable;
 import kr.rvs.mclibrary.bukkit.command.internal.CommandProcessor;
@@ -16,8 +17,7 @@ import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Created by Junhyeong Lim on 2017-07-26.
@@ -25,7 +25,7 @@ import java.util.concurrent.TimeUnit;
 public class CommandTest extends Assert {
     private final SimpleCommandMap commandMap = new SimpleCommandMap(MockFactory.createMockServer());
     private final CommandSender mockSender = MockFactory.createCommandSender();
-    private final CountDownLatch latch = new CountDownLatch(1);
+    private final AtomicBoolean storage = new AtomicBoolean(false);
 
     @Before
     public void register() throws NoSuchMethodException {
@@ -39,7 +39,7 @@ public class CommandTest extends Assert {
     public void commandTest() throws InterruptedException {
         commandMap.dispatch(mockSender, "test a b c 1 2 3");
 
-        if (!latch.await(3, TimeUnit.SECONDS)) {
+        if (!storage.get()) {
             throw new Error("Command testing fail");
         }
     }
@@ -47,9 +47,8 @@ public class CommandTest extends Assert {
     @Test
     public void commandHelp() {
         // Help message
-        commandMap.dispatch(mockSender, "test help -1");
-        commandMap.dispatch(mockSender, "test help");
-        commandMap.dispatch(mockSender, "test help 2");
+        commandMap.dispatch(mockSender, "test");
+        commandMap.dispatch(mockSender, "test a b c");
     }
 
     @Test
@@ -69,7 +68,11 @@ public class CommandTest extends Assert {
 
         @Override
         public SubCommand[] commands() {
-            return new SubCommand[]{new TestSubCommand(), new TabCompleteTestSubCommand()};
+            return new SubCommand[]{
+                    new TestSubCommand(),
+                    new TabCompleteTestSubCommand(),
+                    new HelpSubCommand(this)
+            };
         }
     }
 
@@ -90,8 +93,8 @@ public class CommandTest extends Assert {
         }
 
         @Override
-        public void execute(CommandSenderWrapper wrapper, String label, VolatileArrayList args) {
-            latch.countDown();
+        public void execute(CommandSenderWrapper wrapper, BaseCommand cmd, String label, VolatileArrayList args) {
+            storage.set(true);
         }
     }
 
@@ -102,7 +105,7 @@ public class CommandTest extends Assert {
         }
 
         @Override
-        public void execute(CommandSenderWrapper wrapper, String label, VolatileArrayList args) {
+        public void execute(CommandSenderWrapper wrapper, BaseCommand cmd, String label, VolatileArrayList args) {
 
         }
 

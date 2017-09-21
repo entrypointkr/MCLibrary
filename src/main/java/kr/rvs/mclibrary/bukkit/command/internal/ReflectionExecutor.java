@@ -1,6 +1,7 @@
 package kr.rvs.mclibrary.bukkit.command.internal;
 
 import kr.rvs.mclibrary.Static;
+import kr.rvs.mclibrary.bukkit.command.BaseCommand;
 import kr.rvs.mclibrary.bukkit.command.CommandExecutable;
 import kr.rvs.mclibrary.bukkit.player.CommandSenderWrapper;
 import kr.rvs.mclibrary.collection.VolatileArrayList;
@@ -18,9 +19,9 @@ public class ReflectionExecutor extends MethodWrapper implements CommandExecutab
     }
 
     @Override
-    public void execute(CommandSenderWrapper wrapper, String label, VolatileArrayList args) {
+    public void execute(CommandSenderWrapper wrapper, BaseCommand cmd, String label, VolatileArrayList args) {
         try {
-            getMethod().invoke(getHandle(), wrapper, label, args);
+            getMethod().invoke(get(), wrapper, label, args);
         } catch (IllegalAccessException | InvocationTargetException e) {
             Static.log(e);
         }

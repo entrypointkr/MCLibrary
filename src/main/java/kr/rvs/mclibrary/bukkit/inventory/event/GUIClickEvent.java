@@ -44,7 +44,7 @@ public class GUIClickEvent extends InventoryClickEvent {
 
         ItemWrapper clickedItem = new ItemWrapper(getInventory().getItem(getSlot()));
         if (clickedItem.isNotEmpty() && !messageItemMap.containsKey(getSlot())) {
-            messageItemMap.put(getSlot(), clickedItem.getHandle());
+            messageItemMap.put(getSlot(), clickedItem.get());
             ItemStack newItem = new ItemBuilder(clickedItem)
                     .display(title)
                     .lore(messages).build();

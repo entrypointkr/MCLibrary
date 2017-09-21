@@ -1,7 +1,10 @@
 package kr.rvs.mclibrary.bukkit.command.internal;
 
+import kr.rvs.mclibrary.bukkit.command.BaseCommand;
 import kr.rvs.mclibrary.bukkit.command.SubCommand;
 import kr.rvs.mclibrary.bukkit.command.TabCompletable;
+import kr.rvs.mclibrary.bukkit.command.exception.InvalidUsageException;
+import kr.rvs.mclibrary.bukkit.command.exception.PermissionDeniedException;
 import kr.rvs.mclibrary.bukkit.player.CommandSenderWrapper;
 import kr.rvs.mclibrary.collection.VolatileArrayList;
 import org.apache.commons.lang.StringUtils;
@@ -39,17 +42,17 @@ public class SubCommandProxy implements SubCommand, TabCompletable {
     }
 
     @Override
-    public void execute(CommandSenderWrapper wrapper, String label, VolatileArrayList args) {
+    public void execute(CommandSenderWrapper wrapper, BaseCommand cmd, String label, VolatileArrayList args) {
         if (command.min() > args.size() || command.max() < args.size()
                 || !command.type().isValid(wrapper))
-            return;
+            throw new InvalidUsageException(cmd, wrapper, command);
 
         String perm = command.perm();
         if (!StringUtils.isEmpty(perm) && !wrapper.getSender().hasPermission(perm)) {
-            return;
+            throw new PermissionDeniedException(cmd, wrapper, perm);
         }
 
-        command.execute(wrapper, label, args);
+        command.execute(wrapper, cmd, label, args);
     }
 
     @Override
