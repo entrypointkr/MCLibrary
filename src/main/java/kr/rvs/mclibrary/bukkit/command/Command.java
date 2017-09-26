@@ -11,5 +11,17 @@ import java.lang.annotation.Target;
 @Target({ElementType.TYPE, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Command {
+    CommandType type() default CommandType.DEFAULT;
+
     String args();
+
+    String usage() default "";
+
+    String desc() default "";
+
+    String perm() default "";
+
+    int min() default 0;
+
+    int max() default Integer.MAX_VALUE;
 }

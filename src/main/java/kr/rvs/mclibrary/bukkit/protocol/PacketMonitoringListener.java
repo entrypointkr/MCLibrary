@@ -5,6 +5,8 @@ import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketEvent;
 import kr.rvs.mclibrary.MCLibrary;
 import kr.rvs.mclibrary.Static;
+import kr.rvs.mclibrary.bukkit.MCUtils;
+import org.bukkit.plugin.Plugin;
 
 import java.util.logging.Level;
 
@@ -12,6 +14,11 @@ import java.util.logging.Level;
  * Created by Junhyeong Lim on 2017-08-26.
  */
 public class PacketMonitoringListener extends PacketAdapter {
+    public static void register(Plugin plugin) {
+        MCUtils.getProtocolManager().removePacketListeners(plugin);
+        MCUtils.getProtocolManager().addPacketListener(new PacketMonitoringListener());
+    }
+
     public PacketMonitoringListener() {
         super(MCLibrary.getPlugin(), PacketType.values());
     }

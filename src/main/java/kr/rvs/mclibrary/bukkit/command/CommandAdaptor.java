@@ -1,5 +1,9 @@
 package kr.rvs.mclibrary.bukkit.command;
 
+import kr.rvs.mclibrary.bukkit.command.exception.CommandException;
+import kr.rvs.mclibrary.bukkit.command.exception.CommandNotFoundException;
+import kr.rvs.mclibrary.bukkit.command.exception.InvalidUsageException;
+import kr.rvs.mclibrary.bukkit.command.exception.PermissionDeniedException;
 import kr.rvs.mclibrary.bukkit.player.CommandSenderWrapper;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -28,12 +32,23 @@ public class CommandAdaptor extends Command implements PluginIdentifiableCommand
     public boolean execute(CommandSender sender, String commandLabel, String[] args) {
         CommandSenderWrapper wrapper = new CommandSenderWrapper(sender);
         CommandArguments arguments = new CommandArguments(Arrays.asList(args));
-        executor.execute(wrapper, arguments);
+        try {
+            executor.execute(wrapper, arguments);
+        } catch (CommandNotFoundException ex) {
+
+        } catch (InvalidUsageException ex) {
+
+        } catch (PermissionDeniedException ex) {
+
+        } catch (CommandException ex) {
+            ex.printStackTrace();
+        }
         return true;
     }
 
     @Override
-    public List<String> tabComplete(CommandSender sender, String alias, String[] args) throws IllegalArgumentException {
+    public List<String> tabComplete(CommandSender sender, String alias, String[] args) throws
+            IllegalArgumentException {
         CommandSenderWrapper wrapper = new CommandSenderWrapper(sender);
         CommandArguments arguments = new CommandArguments(Arrays.asList(args));
         List<String> complete = completer.tabComplete(wrapper, arguments);

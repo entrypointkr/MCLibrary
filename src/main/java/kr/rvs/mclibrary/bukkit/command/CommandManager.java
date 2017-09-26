@@ -4,6 +4,7 @@ import kr.rvs.mclibrary.MCLibrary;
 import kr.rvs.mclibrary.Static;
 import kr.rvs.mclibrary.bukkit.command.completor.CompositeCompleter;
 import kr.rvs.mclibrary.bukkit.command.completor.ReflectiveCompletor;
+import kr.rvs.mclibrary.bukkit.command.executor.AnnotationProxyExecutor;
 import kr.rvs.mclibrary.bukkit.command.executor.CompositeExecutor;
 import kr.rvs.mclibrary.bukkit.command.executor.ReflectiveExecutor;
 import kr.rvs.mclibrary.reflection.ClassProbe;
@@ -23,6 +24,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.regex.Pattern;
 
@@ -30,6 +32,11 @@ import java.util.regex.Pattern;
  * Created by Junhyeong Lim on 2017-09-25.
  */
 public class CommandManager {
+    public static final CommandCreator DEF_CREATOR = aClass -> {
+        Constructor constructor = Reflections.getAllConstructors(aClass)[0];
+        constructor.setAccessible(true);
+        return constructor.newInstance();
+    };
     private static final Pattern SPACE_PATTERN = Pattern.compile(" ", Pattern.LITERAL);
     private final CommandMap commandMap;
 
@@ -67,43 +74,39 @@ public class CommandManager {
 
     public void registerCommand(Class commandClass, Plugin plugin) {
         try {
-            registerCommand(new CompositeExecutor(), new CompositeCompleter(), commandClass, true, plugin);
+            registerCommand(new CompositeExecutor(), new CompositeCompleter(), commandClass, DEF_CREATOR, true, plugin);
         } catch (IllegalAccessException | InstantiationException | InvocationTargetException e) {
             Static.log(e);
         }
     }
 
     public void registerCommand(CompositeExecutor compositeExecutor, CompositeCompleter compositeCompleter, Object instance, Method method) {
-        boolean isExecutor = method.isAnnotationPresent(Command.class);
-        boolean isCompleter = method.isAnnotationPresent(TabCompletor.class);
-        if (!isExecutor && !isCompleter)
-            return;
+        if (method.isAnnotationPresent(Command.class)) {
+            Command annotation = method.getAnnotation(Command.class);
+            String[] splited = SPACE_PATTERN.split(annotation.args());
 
-        String args = isExecutor ?
-                method.getAnnotation(Command.class).args() :
-                method.getAnnotation(TabCompletor.class).args();
-        String[] splited = SPACE_PATTERN.split(args);
-
-        if (isExecutor) {
             CompositeExecutor composite = compositeExecutor.setupComposite(splited, 0, splited.length - 1, new CompositeExecutor());
-            composite.put(splited[splited.length - 1], new ReflectiveExecutor(instance, method));
-        } else {
+            ReflectiveExecutor reflectiveExecutor = new ReflectiveExecutor(instance, method);
+            AnnotationProxyExecutor proxyExecutor = new AnnotationProxyExecutor(annotation, reflectiveExecutor);
+            composite.put(splited[splited.length - 1], proxyExecutor);
+        } else if (method.isAnnotationPresent(TabCompletor.class)) {
+            TabCompletor annotation = method.getAnnotation(TabCompletor.class);
+            String[] splited = SPACE_PATTERN.split(annotation.args());
+
             CompositeCompleter composite = compositeCompleter.setupComposite(splited, 0, splited.length - 1, new CompositeCompleter());
             composite.put(splited[splited.length - 1], new ReflectiveCompletor(instance, method));
         }
     }
 
     public void registerCommand(CompositeExecutor compositeExecutor, CompositeCompleter compositeCompleter,
-                                Class<?> commandClass, boolean first, Plugin plugin) throws IllegalAccessException, InvocationTargetException, InstantiationException {
+                                Class<?> commandClass, CommandCreator creator, boolean first, Plugin plugin) throws IllegalAccessException, InvocationTargetException, InstantiationException {
         if (!commandClass.isAnnotationPresent(Command.class)) {
             Static.log(Level.WARNING, commandClass.getSimpleName() + " is not annotation presented");
             return;
         }
 
         Command commandAnnot = commandClass.getAnnotation(Command.class);
-        Constructor constructor = Reflections.getAllConstructors(commandClass)[0];
-        constructor.setAccessible(true);
-        Object instance = constructor.newInstance();
+        Object instance = creator.create(commandClass);
         String[] args = SPACE_PATTERN.split(commandAnnot.args());
         if (args.length == 0)
             return;
@@ -132,8 +135,12 @@ public class CommandManager {
         if (commandClass.isAnnotationPresent(SubCommand.class)) {
             SubCommand subCommandAnnot = commandClass.getAnnotation(SubCommand.class);
             for (Class<?> subClass : subCommandAnnot.value()) {
-                registerCommand(compositeExecutor, compositeCompleter, subClass, false, plugin);
+                registerCommand(compositeExecutor, compositeCompleter, subClass, creator, false, plugin);
             }
         }
+    }
+
+    interface CommandCreator {
+        Object create(Class aClass) throws IllegalAccessException, InvocationTargetException, InstantiationException;
     }
 }
