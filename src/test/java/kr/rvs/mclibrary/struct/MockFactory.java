@@ -1,5 +1,6 @@
 package kr.rvs.mclibrary.struct;
 
+import kr.rvs.mclibrary.MCLibrary;
 import kr.rvs.mclibrary.mock.MockInventory;
 import kr.rvs.mclibrary.mock.MockItemFactory;
 import kr.rvs.mclibrary.mock.MockItemMeta;
@@ -8,6 +9,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.SimpleCommandMap;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
@@ -95,7 +97,10 @@ public class MockFactory extends Mockito {
 
     public static Plugin createPlugin() {
         Plugin plugin = mock(Plugin.class);
+        YamlConfiguration config = new YamlConfiguration();
+        config.set(MCLibrary.DETAIL_LOG, true);
         when(plugin.getName()).thenReturn("MCLibrary");
+        when(plugin.getConfig()).thenReturn(config);
 
         return plugin;
     }

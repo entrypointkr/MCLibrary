@@ -1,14 +1,14 @@
 package kr.rvs.mclibrary;
 
-import kr.rvs.mclibrary.bukkit.command.BaseCommand;
-import kr.rvs.mclibrary.bukkit.command.HelpSubCommand;
-import kr.rvs.mclibrary.bukkit.command.SubCommand;
-import kr.rvs.mclibrary.bukkit.command.TabCompletable;
-import kr.rvs.mclibrary.bukkit.command.internal.CommandProcessor;
+import kr.rvs.mclibrary.bukkit.command.Command;
+import kr.rvs.mclibrary.bukkit.command.CommandArguments;
+import kr.rvs.mclibrary.bukkit.command.CommandManager;
+import kr.rvs.mclibrary.bukkit.command.TabCompletor;
 import kr.rvs.mclibrary.bukkit.player.CommandSenderWrapper;
 import kr.rvs.mclibrary.collection.VolatileArrayList;
 import kr.rvs.mclibrary.struct.Injector;
 import kr.rvs.mclibrary.struct.MockFactory;
+import org.bukkit.command.CommandMap;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.SimpleCommandMap;
 import org.junit.Assert;
@@ -23,21 +23,21 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * Created by Junhyeong Lim on 2017-07-26.
  */
 public class CommandTest extends Assert {
-    private final SimpleCommandMap commandMap = new SimpleCommandMap(MockFactory.createMockServer());
+    private final CommandMap commandMap = new SimpleCommandMap(MockFactory.createMockServer());
+    private final CommandManager manager = new CommandManager(commandMap);
     private final CommandSender mockSender = MockFactory.createCommandSender();
-    private final AtomicBoolean storage = new AtomicBoolean(false);
+    private static final AtomicBoolean storage = new AtomicBoolean(false);
 
     @Before
     public void register() throws NoSuchMethodException {
         Injector.injectServer(MockFactory.createMockServer());
-
-        CommandProcessor processor = new CommandProcessor(new TestCommand(), MockFactory.createPlugin());
-        commandMap.register(processor.getLabel(), processor);
+        Injector.injectPlugin(MockFactory.createPlugin());
+        manager.registerCommand(TestCommand.class, MockFactory.createPlugin());
     }
 
     @Test
     public void commandTest() throws InterruptedException {
-        commandMap.dispatch(mockSender, "test a b c 1 2 3");
+        commandMap.dispatch(mockSender, "test ab");
 
         if (!storage.get()) {
             throw new Error("Command testing fail");
@@ -53,64 +53,28 @@ public class CommandTest extends Assert {
 
     @Test
     public void tabComplete() {
-        List<String> matches = commandMap.tabComplete(mockSender, "test a b ");
-        List<String> matchesB = commandMap.tabComplete(mockSender, "test a b d");
+        List<String> matches = commandMap.tabComplete(mockSender, "test a");
+        List<String> matchesB = commandMap.tabComplete(mockSender, "test abc");
 
-        assertEquals(matches, Arrays.asList("c", "d"));
+        assertEquals(matches, Arrays.asList("abc"));
         assertEquals(matchesB, Arrays.asList("test", "completes"));
     }
 
-    class TestCommand extends BaseCommand {
-        @Override
-        public String label() {
-            return "test";
-        }
-
-        @Override
-        public SubCommand[] commands() {
-            return new SubCommand[]{
-                    new TestSubCommand(),
-                    new TabCompleteTestSubCommand(),
-                    new HelpSubCommand(this)
-            };
-        }
-    }
-
-    class TestSubCommand implements SubCommand {
-        @Override
-        public String args() {
-            return "a b c";
-        }
-
-        @Override
-        public int min() {
-            return 3;
-        }
-
-        @Override
-        public int max() {
-            return 3;
-        }
-
-        @Override
-        public void execute(CommandSenderWrapper wrapper, BaseCommand cmd, String label, VolatileArrayList args) {
+    @Command(
+            args = "test"
+    )
+    static class TestCommand {
+        @Command(
+                args = "ab"
+        )
+        public void test(CommandSenderWrapper wrapper, CommandArguments args) {
             storage.set(true);
         }
-    }
 
-    class TabCompleteTestSubCommand implements SubCommand, TabCompletable {
-        @Override
-        public String args() {
-            return "a b d";
-        }
-
-        @Override
-        public void execute(CommandSenderWrapper wrapper, BaseCommand cmd, String label, VolatileArrayList args) {
-
-        }
-
-        @Override
-        public List<String> tabComplete(CommandSenderWrapper sender, String label, VolatileArrayList args) throws IllegalArgumentException {
+        @TabCompletor(
+                args = "abc"
+        )
+        public List<String> tab(CommandSenderWrapper wrapper, CommandArguments args) {
             return Arrays.asList("test", "completes");
         }
     }

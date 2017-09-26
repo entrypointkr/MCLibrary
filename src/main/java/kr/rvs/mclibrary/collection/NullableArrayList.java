@@ -18,18 +18,22 @@ public class NullableArrayList<E> extends ArrayList<E> {
         super(c);
     }
 
-    private E def(E val, E def) {
+    public E def(E val, E def) {
         return val != null ? val : def;
     }
 
     @Override
     public E get(int index) {
-        E elem = size() > index ? super.get(index) : null;
-        return elem;
+        return size() > index ? super.get(index) : null;
     }
 
     public E get(int index, E def) {
         return def(get(index), def);
+    }
+
+    @Override
+    public E remove(int index) {
+        return size() > index ? super.remove(index) : null;
     }
 
     public E remove(int index, E def) {

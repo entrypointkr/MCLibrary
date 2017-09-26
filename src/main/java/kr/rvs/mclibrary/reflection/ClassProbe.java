@@ -1,123 +1,56 @@
 package kr.rvs.mclibrary.reflection;
 
 import kr.rvs.mclibrary.Static;
+import org.apache.commons.lang.ArrayUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.net.MalformedURLException;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.util.*;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 /**
- * Created by Junhyeong Lim on 2017-07-26.
+ * Created by Junhyeong Lim on 2017-09-22.
  */
 @SuppressWarnings("unchecked")
 public class ClassProbe {
-    private final String packageName;
-    private final String rscPackageName;
-    private final String winPackageName;
-    private final List<Class<?>> cachedClasses = new ArrayList<>();
+    private final File file;
+    private final InternalStorage storage = new InternalStorage();
 
-    public ClassProbe(String packageName, ClassLoader... loaders) {
-        this.packageName = packageName;
-        this.rscPackageName = packageName
-                .replace('.', '/')
-                .replace(".class", "");
-        this.winPackageName = packageName
-                .replace('.', '\\')
-                .replace(".class", "");
+    public ClassProbe(File file) {
+        this.file = file;
+        init();
+    }
 
-        try {
-            init(loaders);
+    private void init() {
+        ZipEntry entry;
+        try (ZipInputStream zin = new ZipInputStream(new FileInputStream(file))) {
+            while ((entry = zin.getNextEntry()) != null) {
+                String name = entry.getName();
+                if (name.endsWith(".class")) {
+                    try {
+                        String className = name.substring(0, name.indexOf(".class")).replace('/', '.');
+                        Class aClass = Class.forName(className);
+                        storage.add(aClass);
+                    } catch (Throwable th) {
+                        // Ignore
+                    }
+                }
+            }
         } catch (Exception e) {
             Static.log(e);
         }
     }
 
-    public ClassProbe(String packageName) {
-        this(packageName, getDefaultClassLoaders());
-    }
-
-    public static ClassLoader[] getDefaultClassLoaders() {
-        return new ClassLoader[]{
-                Thread.currentThread().getContextClassLoader(),
-                ClassProbe.class.getClassLoader()
-        };
-    }
-
-    private void init(ClassLoader... loaders) throws Exception {
-        for (ClassLoader loader : loaders) {
-            if (loader == null)
-                continue;
-
-            Enumeration<URL> urlEnum = loader.getResources(rscPackageName);
-            while (urlEnum.hasMoreElements()) {
-                cachedClasses.addAll(
-                        getClassesFromUrl(urlEnum.nextElement()));
-            }
-        }
-    }
-
-    private Set<Class<?>> getClassesFromUrl(URL url) throws Exception {
-        Set<Class<?>> ret = new HashSet<>();
-
-        if (url.getProtocol().equals("jar")) {
-            ZipEntry entry;
-            try (ZipInputStream in = new ZipInputStream(new FileInputStream(getJarFileFromUrl(url)))) {
-                while ((entry = in.getNextEntry()) != null) {
-                    String name = entry.getName();
-
-                    if (name.endsWith(".class") && name.startsWith(rscPackageName)) {
-                        String className = name.replace('/', '.');
-                        ret.add(Class.forName(className.substring(0, className.indexOf(".class"))));
-                    }
-                }
-            }
-        } else {
-            ret.addAll(getClassesFromDirectory(new File(url.toURI()).listFiles()));
-        }
-
-        return ret;
-    }
-
-    private File getJarFileFromUrl(URL url) throws MalformedURLException, URISyntaxException {
-        String path = url.getPath();
-        path = path.substring(0, path.indexOf('!'));
-
-        return new File(new URL(path).toURI());
-    }
-
-    private Set<Class<?>> getClassesFromDirectory(File[] files) throws ClassNotFoundException {
-        Set<Class<?>> ret = new HashSet<>();
-
-        if (files == null)
-            return ret;
-
-        for (File aFile : files) {
-            if (aFile.isFile()) {
-                String path = aFile.getPath();
-                int start = path.indexOf(winPackageName);
-                int end = path.indexOf(".class");
-
-                if (start == -1 || end == -1)
-                    continue;
-
-                String className = path.substring(start, end).replace("\\", ".");
-                ret.add(Class.forName(className));
-            } else {
-                ret.addAll(getClassesFromDirectory(aFile.listFiles()));
-            }
-        }
-
-        return ret;
-    }
-
-    public <T> List<Class<? extends T>> getSubTypesOf(Class<T> tClass) {
-        List<Class<? extends T>> ret = new ArrayList<>();
-        for (Class<?> aClass : cachedClasses) {
+    public <T> Set<Class<? extends T>> getSubTypesOf(Class<T> tClass) {
+        Set<Class<? extends T>> ret = new HashSet<>();
+        for (Class<?> aClass : storage.classes) {
             if (tClass.isAssignableFrom(aClass)) {
                 ret.add((Class<? extends T>) aClass);
             }
@@ -125,7 +58,27 @@ public class ClassProbe {
         return ret;
     }
 
-    public List<Class<?>> getCachedClasses() {
-        return cachedClasses;
+    public Set<Class> getTypesAnnotatedWith(Class<? extends Annotation> annotCls) {
+        return storage.classes.stream()
+                .filter(aClass -> aClass.isAnnotationPresent(annotCls))
+                .collect(Collectors.toSet());
+    }
+
+    public Set<Method> getMethodsAnnotatedWith(Class<? extends Annotation> annotCls) {
+        return storage.methods.stream()
+                .filter(method -> method.isAnnotationPresent(annotCls))
+                .collect(Collectors.toSet());
+    }
+
+    class InternalStorage {
+        private final Set<Class> classes = new HashSet<>();
+        private final Set<Method> methods = new HashSet<>();
+        private final Set<Field> fields = new HashSet<>();
+
+        public void add(Class aClass) {
+            classes.add(aClass);
+            methods.addAll(Arrays.asList((Method[]) ArrayUtils.addAll(aClass.getDeclaredMethods(), aClass.getMethods())));
+            fields.addAll(Arrays.asList((Field[]) ArrayUtils.addAll(aClass.getDeclaredFields(), aClass.getFields())));
+        }
     }
 }
