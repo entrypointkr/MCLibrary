@@ -2,9 +2,12 @@ package kr.rvs.mclibrary.reflection;
 
 import org.apache.commons.lang.ArrayUtils;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.Optional;
 
 /**
  * Created by Junhyeong Lim on 2017-07-31.
@@ -48,6 +51,18 @@ public class Reflections {
                 return new FieldEx(field);
             }
         }
-        return new FieldEx();
+        return new FieldEx(null);
+    }
+
+    public static ConstructorEx getConstructorEx(Class<?> aClass, Class<?>... parameters) {
+        for (Constructor<?> constructor : getAllConstructors(aClass)) {
+            if (Arrays.equals(constructor.getParameterTypes(), parameters))
+                return new ConstructorEx(constructor);
+        }
+        return new ConstructorEx(null);
+    }
+
+    public static <T extends Annotation> Optional<T> getAnnotation(Class<?> aClass, Class<T> annotationClass) {
+        return Optional.ofNullable(aClass.getAnnotation(annotationClass));
     }
 }

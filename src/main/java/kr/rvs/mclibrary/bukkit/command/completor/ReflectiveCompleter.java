@@ -4,7 +4,6 @@ import kr.rvs.mclibrary.bukkit.command.CommandArguments;
 import kr.rvs.mclibrary.bukkit.command.TabCompletable;
 import kr.rvs.mclibrary.bukkit.player.CommandSenderWrapper;
 import org.apache.commons.lang.Validate;
-import org.bukkit.command.CommandSender;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -13,11 +12,11 @@ import java.util.List;
 /**
  * Created by Junhyeong Lim on 2017-09-26.
  */
-public class ReflectiveCompletor implements TabCompletable {
+public class ReflectiveCompleter implements TabCompletable {
     private final Object object;
     private final Method method;
 
-    public ReflectiveCompletor(Object object, Method method) {
+    public ReflectiveCompleter(Object object, Method method) {
         Class<?> retType = method.getReturnType();
         Class<?>[] paramTypes = method.getParameterTypes();
         Validate.isTrue(

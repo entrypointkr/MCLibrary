@@ -13,11 +13,12 @@ import kr.rvs.mclibrary.bukkit.player.CommandSenderWrapper;
 public class CompositeExecutor extends CompositeBase<CommandExecutable, CompositeExecutor> implements CommandExecutable {
     @Override
     public void execute(CommandSenderWrapper wrapper, CommandArguments args) throws CommandException {
-        CommandExecutable command = get(args.pollFirst());
+        CommandExecutable command = get(args.peekFirst());
         if (command != null) {
+            args.pollFirst();
             command.execute(wrapper, args);
         } else {
-            throw new CommandNotFoundException(this);
+            throw new CommandNotFoundException(wrapper, args, this);
         }
     }
 }

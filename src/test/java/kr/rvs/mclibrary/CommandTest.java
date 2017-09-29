@@ -1,11 +1,7 @@
 package kr.rvs.mclibrary;
 
-import kr.rvs.mclibrary.bukkit.command.Command;
-import kr.rvs.mclibrary.bukkit.command.CommandArguments;
-import kr.rvs.mclibrary.bukkit.command.CommandManager;
-import kr.rvs.mclibrary.bukkit.command.TabCompletor;
+import kr.rvs.mclibrary.bukkit.command.*;
 import kr.rvs.mclibrary.bukkit.player.CommandSenderWrapper;
-import kr.rvs.mclibrary.collection.VolatileArrayList;
 import kr.rvs.mclibrary.struct.Injector;
 import kr.rvs.mclibrary.struct.MockFactory;
 import org.bukkit.command.CommandMap;
@@ -17,7 +13,7 @@ import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Created by Junhyeong Lim on 2017-07-26.
@@ -26,7 +22,7 @@ public class CommandTest extends Assert {
     private final CommandMap commandMap = new SimpleCommandMap(MockFactory.createMockServer());
     private final CommandManager manager = new CommandManager(commandMap);
     private final CommandSender mockSender = MockFactory.createCommandSender();
-    private static final AtomicBoolean storage = new AtomicBoolean(false);
+    private static final AtomicInteger integer = new AtomicInteger();
 
     @Before
     public void register() throws NoSuchMethodException {
@@ -38,8 +34,9 @@ public class CommandTest extends Assert {
     @Test
     public void commandTest() throws InterruptedException {
         commandMap.dispatch(mockSender, "test ab");
+        commandMap.dispatch(mockSender, "test a b c d e f 1 2");
 
-        if (!storage.get()) {
+        if (integer.get() < 3) {
             throw new Error("Command testing fail");
         }
     }
@@ -47,7 +44,7 @@ public class CommandTest extends Assert {
     @Test
     public void commandHelp() {
         // Help message
-        commandMap.dispatch(mockSender, "test");
+        commandMap.dispatch(mockSender, "test help");
         commandMap.dispatch(mockSender, "test a b c");
     }
 
@@ -64,11 +61,28 @@ public class CommandTest extends Assert {
             args = "test"
     )
     static class TestCommand {
+        public TestCommand(CommandAdaptor adaptor) {
+            integer.incrementAndGet();
+        }
+
         @Command(
-                args = "ab"
+                args = "ab",
+                usage = "[test]"
         )
         public void test(CommandSenderWrapper wrapper, CommandArguments args) {
-            storage.set(true);
+            integer.incrementAndGet();
+        }
+
+        @Command(
+                args = "a b c d e f",
+                usage = "(num1) (num2)",
+                desc = "Test description",
+                min = 2,
+                max = 2
+        )
+        public void test(CommandSenderWrapper wrapper, List<String> args) {
+            if (args.equals(Arrays.asList("1", "2")))
+                integer.incrementAndGet();
         }
 
         @TabCompletor(

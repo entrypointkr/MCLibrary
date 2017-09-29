@@ -1,12 +1,22 @@
 package kr.rvs.mclibrary.bukkit.command.exception;
 
+import kr.rvs.mclibrary.bukkit.command.CommandArguments;
 import kr.rvs.mclibrary.bukkit.command.CommandExecutable;
+import kr.rvs.mclibrary.bukkit.command.CommandInfo;
+import kr.rvs.mclibrary.bukkit.player.CommandSenderWrapper;
 
 /**
  * Created by Junhyeong Lim on 2017-09-27.
  */
 public class InvalidUsageException extends CommandException {
-    public InvalidUsageException(CommandExecutable source) {
-        super(source);
+    private final CommandInfo commandInfo;
+
+    public InvalidUsageException(CommandSenderWrapper wrapper, CommandArguments arguments, CommandExecutable source, CommandInfo commandInfo) {
+        super(wrapper, arguments, source);
+        this.commandInfo = commandInfo;
+    }
+
+    public CommandInfo getCommandInfo() {
+        return commandInfo;
     }
 }
