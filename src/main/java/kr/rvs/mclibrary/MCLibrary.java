@@ -9,6 +9,7 @@ import kr.rvs.mclibrary.gson.GsonManager;
 import kr.rvs.mclibrary.gson.SettingManager;
 import kr.rvs.mclibrary.plugin.LibraryCommand;
 import org.bukkit.Bukkit;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
@@ -21,7 +22,8 @@ public class MCLibrary extends JavaPlugin {
     private static final GsonManager gsonManager = new GsonManager();
     private static final SettingManager settingManager = new SettingManager();
     private static final Version bukkitVersion = new Version(Bukkit.getBukkitVersion());
-    private static MCLibrary plugin;
+
+    private static Plugin plugin;
 
     public MCLibrary() {
         plugin = this;
@@ -43,7 +45,7 @@ public class MCLibrary extends JavaPlugin {
         return bukkitVersion;
     }
 
-    public static MCLibrary getPlugin() {
+    public static Plugin getPlugin() {
         return plugin;
     }
 
@@ -51,7 +53,8 @@ public class MCLibrary extends JavaPlugin {
     public void onEnable() {
         GUI.init(this);
         saveDefaultConfig();
-        getCommandManager().registerCommands(this, new LibraryCommand(this));
+        getCommandManager().registerAll();
+        getCommandManager().registerCommand(LibraryCommand.class, this);
 
         getConfig().options().copyDefaults(true);
         configInit();
@@ -60,8 +63,7 @@ public class MCLibrary extends JavaPlugin {
     public void configInit() {
         if (MCUtils.isEnabled("ProtocolLib")
                 && getConfig().getBoolean(PACKET_DEBUG, false)) {
-            MCUtils.getProtocolManager().removePacketListeners(this);
-            MCUtils.getProtocolManager().addPacketListener(new PacketMonitoringListener());
+            PacketMonitoringListener.register(this);
         }
     }
 

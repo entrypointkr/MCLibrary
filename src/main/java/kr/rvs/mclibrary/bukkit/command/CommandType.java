@@ -1,32 +1,27 @@
 package kr.rvs.mclibrary.bukkit.command;
 
-import kr.rvs.mclibrary.bukkit.player.CommandSenderWrapper;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.function.Function;
+
 /**
- * Created by Junhyeong Lim on 2017-09-20.
+ * Created by Junhyeong Lim on 2017-09-27.
  */
 public enum CommandType {
-    DEFAULT,
-    PLAYER_ONLY,
-    CONSOLE_ONLY
+    DEFAULT(sender -> true),
+    PLAYER(sender -> sender instanceof Player),
+    CONSOLE(sender -> sender instanceof ConsoleCommandSender)
     ;
 
-    public boolean isValid(CommandSender sender) {
-        switch (this) {
-            case DEFAULT:
-                return true;
-            case PLAYER_ONLY:
-                return sender instanceof Player;
-            case CONSOLE_ONLY:
-                return sender instanceof ConsoleCommandSender;
-        }
-        return false;
+    private final Function<CommandSender, Boolean> function;
+
+    CommandType(Function<CommandSender, Boolean> function) {
+        this.function = function;
     }
 
-    public boolean isValid(CommandSenderWrapper wrapper) {
-        return isValid(wrapper.getSender());
+    public boolean isValid(CommandSender sender) {
+        return function.apply(sender);
     }
 }

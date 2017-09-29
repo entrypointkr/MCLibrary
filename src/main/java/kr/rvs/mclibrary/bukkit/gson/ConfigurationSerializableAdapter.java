@@ -3,7 +3,7 @@ package kr.rvs.mclibrary.bukkit.gson;
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
-import kr.rvs.mclibrary.reflection.ReflectionUtils;
+import kr.rvs.mclibrary.reflection.Reflections;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 
@@ -64,19 +64,5 @@ public class ConfigurationSerializableAdapter extends TypeAdapter<ConfigurationS
             }
         }
         return ConfigurationSerialization.deserializeObject(map);
-    }
-
-    private Class<? extends ConfigurationSerializable> getType(Class<? extends ConfigurationSerializable> type, String name) {
-        for (Field field : ReflectionUtils.getFields(type)) {
-            if (!field.getName().equals(name))
-                continue;
-
-            Class<?> fieldType = field.getType();
-            if (ConfigurationSerializable.class.isAssignableFrom(fieldType)) {
-                return (Class<? extends ConfigurationSerializable>) fieldType;
-            }
-        }
-
-        return null;
     }
 }

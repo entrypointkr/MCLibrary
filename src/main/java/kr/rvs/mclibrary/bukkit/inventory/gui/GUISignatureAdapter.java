@@ -83,6 +83,7 @@ public class GUISignatureAdapter implements GUISignature, Cloneable {
      * For example, contents(1, contents, 2, contents, 10, contents)
      *
      * @param args (int slot, ItemStack contents)...
+     * @return this
      */
     public GUISignatureAdapter item(Object... args) {
         VarargsParser parser = new VarargsParser(args);
