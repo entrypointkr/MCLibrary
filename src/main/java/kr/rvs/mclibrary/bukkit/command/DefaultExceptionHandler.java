@@ -3,7 +3,7 @@ package kr.rvs.mclibrary.bukkit.command;
 import kr.rvs.mclibrary.bukkit.command.exception.CommandNotFoundException;
 import kr.rvs.mclibrary.bukkit.command.exception.InvalidUsageException;
 import kr.rvs.mclibrary.bukkit.command.exception.PermissionDeniedException;
-import kr.rvs.mclibrary.bukkit.command.executor.HelpExecutor;
+import kr.rvs.mclibrary.bukkit.command.duplex.HelpExecutor;
 import kr.rvs.mclibrary.bukkit.player.CommandSenderWrapper;
 
 /**
@@ -14,8 +14,8 @@ public class DefaultExceptionHandler implements CommandExceptionHandler {
 
     @Override
     public void init(CommandAdaptor adaptor) {
-        CommandExecutable executable = adaptor.getExecutor();
-        this.helpExecutor = new HelpExecutor(executable, adaptor.getLabel(), 8);
+        ICommand command = adaptor.getCommand();
+        this.helpExecutor = new HelpExecutor(command, adaptor.getLabel(), 8);
     }
 
     @Override

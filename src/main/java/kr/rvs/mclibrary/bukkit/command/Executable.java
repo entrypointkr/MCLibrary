@@ -5,6 +5,6 @@ import kr.rvs.mclibrary.bukkit.player.CommandSenderWrapper;
 /**
  * Created by Junhyeong Lim on 2017-09-25.
  */
-public interface CommandExecutable {
+public interface Executable {
     void execute(CommandSenderWrapper wrapper, CommandArguments args);
 }

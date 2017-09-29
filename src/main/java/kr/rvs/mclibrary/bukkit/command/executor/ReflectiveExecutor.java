@@ -2,7 +2,7 @@ package kr.rvs.mclibrary.bukkit.command.executor;
 
 import kr.rvs.mclibrary.Static;
 import kr.rvs.mclibrary.bukkit.command.CommandArguments;
-import kr.rvs.mclibrary.bukkit.command.CommandExecutable;
+import kr.rvs.mclibrary.bukkit.command.Executable;
 import kr.rvs.mclibrary.bukkit.player.CommandSenderWrapper;
 import org.apache.commons.lang.Validate;
 
@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * Created by Junhyeong Lim on 2017-09-25.
  */
-public class ReflectiveExecutor implements CommandExecutable {
+public class ReflectiveExecutor implements Executable {
     private final Object object;
     private final Method method;
 

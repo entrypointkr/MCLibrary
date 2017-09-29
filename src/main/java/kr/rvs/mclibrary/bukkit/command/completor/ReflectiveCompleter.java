@@ -1,5 +1,6 @@
 package kr.rvs.mclibrary.bukkit.command.completor;
 
+import kr.rvs.mclibrary.Static;
 import kr.rvs.mclibrary.bukkit.command.CommandArguments;
 import kr.rvs.mclibrary.bukkit.command.TabCompletable;
 import kr.rvs.mclibrary.bukkit.player.CommandSenderWrapper;
@@ -38,7 +39,7 @@ public class ReflectiveCompleter implements TabCompletable {
         try {
             ret = (List<String>) method.invoke(object, wrapper, args);
         } catch (IllegalAccessException | InvocationTargetException e) {
-            e.printStackTrace();
+            Static.log(e);
         }
 
         return ret;

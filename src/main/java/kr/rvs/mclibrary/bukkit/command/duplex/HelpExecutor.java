@@ -1,8 +1,8 @@
-package kr.rvs.mclibrary.bukkit.command.executor;
+package kr.rvs.mclibrary.bukkit.command.duplex;
 
 import kr.rvs.mclibrary.bukkit.command.CommandArguments;
-import kr.rvs.mclibrary.bukkit.command.CommandExecutable;
 import kr.rvs.mclibrary.bukkit.command.CommandInfo;
+import kr.rvs.mclibrary.bukkit.command.ICommand;
 import kr.rvs.mclibrary.bukkit.player.CommandSenderWrapper;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.ChatColor;
@@ -15,55 +15,59 @@ import java.util.Map;
 /**
  * Created by Junhyeong Lim on 2017-09-28.
  */
-public class HelpExecutor implements CommandExecutable, CommandInfo {
-    private final CommandExecutable executable;
+public class HelpExecutor implements ICommand, CommandInfo {
+    private final ICommand command;
     private final String label;
     private final int line;
     private final List<CommandStorage> storageList = new ArrayList<>();
     private final String helpArg;
     private int lastHashCode = -1;
 
-    public HelpExecutor(CommandExecutable executable, String label, int line) {
-        this.executable = executable;
+    public HelpExecutor(ICommand command, String label, int line) {
+        this.command = command;
         this.label = label;
         this.line = line;
         this.helpArg = StringUtils.isAlphanumeric(label) ? "help" : "도움말";
     }
 
     private void checkDiff() {
-        int hashCode = executable.hashCode();
+        int hashCode = command.hashCode();
         if (lastHashCode != hashCode) {
             storageList.clear();
-            init("", executable);
+            init("", command);
             lastHashCode = hashCode;
 
-            if (executable instanceof CompositeExecutor) {
-                CompositeExecutor compositeExecutor = (CompositeExecutor) executable;
+            if (command instanceof ComplexCommand) {
+                ComplexCommand compositeExecutor = (ComplexCommand) command;
                 if (!compositeExecutor.containsKey(helpArg))
                     compositeExecutor.put(helpArg, this);
             }
         }
     }
 
-    private void init(String args, CommandExecutable commandExecutable) {
-        if (commandExecutable instanceof CompositeExecutor) {
-            CompositeExecutor compositeExecutor = (CompositeExecutor) commandExecutable;
+    private void init(String args, ICommand command) {
+        if (command instanceof ComplexCommand) {
+            ComplexCommand compositeExecutor = (ComplexCommand) command;
 
-            for (Map.Entry<String, CommandExecutable> entry : compositeExecutor.entrySet()) {
+            for (Map.Entry<String, ICommand> entry : compositeExecutor.entrySet()) {
                 String key = entry.getKey();
-                CommandExecutable val = entry.getValue();
+                ICommand val = entry.getValue();
 
-                if (val instanceof CompositeExecutor) {
+                if (val instanceof ComplexCommand) {
                     init(args + key + ' ', val);
                 } else if (val instanceof CommandInfo) {
                     CommandStorage storage = new CommandStorage(args + key, (CommandInfo) val);
                     storageList.add(storage);
                 }
             }
-        } else if (commandExecutable instanceof CommandInfo) {
-            CommandStorage storage = new CommandStorage("", (CommandInfo) commandExecutable);
+        } else if (command instanceof CommandInfo) {
+            CommandStorage storage = new CommandStorage("", (CommandInfo) command);
             storageList.add(storage);
         }
+    }
+
+    private int getMaxPage() {
+        return storageList.size() / line + (storageList.size() % line > 0 ? 1 : 0);
     }
 
     @Override
@@ -71,7 +75,7 @@ public class HelpExecutor implements CommandExecutable, CommandInfo {
         checkDiff();
 
         int currPage = Math.max(args.getInt(0, 1), 1);
-        int maxPage = storageList.size() / line + storageList.size() % line > 0 ? 1 : 0;
+        int maxPage = getMaxPage();
         int start = (currPage - 1) * line;
         int end = Math.min(currPage * line, storageList.size());
 
@@ -86,6 +90,16 @@ public class HelpExecutor implements CommandExecutable, CommandInfo {
             CommandStorage storage = storageList.get(i);
             sendCommandInfo(wrapper, storage.args, storage.info);
         }
+    }
+
+    @Override
+    public List<String> tabComplete(CommandSenderWrapper wrapper, CommandArguments args) {
+        List<String> ret = new ArrayList<>();
+        int maxPage = getMaxPage();
+        for (int i = 1; i <= maxPage; i++) {
+            ret.add(String.valueOf(i));
+        }
+        return ret;
     }
 
     public void sendCommandInfo(CommandSenderWrapper wrapper, String args, CommandInfo commandInfo) {

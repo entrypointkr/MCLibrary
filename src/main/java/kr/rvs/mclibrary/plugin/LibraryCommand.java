@@ -1,7 +1,7 @@
 package kr.rvs.mclibrary.plugin;
 
 import kr.rvs.mclibrary.MCLibrary;
-import kr.rvs.mclibrary.bukkit.command.Command;
+import kr.rvs.mclibrary.bukkit.command.annotation.Command;
 import kr.rvs.mclibrary.bukkit.command.CommandArguments;
 import kr.rvs.mclibrary.bukkit.inventory.event.GUIClickEvent;
 import kr.rvs.mclibrary.bukkit.inventory.gui.GUI;

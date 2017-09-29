@@ -1,6 +1,8 @@
 package kr.rvs.mclibrary;
 
 import kr.rvs.mclibrary.bukkit.command.*;
+import kr.rvs.mclibrary.bukkit.command.annotation.Command;
+import kr.rvs.mclibrary.bukkit.command.annotation.TabCompleter;
 import kr.rvs.mclibrary.bukkit.player.CommandSenderWrapper;
 import kr.rvs.mclibrary.struct.Injector;
 import kr.rvs.mclibrary.struct.MockFactory;
@@ -33,7 +35,7 @@ public class CommandTest extends Assert {
 
     @Test
     public void commandTest() throws InterruptedException {
-        commandMap.dispatch(mockSender, "test ab");
+        commandMap.dispatch(mockSender, "test abc");
         commandMap.dispatch(mockSender, "test a b c d e f 1 2");
 
         if (integer.get() < 3) {
@@ -50,7 +52,7 @@ public class CommandTest extends Assert {
 
     @Test
     public void tabComplete() {
-        List<String> matches = commandMap.tabComplete(mockSender, "test a");
+        List<String> matches = commandMap.tabComplete(mockSender, "test ab");
         List<String> matchesB = commandMap.tabComplete(mockSender, "test abc");
 
         assertEquals(matches, Arrays.asList("abc"));
@@ -66,7 +68,7 @@ public class CommandTest extends Assert {
         }
 
         @Command(
-                args = "ab",
+                args = "abc",
                 usage = "[test]"
         )
         public void test(CommandSenderWrapper wrapper, CommandArguments args) {
@@ -85,7 +87,7 @@ public class CommandTest extends Assert {
                 integer.incrementAndGet();
         }
 
-        @TabCompletor(
+        @TabCompleter(
                 args = "abc"
         )
         public List<String> tab(CommandSenderWrapper wrapper, CommandArguments args) {

@@ -1,7 +1,7 @@
 package kr.rvs.mclibrary.bukkit.command.test;
 
-import kr.rvs.mclibrary.bukkit.command.Command;
-import kr.rvs.mclibrary.bukkit.command.SubCommand;
+import kr.rvs.mclibrary.bukkit.command.annotation.Command;
+import kr.rvs.mclibrary.bukkit.command.annotation.SubCommand;
 import kr.rvs.mclibrary.bukkit.player.CommandSenderWrapper;
 import kr.rvs.mclibrary.collection.VolatileArrayList;
 

@@ -25,14 +25,6 @@ public class CommandArguments extends VolatileArrayList { // TODO: Implement Lis
         super(c);
     }
 
-    public String pollFirst() {
-        return remove(0, "");
-    }
-
-    public String peekFirst() {
-        return get(0, "");
-    }
-
     @Override
     public String remove(int index) {
         String old = super.remove(index);

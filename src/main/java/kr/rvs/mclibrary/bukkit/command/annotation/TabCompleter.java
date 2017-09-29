@@ -1,4 +1,4 @@
-package kr.rvs.mclibrary.bukkit.command;
+package kr.rvs.mclibrary.bukkit.command.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -10,6 +10,6 @@ import java.lang.annotation.Target;
  */
 @Target({ElementType.TYPE, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface TabCompletor {
+public @interface TabCompleter {
     String args();
 }

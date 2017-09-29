@@ -1,8 +1,8 @@
 package kr.rvs.mclibrary.bukkit.command.executor;
 
-import kr.rvs.mclibrary.bukkit.command.Command;
+import kr.rvs.mclibrary.bukkit.command.annotation.Command;
 import kr.rvs.mclibrary.bukkit.command.CommandArguments;
-import kr.rvs.mclibrary.bukkit.command.CommandExecutable;
+import kr.rvs.mclibrary.bukkit.command.Executable;
 import kr.rvs.mclibrary.bukkit.command.CommandInfo;
 import kr.rvs.mclibrary.bukkit.command.exception.CommandException;
 import kr.rvs.mclibrary.bukkit.command.exception.InvalidUsageException;
@@ -14,11 +14,11 @@ import org.bukkit.command.CommandSender;
 /**
  * Created by Junhyeong Lim on 2017-09-27.
  */
-public class AnnotationProxyExecutor implements CommandExecutable, CommandInfo {
+public class AnnotationProxyExecutor implements Executable, CommandInfo {
     private final Command annotation;
-    private final CommandExecutable executable;
+    private final Executable executable;
 
-    public AnnotationProxyExecutor(Command annotation, CommandExecutable executable) {
+    public AnnotationProxyExecutor(Command annotation, Executable executable) {
         this.annotation = annotation;
         this.executable = executable;
     }

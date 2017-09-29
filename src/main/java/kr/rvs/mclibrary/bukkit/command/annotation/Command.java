@@ -1,4 +1,6 @@
-package kr.rvs.mclibrary.bukkit.command;
+package kr.rvs.mclibrary.bukkit.command.annotation;
+
+import kr.rvs.mclibrary.bukkit.command.CommandType;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

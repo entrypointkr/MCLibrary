@@ -2,10 +2,13 @@ package kr.rvs.mclibrary.bukkit.command;
 
 import kr.rvs.mclibrary.MCLibrary;
 import kr.rvs.mclibrary.Static;
-import kr.rvs.mclibrary.bukkit.command.completor.CompositeCompleter;
+import kr.rvs.mclibrary.bukkit.command.annotation.Command;
+import kr.rvs.mclibrary.bukkit.command.annotation.SubCommand;
+import kr.rvs.mclibrary.bukkit.command.annotation.TabCompleter;
 import kr.rvs.mclibrary.bukkit.command.completor.ReflectiveCompleter;
+import kr.rvs.mclibrary.bukkit.command.duplex.CompositionCommand;
 import kr.rvs.mclibrary.bukkit.command.executor.AnnotationProxyExecutor;
-import kr.rvs.mclibrary.bukkit.command.executor.CompositeExecutor;
+import kr.rvs.mclibrary.bukkit.command.duplex.ComplexCommand;
 import kr.rvs.mclibrary.bukkit.command.executor.ReflectiveExecutor;
 import kr.rvs.mclibrary.reflection.ClassProbe;
 import kr.rvs.mclibrary.reflection.ConstructorEx;
@@ -92,8 +95,7 @@ public class CommandManager {
 
     public void registerCommand(Class<?> commandClass, CommandFactory factory, Plugin plugin) {
         getCommandAnnotation(commandClass).ifPresent(commandAnnot -> {
-            CompositeExecutor compositeExecutor = new CompositeExecutor();
-            CompositeCompleter compositeCompleter = new CompositeCompleter();
+            ComplexCommand complexCommand = new ComplexCommand();
             String[] args = SPACE_PATTERN.split(commandAnnot.args());
             String firstArg = args[0];
             CommandAdaptor adaptor = new CommandAdaptor(
@@ -101,21 +103,20 @@ public class CommandManager {
                     commandAnnot.desc(),
                     commandAnnot.usage(),
                     Arrays.asList(args),
-                    compositeExecutor,
-                    compositeCompleter,
+                    complexCommand,
                     plugin
             );
             commandMap.register(firstArg, "mclibrary", adaptor);
 
-            CompositeExecutor newCompositeExecutor = compositeExecutor.setupComposite(args, 1, args.length, CompositeExecutor::new);
+            ComplexCommand newComplexCommand = complexCommand.setupComposite(args, 1, args.length);
             Object instance = factory.create(commandClass, adaptor);
             for (Method method : commandClass.getDeclaredMethods()) {
-                registerCommand(method, instance, newCompositeExecutor, compositeCompleter);
+                registerCommand(method, instance, newComplexCommand);
             }
 
             Reflections.getAnnotation(commandClass, SubCommand.class).ifPresent(subCommandAnnot -> {
                 for (Class<?> subClass : subCommandAnnot.value()) {
-                    registerCommand(subClass, instance, newCompositeExecutor, compositeCompleter);
+                    registerCommand(subClass, instance, newComplexCommand);
                 }
             });
         });
@@ -126,31 +127,44 @@ public class CommandManager {
     }
 
     public void registerCommand(Method method, Object instance,
-                                CompositeExecutor compositeExecutor, CompositeCompleter compositeCompleter) {
-        if (method.isAnnotationPresent(Command.class)) {
-            Command annotation = method.getAnnotation(Command.class);
-            String[] splited = SPACE_PATTERN.split(annotation.args());
+                                ComplexCommand complexCommand) {
+        Command commandAnnot = method.getAnnotation(Command.class);
+        TabCompleter completerAnnot = method.getAnnotation(TabCompleter.class);
+        if (commandAnnot == null && completerAnnot == null)
+            return;
 
-            CompositeExecutor composite = compositeExecutor.setupComposite(splited, 0, splited.length - 1, CompositeExecutor::new);
+        String args = commandAnnot != null ?
+                commandAnnot.args() :
+                completerAnnot.args();
+        String[] splited = SPACE_PATTERN.split(args);
+        String lastArg = splited[splited.length - 1];
+        ComplexCommand composite = complexCommand.setupComposite(splited, 0, splited.length - 1);
+        ICommand command = composite.computeIfAbsent(lastArg, k -> new CompositionCommand());
+
+        if (!(command instanceof CompositionCommand)) {
+            Static.log(Level.WARNING, "CompositionCommand expected, but " + command.getClass().getSimpleName());
+            composite.put(lastArg, command = new CompositionCommand());
+        }
+
+        CompositionCommand compositionCommand = (CompositionCommand) command;
+
+        if (commandAnnot != null) {
             ReflectiveExecutor reflectiveExecutor = new ReflectiveExecutor(instance, method);
-            AnnotationProxyExecutor proxyExecutor = new AnnotationProxyExecutor(annotation, reflectiveExecutor);
-            composite.put(splited[splited.length - 1], proxyExecutor);
-        } else if (method.isAnnotationPresent(TabCompletor.class)) {
-            TabCompletor annotation = method.getAnnotation(TabCompletor.class);
-            String[] splited = SPACE_PATTERN.split(annotation.args());
-
-            CompositeCompleter composite = compositeCompleter.setupComposite(splited, 0, splited.length - 1, CompositeCompleter::new);
-            composite.put(splited[splited.length - 1], new ReflectiveCompleter(instance, method));
+            AnnotationProxyExecutor proxyExecutor = new AnnotationProxyExecutor(commandAnnot, reflectiveExecutor);
+            compositionCommand.setExecutable(proxyExecutor);
+        }
+        if (completerAnnot != null) {
+            compositionCommand.setCompletable(new ReflectiveCompleter(instance, method));
         }
     }
 
     public void registerCommand(Class<?> commandClass, Object instance,
-                                CompositeExecutor compositeExecutor, CompositeCompleter compositeCompleter) {
+                                ComplexCommand complexCommand) {
         getCommandAnnotation(commandClass).ifPresent(commandAnnot -> {
             String[] args = SPACE_PATTERN.split(commandAnnot.args());
-            CompositeExecutor newCompositeExecutor = compositeExecutor.setupComposite(args, 0, args.length, CompositeExecutor::new);
+            ComplexCommand newComplexCommand = complexCommand.setupComposite(args, 0, args.length);
             for (Method method : commandClass.getDeclaredMethods()) {
-                registerCommand(method, instance, newCompositeExecutor, compositeCompleter);
+                registerCommand(method, instance, newComplexCommand);
             }
         });
     }
