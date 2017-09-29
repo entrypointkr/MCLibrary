@@ -152,6 +152,7 @@ public class CommandManager {
             ReflectiveExecutor reflectiveExecutor = new ReflectiveExecutor(instance, method);
             AnnotationProxyExecutor proxyExecutor = new AnnotationProxyExecutor(commandAnnot, reflectiveExecutor);
             compositionCommand.setExecutable(proxyExecutor);
+            compositionCommand.setCommandInfo(proxyExecutor);
         }
         if (completerAnnot != null) {
             compositionCommand.setCompletable(new ReflectiveCompleter(instance, method));

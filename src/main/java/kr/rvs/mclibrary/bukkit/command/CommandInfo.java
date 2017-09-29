@@ -9,4 +9,21 @@ public interface CommandInfo {
     String desc();
 
     String perm();
+
+    CommandInfo DEFAULT = new CommandInfo() {
+        @Override
+        public String usage() {
+            return "";
+        }
+
+        @Override
+        public String desc() {
+            return "";
+        }
+
+        @Override
+        public String perm() {
+            return "";
+        }
+    };
 }
