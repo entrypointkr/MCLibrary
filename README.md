@@ -30,7 +30,7 @@ static class TestCommand {
 		args = "first b"
 	)
 	public void execute(CommandSenderWrapper wrapper, CommandArguments args) {
-		wrapper.sendMessage("Example command 1");
+		wrapper.sendMessage("Example command 3");
 	}
 	
 	@Command(
@@ -41,7 +41,7 @@ static class TestCommand {
 			args = "b"
 		)
 		public void execute(CommandSenderWrapper wrapper, CommandArguments args) {
-			wrapper.sendMessage("Example command 2");
+			wrapper.sendMessage("Example command 4");
 		}
 	}
 }
@@ -51,6 +51,10 @@ static class TestCommand {
 Example command 1
 > test second
 Example command 2
+> test first b
+Example command 3
+> test second b
+Example command 4
 ```
 
 ## GUI
