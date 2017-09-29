@@ -10,6 +10,7 @@ Jenkins Build Server: http://builds.rvs.kr/job/MCLibrary/
 @Command(
 	args = "test"
 )
+@SubCommand(TestSubCommand.class)
 static class TestCommand {
 	@Command(
 		args = "first"
@@ -24,7 +25,32 @@ static class TestCommand {
 	public void execute(CommandSenderWrapper wrapper, CommandArguments args) {
 		wrapper.sendMessage("Example command 2");
 	}
+	
+	@Command(
+		args = "first b"
+	)
+	public void execute(CommandSenderWrapper wrapper, CommandArguments args) {
+		wrapper.sendMessage("Example command 1");
+	}
+	
+	@Command(
+		args = "second"
+	)
+	static class TestSubCommand {
+		@Command(
+			args = "b"
+		)
+		public void execute(CommandSenderWrapper wrapper, CommandArguments args) {
+			wrapper.sendMessage("Example command 2");
+		}
+	}
 }
+```
+```
+> test first
+Example command 1
+> test second
+Example command 2
 ```
 
 ## GUI
@@ -38,8 +64,8 @@ new GUI(
 		@Override
 		public void receive(GUIClickEvent e) {
 			e.sendMessage(
-					"Hello,",
-					"MCLibrary"
+				"&aHello,",
+				"&eMCLibrary"
 			);
 		}
 	}
