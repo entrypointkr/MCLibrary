@@ -34,19 +34,18 @@ public class HelpExecutor implements ICommand, CommandInfo {
         int hashCode = command.hashCode();
         if (lastHashCode != hashCode) {
             storageList.clear();
-            init("", command);
-            lastHashCode = hashCode;
-
             if (command instanceof ComplexCommand) {
                 ComplexCommand compositeExecutor = (ComplexCommand) command;
                 if (!compositeExecutor.containsKey(helpArg))
                     compositeExecutor.put(helpArg, this);
             }
+            init("", command);
+            lastHashCode = hashCode;
         }
     }
 
     private String argSpacing(String args, String key) {
-        return args.isEmpty() ? key : args + ' ' + key;
+        return args.isEmpty() ? key : key.isEmpty() ? args : args + ' ' + key;
     }
 
     private void init(String args, ICommand command) {

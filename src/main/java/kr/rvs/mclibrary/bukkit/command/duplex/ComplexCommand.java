@@ -7,15 +7,14 @@ import kr.rvs.mclibrary.bukkit.command.exception.CommandException;
 import kr.rvs.mclibrary.bukkit.command.exception.CommandNotFoundException;
 import kr.rvs.mclibrary.bukkit.player.CommandSenderWrapper;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
  * Created by Junhyeong Lim on 2017-09-25.
  */
-public class ComplexCommand extends HashMap<String, ICommand> implements ICommand {
+public class ComplexCommand extends LinkedHashMap<String, ICommand> implements ICommand {
     @Override
     public void execute(CommandSenderWrapper wrapper, CommandArguments args) throws CommandException {
         Executable command = get(args.get(0, ""));
