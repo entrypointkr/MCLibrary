@@ -15,12 +15,16 @@ public class CompositionCommand implements ICommand, CommandInfo {
 
     @Override
     public void execute(CommandSenderWrapper wrapper, CommandArguments args) {
-        executable.execute(wrapper, args);
+        if (executable != null)
+            executable.execute(wrapper, args);
     }
 
     @Override
     public List<String> tabComplete(CommandSenderWrapper wrapper, CommandArguments args) {
-        return completable.tabComplete(wrapper, args);
+        if (completable != null) {
+            return completable.tabComplete(wrapper, args);
+        }
+        return null;
     }
 
     @Override

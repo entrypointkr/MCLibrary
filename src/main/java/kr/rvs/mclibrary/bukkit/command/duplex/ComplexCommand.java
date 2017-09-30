@@ -1,6 +1,5 @@
 package kr.rvs.mclibrary.bukkit.command.duplex;
 
-import kr.rvs.mclibrary.Static;
 import kr.rvs.mclibrary.bukkit.command.CommandArguments;
 import kr.rvs.mclibrary.bukkit.command.Executable;
 import kr.rvs.mclibrary.bukkit.command.ICommand;
@@ -10,7 +9,7 @@ import kr.rvs.mclibrary.bukkit.player.CommandSenderWrapper;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.logging.Level;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -44,11 +43,9 @@ public class ComplexCommand extends HashMap<String, ICommand> implements IComman
             String arg = args[i];
             ICommand command = ret.computeIfAbsent(arg, k -> new ComplexCommand());
             if (!(command instanceof ComplexCommand)) {
-                Static.log(Level.WARNING, String.format(
-                        "CompositeBase expected, but find %s, key: %s",
-                        command.toString(), arg
-                ));
-                ret.put(arg, command = new ComplexCommand());
+                ComplexCommand complexCommand = new ComplexCommand();
+                complexCommand.put("", command);
+                ret.put(arg, command = complexCommand);
             }
             ret = (ComplexCommand) command;
         }

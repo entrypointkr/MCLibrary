@@ -10,7 +10,9 @@ public class AccessibleObjectWrapper<T extends AccessibleObject> {
 
     public AccessibleObjectWrapper(T object) {
         this.object = object;
-        object.setAccessible(true);
+
+        if (object != null)
+            object.setAccessible(true);
     }
 
     public T getAccessibleObject() {
