@@ -1,7 +1,9 @@
 package kr.rvs.mclibrary;
 
-import kr.rvs.mclibrary.bukkit.command.*;
+import kr.rvs.mclibrary.bukkit.command.CommandArguments;
+import kr.rvs.mclibrary.bukkit.command.CommandManager;
 import kr.rvs.mclibrary.bukkit.command.annotation.Command;
+import kr.rvs.mclibrary.bukkit.command.annotation.SubCommand;
 import kr.rvs.mclibrary.bukkit.command.annotation.TabCompleter;
 import kr.rvs.mclibrary.bukkit.player.CommandSenderWrapper;
 import kr.rvs.mclibrary.struct.Injector;
@@ -35,10 +37,12 @@ public class CommandTest extends Assert {
 
     @Test
     public void commandTest() throws InterruptedException {
-        commandMap.dispatch(mockSender, "test abc");
-        commandMap.dispatch(mockSender, "test a b c d e f 1 2");
+        commandMap.dispatch(mockSender, "test first");
+        commandMap.dispatch(mockSender, "test second");
+        commandMap.dispatch(mockSender, "test first b 10");
+        commandMap.dispatch(mockSender, "test second b");
 
-        if (integer.get() < 3) {
+        if (integer.get() < 4) {
             throw new Error("Command testing fail");
         }
     }
@@ -46,52 +50,107 @@ public class CommandTest extends Assert {
     @Test
     public void commandHelp() {
         // Help message
-        commandMap.dispatch(mockSender, "test help");
-        commandMap.dispatch(mockSender, "test a b c");
+        commandMap.dispatch(mockSender, "test");
+        commandMap.dispatch(mockSender, "test help 2");
     }
 
     @Test
     public void tabComplete() {
-        List<String> matches = commandMap.tabComplete(mockSender, "test ab");
-        List<String> matchesB = commandMap.tabComplete(mockSender, "test abc");
+        List<String> matches = commandMap.tabComplete(mockSender, "test fi");
+        List<String> matchesB = commandMap.tabComplete(mockSender, "test first");
 
-        assertEquals(matches, Arrays.asList("abc"));
+        assertEquals(matches, Arrays.asList("first"));
         assertEquals(matchesB, Arrays.asList("test", "completes"));
     }
 
     @Command(
             args = "test"
     )
+    @SubCommand(TestCommand.TestSubCommand.class)
     static class TestCommand {
-        public TestCommand(CommandAdaptor adaptor) {
-            integer.incrementAndGet();
-        }
-
         @Command(
-                args = "abc",
-                usage = "[test]"
+                args = "first"
         )
-        public void test(CommandSenderWrapper wrapper, CommandArguments args) {
+        public void execute1(CommandSenderWrapper wrapper, CommandArguments args) {
+            wrapper.sendMessage("Example command 1");
             integer.incrementAndGet();
-        }
-
-        @Command(
-                args = "a b c d e f",
-                usage = "(num1) (num2)",
-                desc = "Test description",
-                min = 2,
-                max = 2
-        )
-        public void test(CommandSenderWrapper wrapper, List<String> args) {
-            if (args.equals(Arrays.asList("1", "2")))
-                integer.incrementAndGet();
         }
 
         @TabCompleter(
-                args = "abc"
+                args = "first"
         )
-        public List<String> tab(CommandSenderWrapper wrapper, CommandArguments args) {
+        public List<String> tabComplete(CommandSenderWrapper wrapper, CommandArguments args) {
             return Arrays.asList("test", "completes");
+        }
+
+        @Command(
+                args = "second",
+                desc = "Test description"
+        )
+        public void execute2(CommandSenderWrapper wrapper, CommandArguments args) {
+            wrapper.sendMessage("Example command 2");
+            integer.incrementAndGet();
+        }
+
+        @Command(
+                args = "first b",
+                usage = "(number)",
+                desc = "Test description",
+                min = 1
+        )
+        public void execute3(CommandSenderWrapper wrapper, CommandArguments args) {
+            int defaultNumber = 1;
+            int arg = args.getInt(0, defaultNumber);
+            wrapper.sendMessage("Example command 3 " + arg);
+            integer.incrementAndGet();
+        }
+
+        @Command(
+                args = "second"
+        )
+        static class TestSubCommand {
+            @Command(
+                    args = "b"
+            )
+            public void execute4(CommandSenderWrapper wrapper, CommandArguments args) {
+                wrapper.sendMessage("Example command 4");
+                integer.incrementAndGet();
+            }
+        }
+
+        @Command(
+                args = "first c"
+        )
+        public void execute5(CommandSenderWrapper wrapper, CommandArguments args) {
+
+        }
+
+        @Command(
+                args = "first d"
+        )
+        public void execute6(CommandSenderWrapper wrapper, CommandArguments args) {
+
+        }
+
+        @Command(
+                args = "first e"
+        )
+        public void execute7(CommandSenderWrapper wrapper, CommandArguments args) {
+
+        }
+
+        @Command(
+                args = "first f"
+        )
+        public void execute8(CommandSenderWrapper wrapper, CommandArguments args) {
+
+        }
+
+        @Command(
+                args = "first g"
+        )
+        public void execute9(CommandSenderWrapper wrapper, CommandArguments args) {
+
         }
     }
 }

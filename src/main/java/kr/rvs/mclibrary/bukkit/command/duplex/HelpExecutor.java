@@ -45,6 +45,10 @@ public class HelpExecutor implements ICommand, CommandInfo {
         }
     }
 
+    private String argSpacing(String args, String key) {
+        return args.isEmpty() ? key : args + ' ' + key;
+    }
+
     private void init(String args, ICommand command) {
         if (command instanceof ComplexCommand) {
             ComplexCommand compositeExecutor = (ComplexCommand) command;
@@ -54,9 +58,9 @@ public class HelpExecutor implements ICommand, CommandInfo {
                 ICommand val = entry.getValue();
 
                 if (val instanceof ComplexCommand) {
-                    init(args + key + ' ', val);
+                    init(argSpacing(args, key), val);
                 } else if (val instanceof CommandInfo) {
-                    CommandStorage storage = new CommandStorage(args + key, (CommandInfo) val);
+                    CommandStorage storage = new CommandStorage(argSpacing(args, key), (CommandInfo) val);
                     storageList.add(storage);
                 }
             }
