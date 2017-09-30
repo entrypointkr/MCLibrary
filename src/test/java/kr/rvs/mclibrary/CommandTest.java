@@ -57,7 +57,7 @@ public class CommandTest extends Assert {
     @Test
     public void tabComplete() {
         List<String> matches = commandMap.tabComplete(mockSender, "test fi");
-        List<String> matchesB = commandMap.tabComplete(mockSender, "test first");
+        List<String> matchesB = commandMap.tabComplete(mockSender, "test first ");
 
         assertEquals(matches, Arrays.asList("first"));
         assertEquals(matchesB, Arrays.asList("test", "completes"));

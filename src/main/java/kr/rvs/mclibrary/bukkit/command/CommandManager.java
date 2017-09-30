@@ -125,7 +125,7 @@ public class CommandManager {
             Command commandAnnot = method.getAnnotation(Command.class);
             TabCompleter completerAnnot = method.getAnnotation(TabCompleter.class);
             if (commandAnnot == null && completerAnnot == null)
-                return;
+                continue;
 
             String args = commandAnnot != null ?
                     commandAnnot.args() :
@@ -136,7 +136,8 @@ public class CommandManager {
             ICommand command = newComplexCommand.computeIfAbsent(lastArg, k -> new CompositionCommand());
 
             if (command instanceof ComplexCommand) {
-                command = ((ComplexCommand) command).getOrDefault("", command);
+                ICommand absoluteCommand = ((ComplexCommand) command).getAbsoluteCommand();
+                command = absoluteCommand != null ? absoluteCommand : command;
             }
             if (!(command instanceof CompositionCommand)) {
                 Static.log(Level.WARNING, "CompositionCommand expected, but " + command.getClass().getSimpleName());

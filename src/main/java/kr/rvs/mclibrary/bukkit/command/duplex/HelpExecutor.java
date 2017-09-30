@@ -15,7 +15,7 @@ import java.util.Map;
 /**
  * Created by Junhyeong Lim on 2017-09-28.
  */
-public class HelpExecutor implements ICommand, CommandInfo {
+public class HelpExecutor implements ICommand {
     private final ICommand command;
     private final String label;
     private final int line;
@@ -28,17 +28,18 @@ public class HelpExecutor implements ICommand, CommandInfo {
         this.label = label;
         this.line = line;
         this.helpArg = StringUtils.isAlphanumeric(label) ? "help" : "도움말";
+
+        if (command instanceof ComplexCommand) {
+            ComplexCommand compositeExecutor = (ComplexCommand) command;
+            if (!compositeExecutor.containsKey(helpArg))
+                compositeExecutor.put(helpArg, this);
+        }
     }
 
     private void checkDiff() {
         int hashCode = command.hashCode();
         if (lastHashCode != hashCode) {
             storageList.clear();
-            if (command instanceof ComplexCommand) {
-                ComplexCommand compositeExecutor = (ComplexCommand) command;
-                if (!compositeExecutor.containsKey(helpArg))
-                    compositeExecutor.put(helpArg, this);
-            }
             init("", command);
             lastHashCode = hashCode;
         }
@@ -83,11 +84,16 @@ public class HelpExecutor implements ICommand, CommandInfo {
         int end = Math.min(currPage * line, storageList.size());
 
         StringBuilder header = new StringBuilder()
-                .append(String.format("&e--------- &f도움말: /%s (%d/%d) &6", label, currPage, maxPage));
+                .append(String.format("&6--------- &f도움말: /%s (%d/%d) &6", label, currPage, maxPage));
         for (int i = header.length(); i < 55; i++) {
             header.append('-');
         }
         wrapper.sendMessage(header);
+
+        wrapper.sendMessage(String.format(
+                "&7'/%s %s [페이지]' 를 입력할 수 있습니다.",
+                label, helpArg
+        ));
 
         for (int i = start; i < end; i++) {
             CommandStorage storage = storageList.get(i);
@@ -97,6 +103,8 @@ public class HelpExecutor implements ICommand, CommandInfo {
 
     @Override
     public List<String> tabComplete(CommandSenderWrapper wrapper, CommandArguments args) {
+        checkDiff();
+
         List<String> ret = new ArrayList<>();
         int maxPage = getMaxPage();
         for (int i = 1; i <= maxPage; i++) {
@@ -110,7 +118,7 @@ public class HelpExecutor implements ICommand, CommandInfo {
         String usage = commandInfo.usage();
         String perm = commandInfo.perm();
         boolean hasPerm = StringUtils.isEmpty(perm) || sender.hasPermission(perm);
-        ChatColor color = hasPerm ? ChatColor.YELLOW : ChatColor.RED;
+        ChatColor color = hasPerm ? ChatColor.GOLD : ChatColor.RED;
         String desc = commandInfo.desc();
         StringBuilder builder = new StringBuilder()
                 .append(color).append('/').append(label);
@@ -125,20 +133,20 @@ public class HelpExecutor implements ICommand, CommandInfo {
         wrapper.sendMessage(builder);
     }
 
-    @Override
-    public String usage() {
-        return "[페이지]";
-    }
-
-    @Override
-    public String desc() {
-        return "명령어 도움말을 봅니다.";
-    }
-
-    @Override
-    public String perm() {
-        return null;
-    }
+//    @Override
+//    public String usage() {
+//        return "[페이지]";
+//    }
+//
+//    @Override
+//    public String desc() {
+//        return "명령어 도움말을 봅니다.";
+//    }
+//
+//    @Override
+//    public String perm() {
+//        return null;
+//    }
 
     static class CommandStorage {
         private final String args;

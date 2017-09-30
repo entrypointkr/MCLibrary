@@ -1,2 +1,2 @@
 packet-debug: false
-stacktrace: false
+stacktrace: true
