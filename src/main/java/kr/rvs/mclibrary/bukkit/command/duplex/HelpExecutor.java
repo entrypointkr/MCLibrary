@@ -58,7 +58,11 @@ public class HelpExecutor implements ICommand {
                 ICommand val = entry.getValue();
 
                 if (val instanceof ComplexCommand) {
+                    ComplexCommand complexCommand = (ComplexCommand) val;
+                    ICommand absolute = complexCommand.getAbsoluteCommand();
                     init(argSpacing(args, key), val);
+                    if (absolute != null)
+                        init(argSpacing(args, ""), absolute);
                 } else if (val instanceof CommandInfo) {
                     CommandStorage storage = new CommandStorage(argSpacing(args, key), (CommandInfo) val);
                     storageList.add(storage);
@@ -78,13 +82,13 @@ public class HelpExecutor implements ICommand {
     public void execute(CommandSenderWrapper wrapper, CommandArguments args) {
         checkDiff();
 
-        int currPage = Math.max(args.getInt(0, 1), 1);
         int maxPage = getMaxPage();
+        int currPage = Math.min(Math.max(args.getInt(0, 1), 1), maxPage);
         int start = (currPage - 1) * line;
         int end = Math.min(currPage * line, storageList.size());
 
         StringBuilder header = new StringBuilder()
-                .append(String.format("&6--------- &f도움말: /%s (%d/%d) &6", label, currPage, maxPage));
+                .append(String.format("&e--------- &f도움말: /%s (%d/%d) &e", label, currPage, maxPage));
         for (int i = header.length(); i < 55; i++) {
             header.append('-');
         }

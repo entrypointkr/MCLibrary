@@ -106,8 +106,9 @@ public class CommandManager {
                     complexCommand,
                     plugin
             );
-            commandMap.register(firstArg, "mclibrary", adaptor);
+            commandMap.register(firstArg, plugin.getName(), adaptor);
 
+            Static.log(Level.INFO, "Command \"" + firstArg + "\" register from " + plugin.getName());
             ComplexCommand newComplexCommand = complexCommand.setupComposite(args, 1, args.length);
             Object instance = factory.create(commandClass, adaptor);
             registerCommandFromMethod(commandClass, instance, newComplexCommand);
@@ -155,6 +156,7 @@ public class CommandManager {
             if (completerAnnot != null) {
                 compositionCommand.setCompletable(new ReflectiveCompleter(instance, method));
             }
+            Static.log(Level.INFO, "... " + Arrays.toString(splited));
         }
     }
 
