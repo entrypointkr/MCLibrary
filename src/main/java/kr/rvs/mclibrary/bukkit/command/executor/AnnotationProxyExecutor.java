@@ -29,6 +29,9 @@ public class AnnotationProxyExecutor implements Executable, CommandInfo {
     public void execute(CommandSenderWrapper wrapper, CommandArguments args) throws CommandException {
         CommandSender sender = wrapper.getSender();
         String perm = annotation.perm();
+        if (StringUtils.isNotEmpty(perm) && !sender.hasPermission(perm)) {
+            throw new PermissionDeniedException(wrapper, args, this, perm);
+        }
         String message = null;
         if (annotation.min() > args.size())
             message = String.format("인자를 %d 개 이상 입력하세요. (%d 개 부족)",
@@ -41,9 +44,6 @@ public class AnnotationProxyExecutor implements Executable, CommandInfo {
                     annotation.type() == CommandType.CONSOLE ? "콘솔만 사용 가능합니다." : "사용할 수 없는 명령어입니다.";
         if (message != null) {
             throw new InvalidUsageException(wrapper, args, this, this, ChatColor.RED + message);
-        }
-        if (StringUtils.isNotEmpty(perm) && !sender.hasPermission(perm)) {
-            throw new PermissionDeniedException(wrapper, args, this, perm);
         }
         executable.execute(wrapper, args);
     }

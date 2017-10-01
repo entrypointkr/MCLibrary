@@ -58,7 +58,7 @@ public class ClassProbe {
         return ret;
     }
 
-    public Set<Class> getTypesAnnotatedWith(Class<? extends Annotation> annotCls) {
+    public Set<Class<?>> getTypesAnnotatedWith(Class<? extends Annotation> annotCls) {
         return storage.classes.stream()
                 .filter(aClass -> aClass.isAnnotationPresent(annotCls))
                 .collect(Collectors.toSet());
@@ -71,11 +71,11 @@ public class ClassProbe {
     }
 
     class InternalStorage {
-        private final Set<Class> classes = new HashSet<>();
+        private final Set<Class<?>> classes = new HashSet<>();
         private final Set<Method> methods = new HashSet<>();
         private final Set<Field> fields = new HashSet<>();
 
-        public void add(Class aClass) {
+        public void add(Class<?> aClass) {
             classes.add(aClass);
             methods.addAll(Arrays.asList((Method[]) ArrayUtils.addAll(aClass.getDeclaredMethods(), aClass.getMethods())));
             fields.addAll(Arrays.asList((Field[]) ArrayUtils.addAll(aClass.getDeclaredFields(), aClass.getFields())));

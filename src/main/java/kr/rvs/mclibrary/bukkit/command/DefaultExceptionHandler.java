@@ -38,7 +38,7 @@ public class DefaultExceptionHandler implements CommandExceptionHandler {
     public void handle(PermissionDeniedException ex) {
         CommandSenderWrapper wrapper = ex.getWrapper();
         String permission = ex.getPermission();
-        wrapper.sendMessage(String.format("&c권한 &e%s &c이 없습니다.", permission));
+        wrapper.sendMessage(String.format("&c권한 &f%s &c이(가) 없습니다.", permission));
     }
 
     @Override

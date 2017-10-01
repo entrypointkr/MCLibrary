@@ -1,8 +1,9 @@
 package kr.rvs.mclibrary.plugin;
 
 import kr.rvs.mclibrary.MCLibrary;
-import kr.rvs.mclibrary.bukkit.command.annotation.Command;
 import kr.rvs.mclibrary.bukkit.command.CommandArguments;
+import kr.rvs.mclibrary.bukkit.command.CommandType;
+import kr.rvs.mclibrary.bukkit.command.annotation.Command;
 import kr.rvs.mclibrary.bukkit.inventory.event.GUIClickEvent;
 import kr.rvs.mclibrary.bukkit.inventory.gui.GUI;
 import kr.rvs.mclibrary.bukkit.inventory.gui.GUISignatureAdapter;
@@ -26,7 +27,8 @@ public class LibraryCommand {
     private final MCLibrary instance = (MCLibrary) MCLibrary.getPlugin();
 
     @Command(
-            args = "reload"
+            args = "reload",
+            perm = "mclibrary.reload"
     )
     public void reloadCommand(CommandSenderWrapper wrapper, CommandArguments args) {
         FileConfiguration config = instance.getConfig();
@@ -38,7 +40,9 @@ public class LibraryCommand {
     }
 
     @Command(
-            args = "killall"
+            type = CommandType.PLAYER,
+            args = "killall",
+            perm = "mclibrary.killall"
     )
     public void killallCommand(CommandSenderWrapper wrapper, CommandArguments args) {
         wrapper.getPlayer().getWorld().getEntities().stream()
@@ -47,7 +51,8 @@ public class LibraryCommand {
     }
 
     @Command(
-            args = "gui"
+            args = "gui",
+            perm = "mclibrary.gui"
     )
     public void guiCommand(CommandSenderWrapper wrapper, CommandArguments args) {
         new GUI(

@@ -29,6 +29,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Optional;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.regex.Pattern;
 
@@ -76,7 +77,15 @@ public class CommandManager {
             FieldEx fileField = Reflections.getFieldEx(JavaPlugin.class, "file");
             fileField.<File>get(plugin).ifPresent(file -> {
                 ClassProbe probe = new ClassProbe(file);
-                for (Class<?> annotatedClass : probe.getTypesAnnotatedWith(Command.class)) {
+                Set<Class<?>> commandClasses = probe.getTypesAnnotatedWith(Command.class);
+                Set<Class<?>> subCommandClasses = probe.getTypesAnnotatedWith(SubCommand.class);
+
+                for (Class<?> subCommandClass : subCommandClasses) {
+                    SubCommand subCommand = subCommandClass.getAnnotation(SubCommand.class);
+                    commandClasses.removeAll(Arrays.asList(subCommand.value()));
+                }
+
+                for (Class<?> annotatedClass : commandClasses) {
                     registerCommand(annotatedClass, plugin);
                 }
             });
