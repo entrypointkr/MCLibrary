@@ -2,6 +2,7 @@ package kr.rvs.mclibrary.bukkit.command.executor;
 
 import kr.rvs.mclibrary.bukkit.command.CommandArguments;
 import kr.rvs.mclibrary.bukkit.command.CommandInfo;
+import kr.rvs.mclibrary.bukkit.command.CommandType;
 import kr.rvs.mclibrary.bukkit.command.Executable;
 import kr.rvs.mclibrary.bukkit.command.annotation.Command;
 import kr.rvs.mclibrary.bukkit.command.exception.CommandException;
@@ -9,6 +10,7 @@ import kr.rvs.mclibrary.bukkit.command.exception.InvalidUsageException;
 import kr.rvs.mclibrary.bukkit.command.exception.PermissionDeniedException;
 import kr.rvs.mclibrary.bukkit.player.CommandSenderWrapper;
 import org.apache.commons.lang.StringUtils;
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
 /**
@@ -27,10 +29,18 @@ public class AnnotationProxyExecutor implements Executable, CommandInfo {
     public void execute(CommandSenderWrapper wrapper, CommandArguments args) throws CommandException {
         CommandSender sender = wrapper.getSender();
         String perm = annotation.perm();
-        if (!(annotation.min() <= args.size() &&
-                annotation.max() >= args.size() &&
-                annotation.type().isValid(sender))) {
-            throw new InvalidUsageException(wrapper, args, this, this);
+        String message = null;
+        if (annotation.min() > args.size())
+            message = String.format("인자를 %d 개 이상 입력하세요. (%d 개 부족)",
+                    annotation.min(), annotation.min() - args.size());
+        else if (annotation.max() < args.size())
+            message = String.format("인자를 %d 개 이하로 입력하세요. (%d 개 많음)",
+                    annotation.max(), args.size() - annotation.max());
+        else if (!annotation.type().isValid(sender))
+            message = annotation.type() == CommandType.PLAYER ? "플레이어만 사용 가능합니다." :
+                    annotation.type() == CommandType.CONSOLE ? "콘솔만 사용 가능합니다." : "사용할 수 없는 명령어입니다.";
+        if (message != null) {
+            throw new InvalidUsageException(wrapper, args, this, this, ChatColor.RED + message);
         }
         if (StringUtils.isNotEmpty(perm) && !sender.hasPermission(perm)) {
             throw new PermissionDeniedException(wrapper, args, this, perm);

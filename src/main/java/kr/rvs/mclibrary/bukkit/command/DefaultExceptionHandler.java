@@ -1,9 +1,9 @@
 package kr.rvs.mclibrary.bukkit.command;
 
+import kr.rvs.mclibrary.bukkit.command.duplex.HelpExecutor;
 import kr.rvs.mclibrary.bukkit.command.exception.CommandNotFoundException;
 import kr.rvs.mclibrary.bukkit.command.exception.InvalidUsageException;
 import kr.rvs.mclibrary.bukkit.command.exception.PermissionDeniedException;
-import kr.rvs.mclibrary.bukkit.command.duplex.HelpExecutor;
 import kr.rvs.mclibrary.bukkit.player.CommandSenderWrapper;
 
 /**
@@ -30,6 +30,7 @@ public class DefaultExceptionHandler implements CommandExceptionHandler {
         CommandSenderWrapper wrapper = ex.getWrapper();
         CommandArguments arguments = ex.getArguments();
         CommandInfo commandInfo = ex.getCommandInfo();
+        wrapper.sendMessage(ex.getMessage());
         helpExecutor.sendCommandInfo(wrapper, arguments.getConsumedArgs(), commandInfo);
     }
 
