@@ -27,7 +27,7 @@ public class HelpExecutor implements ICommand {
         this.command = command;
         this.label = label;
         this.line = line;
-        this.helpArg = StringUtils.isAlphanumeric(label) ? "help" : "도움말";
+        this.helpArg = label.matches("[a-zA-Z]+") ? "help" : "도움말";
 
         if (command instanceof ComplexCommand) {
             ComplexCommand compositeExecutor = (ComplexCommand) command;
