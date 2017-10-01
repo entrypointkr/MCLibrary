@@ -37,7 +37,7 @@ public class AnnotationProxyExecutor implements Executable, CommandInfo {
             message = String.format("인자를 %d 개 이상 입력하세요. (%d 개 부족)",
                     annotation.min(), annotation.min() - args.size());
         else if (annotation.max() < args.size())
-            message = String.format("인자를 %d 개 이하로 입력하세요. (%d 개 많음)",
+            message = String.format("인자를 %d 개 이하로 입력하세요. (%d 개 초과)",
                     annotation.max(), args.size() - annotation.max());
         else if (!annotation.type().isValid(sender))
             message = annotation.type() == CommandType.PLAYER ? "플레이어만 사용 가능합니다." :
