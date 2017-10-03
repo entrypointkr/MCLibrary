@@ -86,19 +86,30 @@ public class HelpExecutor implements ICommand {
         int currPage = Math.min(Math.max(args.getInt(0, 1), 1), maxPage);
         int start = (currPage - 1) * line;
         int end = Math.min(currPage * line, storageList.size());
+        boolean paging = maxPage > 1;
 
-        StringBuilder header = new StringBuilder()
-                .append(String.format("&e--------- &f도움말: /%s (%d/%d) &e", label, currPage, maxPage));
+        // Header
+        StringBuilder header = new StringBuilder().append("&e--------- &f도움말: /").append(label).append(' ');
+        if (paging) {
+            header.append(String.format("(%d/%d) ", currPage, maxPage));
+        }
+        header.append("&e");
         for (int i = header.length(); i < 55; i++) {
             header.append('-');
         }
         wrapper.sendMessage(header);
 
-        wrapper.sendMessage(String.format(
-                "&7'/%s %s [페이지]' 를 입력할 수 있습니다.",
-                label, helpArg
-        ));
+        // Additional
+        if (paging) {
+            wrapper.sendMessage(String.format(
+                    "&7'/%s %s [페이지]' 를 입력할 수 있습니다.",
+                    label, helpArg
+            ));
+        } else {
+            wrapper.sendMessage("&7하위 명령어 목록");
+        }
 
+        // Contents
         for (int i = start; i < end; i++) {
             CommandStorage storage = storageList.get(i);
             sendCommandInfo(wrapper, storage.args, storage.info);
