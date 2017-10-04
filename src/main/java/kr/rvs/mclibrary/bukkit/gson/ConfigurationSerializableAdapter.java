@@ -19,7 +19,7 @@ import static org.bukkit.configuration.serialization.ConfigurationSerialization.
 public class ConfigurationSerializableAdapter extends TypeAdapter<ConfigurationSerializable> {
     private final TypeAdapter<Map> mapAdapter;
 
-    ConfigurationSerializableAdapter(TypeAdapter<Map> mapAdapter) {
+    public ConfigurationSerializableAdapter(TypeAdapter<Map> mapAdapter) {
         this.mapAdapter = mapAdapter;
     }
 
