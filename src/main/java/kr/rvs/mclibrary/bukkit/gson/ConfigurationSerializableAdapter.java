@@ -3,12 +3,10 @@ package kr.rvs.mclibrary.bukkit.gson;
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
-import kr.rvs.mclibrary.reflection.Reflections;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 
 import java.io.IOException;
-import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,7 +19,7 @@ import static org.bukkit.configuration.serialization.ConfigurationSerialization.
 public class ConfigurationSerializableAdapter extends TypeAdapter<ConfigurationSerializable> {
     private final TypeAdapter<Map> mapAdapter;
 
-    public ConfigurationSerializableAdapter(TypeAdapter<Map> mapAdapter) {
+    ConfigurationSerializableAdapter(TypeAdapter<Map> mapAdapter) {
         this.mapAdapter = mapAdapter;
     }
 
@@ -59,6 +57,14 @@ public class ConfigurationSerializableAdapter extends TypeAdapter<ConfigurationS
                 continue;
 
             Map<String, Object> subMap = (Map<String, Object>) val;
+            if (key.equals("enchants") && map.containsKey("meta-type")) {
+                for (Map.Entry<String, Object> enchantEntry : subMap.entrySet()) {
+                    String name = enchantEntry.getKey();
+                    Object level = enchantEntry.getValue();
+                    if (level instanceof Number && !(level instanceof Integer))
+                        subMap.put(name, ((Number) level).intValue());
+                }
+            }
             if (subMap.containsKey(SERIALIZED_TYPE_KEY)) {
                 map.put(key, deserialize(subMap));
             }
