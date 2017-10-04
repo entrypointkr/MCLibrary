@@ -3,14 +3,20 @@ package kr.rvs.mclibrary;
 import kr.rvs.mclibrary.bukkit.MCUtils;
 import kr.rvs.mclibrary.bukkit.command.CommandManager;
 import kr.rvs.mclibrary.bukkit.inventory.gui.GUI;
+import kr.rvs.mclibrary.bukkit.player.PlayerUtils;
 import kr.rvs.mclibrary.bukkit.protocol.PacketMonitoringListener;
 import kr.rvs.mclibrary.general.Version;
 import kr.rvs.mclibrary.gson.GsonManager;
 import kr.rvs.mclibrary.gson.SettingManager;
 import kr.rvs.mclibrary.plugin.LibraryCommand;
+import kr.rvs.mclibrary.plugin.ServerHostnameGetter;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by Junhyeong Lim on 2017-07-26.
@@ -22,6 +28,7 @@ public class MCLibrary extends JavaPlugin {
     private static final GsonManager gsonManager = new GsonManager();
     private static final SettingManager settingManager = new SettingManager();
     private static final Version bukkitVersion = new Version(Bukkit.getBukkitVersion());
+    private static String address = "unknown";
 
     private static Plugin plugin;
 
@@ -51,13 +58,24 @@ public class MCLibrary extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        GUI.init(this);
+        // Plugin
         saveDefaultConfig();
         getCommandManager().registerAll();
         getCommandManager().registerCommand(LibraryCommand.class, this);
-
         getConfig().options().copyDefaults(true);
         configInit();
+
+        // Function
+        GUI.init(this);
+        ServerHostnameGetter.init(this);
+
+        // Metrics
+        Metrics metrics = new Metrics(this);
+        metrics.addCustomChart(new Metrics.AdvancedPie("players_by_server", () -> {
+            Map<String, Integer> map = new HashMap<>();
+            map.put(getAddress(), PlayerUtils.getOnlinePlayers().size());
+            return map;
+        }));
     }
 
     public void configInit() {
@@ -71,5 +89,13 @@ public class MCLibrary extends JavaPlugin {
     public void onDisable() {
         settingManager.save();
         saveConfig();
+    }
+
+    public static String getAddress() {
+        return address;
+    }
+
+    public static void setAddress(String address) {
+        MCLibrary.address = address;
     }
 }
