@@ -52,10 +52,10 @@ public class LibraryCommand {
     )
     public void killallCommand(CommandSenderWrapper wrapper, CommandArguments args) {
         Optional<World> worldOpt;
-        if (wrapper.isPlayer()) {
-            worldOpt = Optional.ofNullable(wrapper.getPlayer().getWorld());
-        } else if (args.size() > 0) {
+        if (args.size() > 0) {
             worldOpt = args.getWorld(0);
+        } else if (wrapper.isPlayer()) {
+            worldOpt = Optional.ofNullable(wrapper.getPlayer().getWorld());
         } else {
             throw new InvalidUsageException(this, "&c월드 이름을 입력하세요.");
         }
