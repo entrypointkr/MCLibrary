@@ -28,6 +28,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.logging.Level;
@@ -71,7 +72,10 @@ public class CommandManager {
         String name = MCLibrary.getPlugin().getName();
         for (Plugin plugin : Bukkit.getPluginManager().getPlugins()) {
             PluginDescriptionFile desc = plugin.getDescription();
-            if (!desc.getSoftDepend().contains(name) && !desc.getDepend().contains(name))
+            List<String> softDepend = desc.getSoftDepend();
+            List<String> depend = desc.getDepend();
+            if ((softDepend == null || !softDepend.contains(name))
+                    && (depend == null || !depend.contains(name)))
                 continue;
 
             FieldEx fileField = Reflections.getFieldEx(JavaPlugin.class, "file");

@@ -14,7 +14,7 @@ public class Platform {
 
     public static PacketFactory getPacketFactory() {
         if (packetFactory == null) {
-            if (MCLibrary.getBukkitVersion().afterEquals(new Version(1, 11, 0)))
+            if (MCLibrary.getBukkitVersion().afterEquals(Version.V1_11))
                 packetFactory = new ModernPacketFactory();
             else
                 packetFactory = new DefaultPacketFactory();

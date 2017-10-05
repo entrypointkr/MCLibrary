@@ -30,7 +30,7 @@ public class AnnotationProxyExecutor implements Executable, CommandInfo {
         CommandSender sender = wrapper.getSender();
         String perm = annotation.perm();
         if (StringUtils.isNotEmpty(perm) && !sender.hasPermission(perm)) {
-            throw new PermissionDeniedException(wrapper, args, this, perm);
+            throw new PermissionDeniedException(this, perm);
         }
         String message = null;
         if (annotation.min() > args.size())
@@ -43,7 +43,7 @@ public class AnnotationProxyExecutor implements Executable, CommandInfo {
             message = annotation.type() == CommandType.PLAYER ? "플레이어만 사용 가능합니다." :
                     annotation.type() == CommandType.CONSOLE ? "콘솔만 사용 가능합니다." : "사용할 수 없는 명령어입니다.";
         if (message != null) {
-            throw new InvalidUsageException(wrapper, args, this, this, ChatColor.RED + message);
+            throw new InvalidUsageException(this, ChatColor.RED + message);
         }
         executable.execute(wrapper, args);
     }

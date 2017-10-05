@@ -3,6 +3,7 @@ package kr.rvs.mclibrary.bukkit.command.executor;
 import kr.rvs.mclibrary.Static;
 import kr.rvs.mclibrary.bukkit.command.CommandArguments;
 import kr.rvs.mclibrary.bukkit.command.Executable;
+import kr.rvs.mclibrary.bukkit.command.exception.CommandException;
 import kr.rvs.mclibrary.bukkit.player.CommandSenderWrapper;
 import org.apache.commons.lang.Validate;
 
@@ -20,7 +21,7 @@ public class ReflectiveExecutor implements Executable {
     public ReflectiveExecutor(Object object, Method method) {
         Class<?>[] paramTypes = method.getParameterTypes();
         Validate.isTrue(
-                        paramTypes.length == 2 &&
+                paramTypes.length == 2 &&
                         CommandSenderWrapper.class.isAssignableFrom(paramTypes[0]) &&
                         List.class.isAssignableFrom(paramTypes[1])
         );
@@ -35,7 +36,11 @@ public class ReflectiveExecutor implements Executable {
         try {
             method.invoke(object, wrapper, args);
         } catch (IllegalAccessException | InvocationTargetException e) {
-            Static.log(e);
+            Throwable cause = e.getCause();
+            if (cause instanceof CommandException)
+                throw (CommandException) cause;
+            else
+                Static.log(e);
         }
     }
 }

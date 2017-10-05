@@ -63,7 +63,7 @@ public class ItemBuilder {
     }
 
     public ItemBuilder(ItemWrapper wrapped) {
-        this(wrapped.get());
+        this(wrapped.getHandle());
     }
 
     public ItemBuilder amount(int amount) {

@@ -4,18 +4,15 @@ import kr.rvs.mclibrary.bukkit.command.CommandArguments;
 import kr.rvs.mclibrary.bukkit.command.CommandInfo;
 import kr.rvs.mclibrary.bukkit.command.ICommand;
 import kr.rvs.mclibrary.bukkit.player.CommandSenderWrapper;
-import org.apache.commons.lang.StringUtils;
-import org.bukkit.ChatColor;
-import org.bukkit.command.CommandSender;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 /**
- * Created by Junhyeong Lim on 2017-09-28.
+ * Created by Junhyeong Lim on 2017-10-05.
  */
-public class HelpExecutor implements ICommand {
+public abstract class AbstractHelpExecutor implements ICommand {
     private final ICommand command;
     private final String label;
     private final int line;
@@ -23,7 +20,7 @@ public class HelpExecutor implements ICommand {
     private final String helpArg;
     private int lastHashCode = -1;
 
-    public HelpExecutor(ICommand command, String label, int line) {
+    public AbstractHelpExecutor(ICommand command, String label, int line) {
         this.command = command;
         this.label = label;
         this.line = line;
@@ -74,7 +71,7 @@ public class HelpExecutor implements ICommand {
         }
     }
 
-    private int getMaxPage() {
+    public int getMaxPage() {
         return storageList.size() / line + (storageList.size() % line > 0 ? 1 : 0);
     }
 
@@ -128,40 +125,11 @@ public class HelpExecutor implements ICommand {
         return ret;
     }
 
-    public void sendCommandInfo(CommandSenderWrapper wrapper, String args, CommandInfo commandInfo) {
-        CommandSender sender = wrapper.getSender();
-        String usage = commandInfo.usage();
-        String perm = commandInfo.perm();
-        boolean hasPerm = StringUtils.isEmpty(perm) || sender.hasPermission(perm);
-        ChatColor color = hasPerm ? ChatColor.GOLD : ChatColor.RED;
-        String desc = commandInfo.desc();
-        StringBuilder builder = new StringBuilder()
-                .append(color).append('/').append(label);
+    public abstract void sendCommandInfo(CommandSenderWrapper wrapper, String args, CommandInfo commandInfo);
 
-        if (StringUtils.isNotEmpty(args))
-            builder.append(' ').append(args);
-        if (StringUtils.isNotEmpty(usage))
-            builder.append(' ').append(usage);
-        if (StringUtils.isNotEmpty(desc))
-            builder.append(": ").append(ChatColor.WHITE).append(desc);
-
-        wrapper.sendMessage(builder);
+    public String getLabel() {
+        return label;
     }
-
-//    @Override
-//    public String usage() {
-//        return "[페이지]";
-//    }
-//
-//    @Override
-//    public String desc() {
-//        return "명령어 도움말을 봅니다.";
-//    }
-//
-//    @Override
-//    public String perm() {
-//        return null;
-//    }
 
     static class CommandStorage {
         private final String args;

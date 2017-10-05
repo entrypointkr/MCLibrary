@@ -1,6 +1,7 @@
 package kr.rvs.mclibrary.bukkit.command.duplex;
 
 import kr.rvs.mclibrary.bukkit.command.CommandArguments;
+import kr.rvs.mclibrary.bukkit.command.CommandInfo;
 import kr.rvs.mclibrary.bukkit.command.ICommand;
 import kr.rvs.mclibrary.bukkit.command.TabCompletable;
 import kr.rvs.mclibrary.bukkit.command.exception.CommandException;
@@ -23,9 +24,11 @@ public class ComplexCommand extends LinkedHashMap<String, ICommand> implements I
         ICommand command = arg != null ? get(arg) : absoluteCommand;
         if (command != null) {
             args.remove(0);
+            if (command instanceof CommandInfo)
+                args.setLastCommand((CommandInfo) command);
             command.execute(wrapper, args);
         } else {
-            throw new CommandNotFoundException(wrapper, args, this);
+            throw new CommandNotFoundException(this);
         }
     }
 

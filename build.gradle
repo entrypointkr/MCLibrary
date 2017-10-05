@@ -22,6 +22,8 @@ repositories {
     mavenCentral()
     /* Spigot Repo */
     maven { url 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/' }
+    /* Bungeecord */
+    maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
     /* Vault Repo */
     maven { url 'http://nexus.hc.to/content/repositories/pub_releases' }
     /* ProtocolLib */
@@ -32,7 +34,7 @@ repositories {
 
 dependencies {
     compile(group: 'org.spigotmc', name: 'spigot-api', version: '1.12.2-R0.1-SNAPSHOT') {
-        exclude module: 'bungeecord-chat'
+        exclude module: 'gson'
     }
     compile(group: 'net.milkbowl.vault', name: 'VaultAPI', version: '1.6') {
         transitive = false
@@ -40,7 +42,7 @@ dependencies {
     compile(group: 'com.comphenix.protocol', name: 'ProtocolLib-API', version: '4.4.0-SNAPSHOT') {
         transitive = false
     }
-//    compile group: 'com.google.code.gson', name: 'gson', version: '2.8.1'
+    compile group: 'com.google.code.gson', name: 'gson', version: '2.8.1'
     compile group: 'org.bstats', name: 'bstats-bukkit', version: '1.2'
     compile fileTree(dir: 'libs', include: '*.jar')
 
@@ -62,8 +64,12 @@ shadowJar {
     classifier = null
     dependencies {
         include dependency('org.bstats:bstats-bukkit:1.2')
+        include dependency('net.md-5:bungeecord-chat:1.12-SNAPSHOT')
+        include dependency('com.google.code.gson:gson:2.8.1')
     }
-    relocate 'org.bstats.bukkit', 'kr.rvs.mclibrary.metrics'
+    exclude 'mojang-translations/*'
+    relocate 'org.bstats.bukkit', 'kr.rvs.mclibrary.libs.metrics'
+    relocate 'com.google.gson', 'kr.rvs.mclibrary.libs.gson'
 }
 
 task sourcesJar(type: Jar, dependsOn: classes) {

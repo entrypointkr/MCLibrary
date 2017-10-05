@@ -1,17 +1,13 @@
 package kr.rvs.mclibrary.bukkit.command.exception;
 
-import kr.rvs.mclibrary.bukkit.command.CommandArguments;
-import kr.rvs.mclibrary.bukkit.command.Executable;
-import kr.rvs.mclibrary.bukkit.player.CommandSenderWrapper;
-
 /**
  * Created by Junhyeong Lim on 2017-09-27.
  */
 public class PermissionDeniedException extends CommandException {
     private final String permission;
 
-    public PermissionDeniedException(CommandSenderWrapper wrapper, CommandArguments arguments, Executable source, String permission) {
-        super(wrapper, arguments, source);
+    public PermissionDeniedException(Object source, String permission) {
+        super(source);
         this.permission = permission;
     }
 

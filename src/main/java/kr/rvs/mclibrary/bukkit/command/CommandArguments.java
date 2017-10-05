@@ -2,17 +2,18 @@ package kr.rvs.mclibrary.bukkit.command;
 
 import kr.rvs.mclibrary.collection.VolatileArrayList;
 import org.apache.commons.lang.StringUtils;
+import org.bukkit.Bukkit;
+import org.bukkit.World;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
+import java.util.Optional;
 
 /**
  * Created by Junhyeong Lim on 2017-09-25.
  */
 public class CommandArguments extends VolatileArrayList { // TODO: Implement List, Deque
     private final StringBuilder consumedArgs = new StringBuilder();
+    private CommandInfo lastCommand = CommandInfo.DEFAULT;
 
     public CommandArguments(int initialCapacity) {
         super(initialCapacity);
@@ -38,5 +39,30 @@ public class CommandArguments extends VolatileArrayList { // TODO: Implement Lis
 
     public String getConsumedArgs() {
         return consumedArgs.toString();
+    }
+
+    public String toPlainArgs() {
+        StringBuilder builder = new StringBuilder();
+        for (String arg : this) {
+            if (builder.length() > 0)
+                builder.append(' ');
+            builder.append(arg);
+        }
+        return builder.toString();
+    }
+
+    public Optional<World> getWorld(int index) {
+        String worldName = get(index, null);
+        return StringUtils.isNotEmpty(worldName) ?
+                Optional.ofNullable(Bukkit.getWorld(worldName)) :
+                Optional.empty();
+    }
+
+    public CommandInfo getLastCommand() {
+        return lastCommand;
+    }
+
+    public void setLastCommand(CommandInfo lastCommand) {
+        this.lastCommand = lastCommand;
     }
 }

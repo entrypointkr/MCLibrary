@@ -1,43 +1,34 @@
 package kr.rvs.mclibrary.bukkit.player;
 
-import kr.rvs.mclibrary.Static;
-import kr.rvs.mclibrary.bukkit.MCUtils;
+import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import java.lang.reflect.Field;
-import java.util.concurrent.atomic.AtomicReference;
+import java.util.Objects;
 
 /**
  * Created by Junhyeong Lim on 2017-07-29.
  */
-public class PlayerWrapper extends AtomicReference<Player> {
-    public PlayerWrapper(Player handle) {
-        super(handle);
+public class PlayerWrapper {
+    private final Player player;
+
+    public PlayerWrapper(Player player) {
+        this.player = Objects.requireNonNull(player);
     }
 
     public int hasItemAmount(ItemStack item) {
-        return PlayerUtils.hasItemAmount(get(), item);
+        return PlayerUtils.hasItemAmount(player, item);
     }
 
     public boolean isHasItem(ItemStack item, int amount) {
-        return PlayerUtils.isHasItem(get(), item, amount);
+        return PlayerUtils.isHasItem(player, item, amount);
     }
 
     public boolean takeItem(ItemStack item, int takeAmount) {
-        return PlayerUtils.takeItem(get(), item, takeAmount);
+        return PlayerUtils.takeItem(player, item, takeAmount);
     }
 
-    public ContainerWrapper getContainer() {
-        Object internalPlayer = MCUtils.getHandle(get());
-        ContainerWrapper ret = null;
-        try {
-            Field containerField = internalPlayer.getClass().getField("activeContainer");
-            ret = new ContainerWrapper(containerField.get(internalPlayer));
-        } catch (NoSuchFieldException | IllegalAccessException e) {
-            Static.log(e);
-        }
-
-        return ret;
+    public void sendBaseComponent(BaseComponent component) {
+        PlayerUtils.sendBaseComponent(player, component);
     }
 }

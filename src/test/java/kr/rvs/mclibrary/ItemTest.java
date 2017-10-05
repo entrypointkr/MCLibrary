@@ -34,6 +34,6 @@ public class ItemTest extends Assert {
 
         ItemWrapper wrapper = builder.buildAndWrapping();
         wrapper.setName("Test diamond B");
-        assertEquals(wrapper.get().getItemMeta().getDisplayName(), "Test diamond B");
+        assertEquals(wrapper.getHandle().getItemMeta().getDisplayName(), "Test diamond B");
     }
 }

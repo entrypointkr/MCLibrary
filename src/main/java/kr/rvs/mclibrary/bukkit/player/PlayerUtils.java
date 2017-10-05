@@ -1,6 +1,8 @@
 package kr.rvs.mclibrary.bukkit.player;
 
 import kr.rvs.mclibrary.Static;
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.chat.ComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -14,6 +16,17 @@ import java.util.*;
  * Created by Junhyeong Lim on 2017-07-28.
  */
 public class PlayerUtils {
+    private static BaseComponentSender COMPONENT_SENDER = (player, component) -> player.spigot().sendMessage(component);
+
+    static {
+        try {
+            Player.class.getDeclaredMethod("spigot");
+        } catch (NoSuchMethodException e) {
+            COMPONENT_SENDER = ((player, component) ->
+                    Bukkit.dispatchCommand(player, "tellraw " + ComponentSerializer.toString(component)));
+        }
+    }
+
     public static Collection<? extends Player> getOnlinePlayers() {
         try {
             return Bukkit.getOnlinePlayers();
@@ -91,5 +104,13 @@ public class PlayerUtils {
         }
 
         return false;
+    }
+
+    public static void sendBaseComponent(Player player, BaseComponent component) {
+        COMPONENT_SENDER.send(player, component);
+    }
+
+    public interface BaseComponentSender {
+        void send(Player player, BaseComponent component);
     }
 }

@@ -1,8 +1,5 @@
 package kr.rvs.mclibrary.bukkit.command;
 
-import kr.rvs.mclibrary.bukkit.command.exception.CommandNotFoundException;
-import kr.rvs.mclibrary.bukkit.command.exception.InvalidUsageException;
-import kr.rvs.mclibrary.bukkit.command.exception.PermissionDeniedException;
 import kr.rvs.mclibrary.bukkit.player.CommandSenderWrapper;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -39,14 +36,8 @@ public class CommandAdaptor extends Command implements PluginIdentifiableCommand
         CommandArguments arguments = new CommandArguments(Arrays.asList(args));
         try {
             command.execute(wrapper, arguments);
-        } catch (CommandNotFoundException ex) {
-            exceptionHandler.handle(ex);
-        } catch (InvalidUsageException ex) {
-            exceptionHandler.handle(ex);
-        } catch (PermissionDeniedException ex) {
-            exceptionHandler.handle(ex);
         } catch (Exception ex) {
-            exceptionHandler.handle(ex);
+            exceptionHandler.handle(ex, wrapper, arguments);
         }
         return true;
     }
