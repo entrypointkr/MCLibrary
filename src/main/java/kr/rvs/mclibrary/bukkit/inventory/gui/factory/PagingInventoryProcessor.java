@@ -1,23 +1,22 @@
 package kr.rvs.mclibrary.bukkit.inventory.gui.factory;
 
 import kr.rvs.mclibrary.bukkit.inventory.event.GUIClickEvent;
-import kr.rvs.mclibrary.bukkit.inventory.gui.GUI;
-import kr.rvs.mclibrary.bukkit.inventory.gui.GUIHandler;
-import kr.rvs.mclibrary.bukkit.inventory.gui.Initializable;
+import kr.rvs.mclibrary.bukkit.inventory.gui.*;
+import kr.rvs.mclibrary.bukkit.inventory.gui.handler.DelegateClickHandler;
 import kr.rvs.mclibrary.bukkit.inventory.gui.handler.EventCancelHandler;
-import kr.rvs.mclibrary.bukkit.inventory.gui.handler.SpecificSlotHandler;
 import kr.rvs.mclibrary.bukkit.item.ItemBuilder;
 import kr.rvs.mclibrary.bukkit.item.ItemUtils;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Material;
 import org.bukkit.entity.HumanEntity;
+import org.bukkit.event.inventory.InventoryEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 /**
  * Created by Junhyeong Lim on 2017-09-12.
  */
-public class PagingInventoryProcessor extends InventoryProcessor implements Initializable {
+public class PagingInventoryProcessor extends InventoryProcessor {
     public static final String PAGE = "%page%";
     public static final String MAX_PAGE = "%max-page%";
     private final ItemStack prevPageBtn;
@@ -62,7 +61,6 @@ public class PagingInventoryProcessor extends InventoryProcessor implements Init
 
     @Override
     public void initialize(GUI gui) {
-        super.initialize(gui);
         int size = gui.getSignature().getSize();
         Validate.isTrue(size > 18);
         int lastKey = gui.getSignature().getContents().lastKey();
@@ -70,8 +68,8 @@ public class PagingInventoryProcessor extends InventoryProcessor implements Init
         this.maxPage = lastKey / this.size + (lastKey + 1 % this.size > 0 ? 1 : 0);
         gui.getHandlers().addFirst(
                 new EventCancelHandler(),
-                new PrevPageHandler(getPrevPageIndex()),
-                new NextPageHandler(getNextPageIndex()),
+                new DelegateClickHandler(new PrevPageHandler(), getPrevPageIndex()),
+                new DelegateClickHandler(new NextPageHandler(), getNextPageIndex()),
                 new EventSlotModerator()
         );
     }
@@ -118,25 +116,25 @@ public class PagingInventoryProcessor extends InventoryProcessor implements Init
                 )
                 .build());
     }
+
     class EventSlotModerator implements GUIHandler {
         @Override
-        public void onClick(GUIClickEvent e) {
-            int slot = e.getRawSlot();
-            if (slot >= 0 && slot < size) {
-                e.setRawSlot(e.getRawSlot() + (currentPage - 1) * size);
-            }
-            if (slot >= size)
-                e.setIgnore(true);
+        public void handle(GUIEvent<InventoryEvent> event) {
+            event.getEvent(GUIClickEvent.class).ifPresent(e -> {
+                int slot = e.getRawSlot();
+                if (slot >= 0 && slot < size) {
+                    e.setRawSlot(e.getRawSlot() + (currentPage - 1) * size);
+                }
+                if (slot >= size)
+                    e.setIgnore(true);
+            });
         }
     }
 
-    class PrevPageHandler extends SpecificSlotHandler {
-        public PrevPageHandler(Integer... slots) {
-            super(slots);
-        }
-
+    class PrevPageHandler implements GUIClickHandler {
         @Override
-        public void receive(GUIClickEvent e) {
+        public void click(GUIEvent<GUIClickEvent> event) {
+            GUIClickEvent e = event.getEvent();
             if (!ItemUtils.isEmpty(e.getCurrentItem()) && currentPage >= 2) {
                 currentPage--;
                 e.getGui().open(e.getWhoClicked());
@@ -146,13 +144,10 @@ public class PagingInventoryProcessor extends InventoryProcessor implements Init
         }
     }
 
-    class NextPageHandler extends SpecificSlotHandler {
-        public NextPageHandler(Integer... slots) {
-            super(slots);
-        }
-
+    class NextPageHandler implements GUIClickHandler {
         @Override
-        public void receive(GUIClickEvent e) {
+        public void click(GUIEvent<GUIClickEvent> event) {
+            GUIClickEvent e = event.getEvent();
             if (!ItemUtils.isEmpty(e.getCurrentItem()) && currentPage < maxPage) {
                 currentPage++;
                 e.getGui().open(e.getWhoClicked());

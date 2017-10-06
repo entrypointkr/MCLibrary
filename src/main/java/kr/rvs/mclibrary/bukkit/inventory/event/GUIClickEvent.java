@@ -65,10 +65,6 @@ public class GUIClickEvent extends InventoryClickEvent {
         sendMessage(60, title, messages);
     }
 
-    public GUI getGui() {
-        return gui;
-    }
-
     public void setRawSlot(int rawSlot) {
         this.rawSlot = rawSlot;
     }
@@ -208,5 +204,9 @@ public class GUIClickEvent extends InventoryClickEvent {
     @Override
     public String getEventName() {
         return delegate.getEventName();
+    }
+
+    public GUI getGui() {
+        return gui;
     }
 }

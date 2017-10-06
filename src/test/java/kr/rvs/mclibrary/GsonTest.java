@@ -1,7 +1,6 @@
 package kr.rvs.mclibrary;
 
 import kr.rvs.mclibrary.bukkit.inventory.gui.GUISignature;
-import kr.rvs.mclibrary.bukkit.inventory.gui.GUISignatureAdapter;
 import kr.rvs.mclibrary.gson.GsonUtils;
 import kr.rvs.mclibrary.mock.MockItemMeta;
 import kr.rvs.mclibrary.struct.Injector;
@@ -32,7 +31,7 @@ public class GsonTest extends Assert {
     public void guiSignature() {
         ItemStack itemA = ItemFactory.createRandomItem();
         ItemStack itemB = ItemFactory.createRandomItem();
-        GUISignature signature = new GUISignatureAdapter(InventoryType.CHEST)
+        GUISignature signature = new GUISignature(InventoryType.CHEST)
                 .title("Serialize Test")
                 .size(18)
                 .addHandlerIndexes(1, 2, 3)
@@ -48,7 +47,7 @@ public class GsonTest extends Assert {
         });
 
         System.out.println("Serialized: " + writer.toString());
-        GUISignature deserialized = GsonUtils.read(new StringReader(writer.toString()), GUISignatureAdapter.class);
+        GUISignature deserialized = GsonUtils.read(new StringReader(writer.toString()), GUISignature.class);
         System.out.println("Deserialized: " + deserialized);
         assertEquals(signature, deserialized);
     }

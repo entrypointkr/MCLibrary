@@ -1,13 +1,13 @@
 package kr.rvs.mclibrary.bukkit.inventory.gui.handler;
 
-import org.bukkit.event.inventory.InventoryInteractEvent;
+import kr.rvs.mclibrary.bukkit.inventory.gui.GUIEvent;
 
 /**
- * Created by Junhyeong Lim on 2017-08-18.
+ * Created by Junhyeong Lim on 2017-10-06.
  */
 public class EventCancelHandler extends TopInventoryHandler {
     @Override
-    public void receive(InventoryInteractEvent e) {
-        e.setCancelled(true);
+    public void receive(GUIEvent event) {
+        event.setCancelled(true);
     }
 }

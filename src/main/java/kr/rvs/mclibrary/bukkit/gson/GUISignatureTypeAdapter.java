@@ -4,7 +4,6 @@ import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import kr.rvs.mclibrary.bukkit.inventory.gui.GUISignature;
-import kr.rvs.mclibrary.bukkit.inventory.gui.GUISignatureAdapter;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.ItemStack;
 
@@ -62,7 +61,7 @@ public class GUISignatureTypeAdapter extends TypeAdapter<GUISignature> {
 
     @Override
     public GUISignature read(JsonReader in) throws IOException {
-        GUISignatureAdapter signature = new GUISignatureAdapter();
+        GUISignature signature = new GUISignature();
         Map<String, Object> contents = new HashMap<>();
         in.beginObject();
         while (in.hasNext()) {

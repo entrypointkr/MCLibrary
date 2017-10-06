@@ -6,7 +6,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerLoginEvent;
-import org.bukkit.plugin.Plugin;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -15,7 +14,7 @@ import java.net.UnknownHostException;
  * Created by Junhyeong Lim on 2017-10-04.
  */
 public class ServerHostnameGetter implements Listener {
-    public static void init(Plugin plugin) {
+    public static void init(MCLibrary plugin) {
         Bukkit.getPluginManager().registerEvents(new ServerHostnameGetter(), plugin);
         Static.getAddressAsync(plugin, addr ->
                 MCLibrary.setAddress(addr + ':' + Bukkit.getPort()));

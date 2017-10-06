@@ -7,9 +7,10 @@ import kr.rvs.mclibrary.bukkit.command.annotation.Command;
 import kr.rvs.mclibrary.bukkit.command.exception.InvalidUsageException;
 import kr.rvs.mclibrary.bukkit.inventory.event.GUIClickEvent;
 import kr.rvs.mclibrary.bukkit.inventory.gui.GUI;
-import kr.rvs.mclibrary.bukkit.inventory.gui.GUISignatureAdapter;
+import kr.rvs.mclibrary.bukkit.inventory.gui.GUIEvent;
+import kr.rvs.mclibrary.bukkit.inventory.gui.GUISignature;
+import kr.rvs.mclibrary.bukkit.inventory.gui.handler.ClickHandler;
 import kr.rvs.mclibrary.bukkit.inventory.gui.handler.EventCancelHandler;
-import kr.rvs.mclibrary.bukkit.inventory.gui.handler.SpecificSlotHandler;
 import kr.rvs.mclibrary.bukkit.item.ItemBuilder;
 import kr.rvs.mclibrary.bukkit.player.CommandSenderWrapper;
 import org.bukkit.Material;
@@ -77,14 +78,14 @@ public class LibraryCommand {
     )
     public void guiCommand(CommandSenderWrapper wrapper, CommandArguments args) {
         new GUI(
-                new GUISignatureAdapter(InventoryType.CHEST)
+                new GUISignature(InventoryType.CHEST)
                         .title("MCLibrary GUI")
                         .item(13, new ItemBuilder(Material.MAP).display("MCLibrary version").build()),
                 new EventCancelHandler(),
-                new SpecificSlotHandler(13) {
+                new ClickHandler(13) {
                     @Override
-                    public void receive(GUIClickEvent e) {
-                        e.sendMessage(
+                    public void click(GUIEvent<GUIClickEvent> event) {
+                        event.getEvent().sendMessage(
                                 "&aHello,",
                                 "&e" + instance.getDescription().getFullName()
                         );

@@ -1,8 +1,8 @@
 package kr.rvs.mclibrary.bukkit.inventory.gui.factory;
 
-import kr.rvs.mclibrary.bukkit.MCUtils;
 import kr.rvs.mclibrary.bukkit.inventory.gui.GUI;
 import kr.rvs.mclibrary.bukkit.inventory.gui.GUISignature;
+import kr.rvs.mclibrary.bukkit.inventory.gui.InventoryFactory;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.inventory.InventoryType;
@@ -15,13 +15,13 @@ public class BaseInventoryFactory implements InventoryFactory {
     @Override
     public Inventory create(GUI gui, HumanEntity viewer) {
         GUISignature signature = gui.getSignature();
-        String title = titleCaught(gui, signature.getTitle());
+        signature.title(titleCaught(signature.getTitle()));
         return signature.getType() == InventoryType.CHEST ?
-                Bukkit.createInventory(null, signature.getSize(), title) :
-                Bukkit.createInventory(null, signature.getType(), title);
+                Bukkit.createInventory(null, signature.getSize(), signature.getTitle()) :
+                Bukkit.createInventory(null, signature.getType(), signature.getTitle());
     }
 
-    public String titleCaught(GUI gui, String title) {
-        return MCUtils.colorize(title); // Hook
+    public String titleCaught(String title) {
+        return title; // Hook
     }
 }

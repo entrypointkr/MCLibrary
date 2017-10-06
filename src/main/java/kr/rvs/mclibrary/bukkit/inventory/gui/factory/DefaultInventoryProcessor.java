@@ -1,6 +1,7 @@
 package kr.rvs.mclibrary.bukkit.inventory.gui.factory;
 
 import kr.rvs.mclibrary.bukkit.inventory.gui.GUI;
+import kr.rvs.mclibrary.bukkit.inventory.gui.InventoryFactory;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.inventory.Inventory;
 

@@ -8,21 +8,21 @@ import java.util.Optional;
 import java.util.function.Function;
 
 /**
- * Created by Junhyeong Lim on 2017-09-09.
+ * Created by Junhyeong Lim on 2017-10-06.
  */
-public class EntityNameHashMap<V> extends OptionalHashMap<String, V> {
-    public EntityNameHashMap(int initialCapacity, float loadFactor) {
+public class EntityHashMap<V> extends OptionalHashMap<String, V> {
+    public EntityHashMap(int initialCapacity, float loadFactor) {
         super(initialCapacity, loadFactor);
     }
 
-    public EntityNameHashMap(int initialCapacity) {
+    public EntityHashMap(int initialCapacity) {
         super(initialCapacity);
     }
 
-    public EntityNameHashMap() {
+    public EntityHashMap() {
     }
 
-    public EntityNameHashMap(Map<? extends String, ? extends V> m) {
+    public EntityHashMap(Map<? extends String, ? extends V> m) {
         super(m);
     }
 

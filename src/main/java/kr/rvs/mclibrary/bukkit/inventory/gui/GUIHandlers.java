@@ -1,65 +1,57 @@
 package kr.rvs.mclibrary.bukkit.inventory.gui;
 
-import kr.rvs.mclibrary.Static;
 import kr.rvs.mclibrary.bukkit.inventory.event.GUIClickEvent;
+import kr.rvs.mclibrary.bukkit.inventory.gui.handler.DelegateClickHandler;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryEvent;
 
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.function.Consumer;
-import java.util.logging.Level;
 
 /**
- * Created by Junhyeong Lim on 2017-09-10.
+ * Created by Junhyeong Lim on 2017-10-06.
  */
 public class GUIHandlers {
     private final GUI gui;
+    private final List<GUIHandler> GUIHandlers = new ArrayList<>();
 
     public GUIHandlers(GUI gui) {
         this.gui = gui;
     }
 
-    private final List<GUIHandler> handlers = new LinkedList<>();
-
     public GUIHandlers addFirst(GUIHandler... handlers) {
-        this.handlers.addAll(0, Arrays.asList(handlers));
+        this.GUIHandlers.addAll(0, Arrays.asList(handlers));
         return this;
     }
 
     public GUIHandlers addLast(GUIHandler... handlers) {
-        this.handlers.addAll(Arrays.asList(handlers));
+        this.GUIHandlers.addAll(Arrays.asList(handlers));
         return this;
     }
 
-    public void removeHandler(GUIHandler... handlers) {
-        this.handlers.removeAll(Arrays.asList(handlers));
+    public GUIHandlers addFirst(GUIClickHandler handler, Integer... slots) {
+        return addFirst(new DelegateClickHandler(handler, slots));
     }
 
-    public void clear() {
-        this.handlers.clear();
+    public GUIHandlers addLast(GUIClickHandler handler, Integer... slots) {
+        return addLast(new DelegateClickHandler(handler, slots));
     }
 
     public void notify(InventoryEvent event) {
-        Consumer<GUIHandler> consumer;
-        if (event instanceof InventoryClickEvent) {
-            GUIClickEvent clickEvent = new GUIClickEvent((InventoryClickEvent) event, gui);
-            consumer = handler -> {
-                if (!clickEvent.isIgnore())
-                    handler.onClick(clickEvent);
-            };
-        } else if (event instanceof InventoryCloseEvent) {
-            consumer = handler -> handler.onClose((InventoryCloseEvent) event);
-        } else if (event instanceof InventoryDragEvent) {
-            consumer = handler -> handler.onDrag((InventoryDragEvent) event);
-        } else {
-            Static.log(Level.WARNING, "Unknown event type: " + event.getEventName());
-            return;
-        }
+        GUIEvent guiEvent = new GUIEvent<>(convert(event));
+        for (GUIHandler handler : GUIHandlers) {
+            handler.handle(guiEvent);
 
-        handlers.forEach(consumer);
+            if (guiEvent.isConsume())
+                break;
+        }
+    }
+
+    private InventoryEvent convert(InventoryEvent event) {
+        if (event instanceof InventoryClickEvent) {
+            event = new GUIClickEvent((InventoryClickEvent) event, gui);
+        }
+        return event;
     }
 }

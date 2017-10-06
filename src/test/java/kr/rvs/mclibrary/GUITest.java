@@ -1,7 +1,7 @@
 package kr.rvs.mclibrary;
 
 import kr.rvs.mclibrary.bukkit.inventory.gui.GUI;
-import kr.rvs.mclibrary.bukkit.inventory.gui.GUISignatureAdapter;
+import kr.rvs.mclibrary.bukkit.inventory.gui.GUISignature;
 import kr.rvs.mclibrary.struct.Injector;
 import kr.rvs.mclibrary.struct.ItemFactory;
 import kr.rvs.mclibrary.struct.MockFactory;
@@ -29,14 +29,14 @@ public class GUITest extends Assert {
     public void generalTest() {
         Player player = MockFactory.createPlayer();
 
-        new GUI(new GUISignatureAdapter(InventoryType.CHEST)
+        new GUI(new GUISignature(InventoryType.CHEST)
                 .title("GUI")
                 .item(ItemFactory.createRandomItems())).open(player);
     }
 
     @Test
     public void cloneTest() {
-        GUISignatureAdapter adapter = new GUISignatureAdapter()
+        GUISignature signature = new GUISignature()
                 .title("Clone test")
                 .lineSize(4)
                 .item(
@@ -44,7 +44,7 @@ public class GUITest extends Assert {
                         2, new ItemStack(Material.ACACIA_DOOR)
                 )
                 .addHandlerIndexes(1, 2);
-        GUISignatureAdapter cloned = adapter.clone();
-        assertEquals(adapter, cloned);
+        GUISignature cloned = signature.clone();
+        assertEquals(signature, cloned);
     }
 }
