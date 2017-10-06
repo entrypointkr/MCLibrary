@@ -60,13 +60,13 @@ Example command 4
 ## GUI
 ```java
 new GUI(
-	new GUISignatureAdapter(InventoryType.CHEST)
+	new GUISignature(InventoryType.CHEST)
 			.title("MCLibrary GUI")
 			.item(13, new ItemBuilder(Material.MAP).display("MCLibrary").build()),
 	new EventCancelHandler(),
-	new SpecificSlotHandler(13) {
+	new ClickHandler(13) {
 		@Override
-		public void receive(GUIClickEvent e) {
+		public void click(GUIClickEvent e) {
 			e.sendMessage(
 				"&aHello,",
 				"&eMCLibrary"

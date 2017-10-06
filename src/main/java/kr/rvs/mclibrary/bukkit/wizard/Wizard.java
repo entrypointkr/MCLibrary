@@ -3,6 +3,7 @@ package kr.rvs.mclibrary.bukkit.wizard;
 import kr.rvs.mclibrary.MCLibrary;
 import kr.rvs.mclibrary.bukkit.collection.EntityHashMap;
 import org.bukkit.Bukkit;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
@@ -26,6 +27,14 @@ public abstract class Wizard<D> {
 
         wizardMap.put(player, this);
         start0(callback);
+    }
+
+    public void start(Consumer<D> callback, CommandSender sender) {
+        try {
+            start(callback);
+        } catch (WizardException e) {
+            sender.sendMessage("&c이미 진행중입니다.");
+        }
     }
 
     protected abstract void start0(Consumer<D> callback);

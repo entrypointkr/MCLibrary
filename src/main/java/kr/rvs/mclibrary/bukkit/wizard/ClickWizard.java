@@ -47,7 +47,7 @@ public class ClickWizard extends Wizard<List<Block>> {
     }
 
     @Override
-    public void start0(Consumer<List<Block>> callback) {
+    protected void start0(Consumer<List<Block>> callback) {
         getPlayer().sendMessage(formatting(startMessage, count));
         List<Block> data = new ArrayList<>(count);
         registerEvents(new Listener() {
