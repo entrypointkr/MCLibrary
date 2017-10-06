@@ -6,13 +6,11 @@ import java.util.concurrent.TimeUnit;
  * Created by Junhyeong Lim on 2017-09-02.
  */
 public class Cooldown {
-    private final TimeUnit unit;
-    private final int number;
+    private final long cooltime;
     private long lastCount = 0;
 
     public Cooldown(TimeUnit unit, int number) {
-        this.unit = unit;
-        this.number = number;
+        this.cooltime = unit.toMillis(number);
     }
 
     public boolean isAfter() {
@@ -20,7 +18,7 @@ public class Cooldown {
     }
 
     public void cooldown() {
-        lastCount = System.currentTimeMillis() + unit.toMillis(number);
+        lastCount = System.currentTimeMillis() + cooltime;
     }
 
     public boolean count() {
@@ -31,8 +29,8 @@ public class Cooldown {
         return false;
     }
 
-    public long cooltime() {
+    public long cooltime(TimeUnit unit) {
         long currTime = System.currentTimeMillis();
-        return lastCount > currTime ? lastCount - currTime : 0;
+        return unit.convert(lastCount > currTime ? lastCount - currTime : 0, TimeUnit.MILLISECONDS);
     }
 }
