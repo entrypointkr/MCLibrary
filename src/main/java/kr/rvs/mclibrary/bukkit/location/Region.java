@@ -3,6 +3,7 @@ package kr.rvs.mclibrary.bukkit.location;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.entity.Entity;
 
 /**
  * Created by Junhyeong Lim on 2017-10-07.
@@ -41,5 +42,9 @@ public class Region {
                 && min.getX() <= x && max.getX() >= x
                 && min.getY() <= y && max.getY() >= y
                 && min.getZ() <= z && max.getZ() >= z;
+    }
+
+    public boolean isIn(Entity entity) {
+        return isIn(entity.getLocation());
     }
 }
