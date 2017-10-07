@@ -39,7 +39,7 @@ public class GUIHandlers {
     }
 
     public void notify(InventoryEvent event) {
-        GUIEvent guiEvent = new GUIEvent<>(convert(event));
+        GUIEvent<InventoryEvent> guiEvent = new GUIEvent<>(convert(event));
         for (GUIHandler handler : GUIHandlers) {
             handler.handle(guiEvent);
 

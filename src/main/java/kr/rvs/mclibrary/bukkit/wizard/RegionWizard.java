@@ -14,7 +14,7 @@ public class RegionWizard extends Wizard<List<Block>, Region> {
     private final ClickWizard clickWizard;
 
     public RegionWizard(Player player, ClickWizard wizard) {
-        super(player, wizard.getData(), wizard.getStartMessage(), wizard.getCompleteMessage());
+        super(player, wizard.data, wizard.startMessage, wizard.completeMessage);
         this.clickWizard = wizard;
     }
 
@@ -24,9 +24,8 @@ public class RegionWizard extends Wizard<List<Block>, Region> {
 
     @Override
     public void start(Consumer<Region> callback) throws Exception {
-        super.start(callback);
         clickWizard.start(blocks ->
-                release(new Region(
+                callback.accept(new Region(
                         blocks.get(0).getLocation(),
                         blocks.get(1).getLocation()
                 )));
@@ -35,5 +34,10 @@ public class RegionWizard extends Wizard<List<Block>, Region> {
     @Override
     protected void process(List<Block> data) {
         clickWizard.process(data);
+    }
+
+    @Override
+    protected String messageCaught(String message) {
+        return clickWizard.messageCaught(message);
     }
 }

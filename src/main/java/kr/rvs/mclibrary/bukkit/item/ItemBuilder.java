@@ -119,6 +119,7 @@ public class ItemBuilder {
         return loreWithLineBreak(Arrays.asList(lores));
     }
 
+    @SuppressWarnings("deprecation")
     public ItemBuilder setSkullOwner(String owner) {
         Validate.isTrue(material == Material.SKULL_ITEM);
 

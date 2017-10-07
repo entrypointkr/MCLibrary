@@ -31,14 +31,15 @@ public class ClickWizard extends Wizard<List<Block>, List<Block>> {
         this(
                 player,
                 "&a블럭을 &f" + COUNT + " &a회 클릭하세요.",
-                "&f" + REMAIN_COUNT + " &a회 남았습니다.",
                 "&a완료했습니다.",
+                "&f" + REMAIN_COUNT + " &a회 남았습니다.",
                 count
         );
     }
 
     private String formatting(String target, int remainCount) {
         return MCUtils.colorize(target
+                .replace(COUNT, String.valueOf(count))
                 .replace(REMAIN_COUNT, String.valueOf(remainCount)));
     }
 
@@ -52,8 +53,9 @@ public class ClickWizard extends Wizard<List<Block>, List<Block>> {
                 if (clickedBlock != null && !clickedBlock.isEmpty()) {
                     data.add(clickedBlock);
                     remainCount = count - data.size();
-                    if (data.size() >= count) {
+                    if (remainCount <= 0) {
                         release(data);
+                        event.getHandlers().unregister(this);
                     } else {
                         player.sendMessage(messageCaught(remainMessage));
                     }
@@ -66,9 +68,5 @@ public class ClickWizard extends Wizard<List<Block>, List<Block>> {
     @Override
     protected String messageCaught(String message) {
         return formatting(message, remainCount);
-    }
-
-    public String getRemainMessage() {
-        return remainMessage;
     }
 }

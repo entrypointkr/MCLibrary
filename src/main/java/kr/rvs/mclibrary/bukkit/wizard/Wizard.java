@@ -15,12 +15,12 @@ import java.util.function.Consumer;
  * Created by Junhyeong Lim on 2017-10-06.
  */
 public abstract class Wizard<D, C> {
-    private static final EntityHashMap<Wizard<?, ?>> wizardMap = new EntityHashMap<>();
-    private final Player player;
-    private Consumer<C> callback;
-    private final D data;
-    private final String startMessage;
-    private final String completeMessage;
+    protected static final EntityHashMap<Wizard<?, ?>> wizardMap = new EntityHashMap<>();
+    protected final Player player;
+    protected Consumer<C> callback;
+    protected final D data;
+    protected final String startMessage;
+    protected final String completeMessage;
 
     public Wizard(Player player, D data, String startMessage, String completeMessage) {
         this.player = player;
@@ -30,7 +30,7 @@ public abstract class Wizard<D, C> {
     }
 
     public void start(Consumer<C> callback) throws Exception {
-        Validate.isTrue(wizardMap.containsKey(player), "Already has a wizard");
+        Validate.isTrue(!wizardMap.containsKey(player), "Already has a wizard");
 
         this.callback = callback;
 
@@ -57,22 +57,6 @@ public abstract class Wizard<D, C> {
         callback.accept(callbackData);
         wizardMap.remove(player);
         player.sendMessage(messageCaught(completeMessage));
-    }
-
-    public D getData() {
-        return data;
-    }
-
-    public String getStartMessage() {
-        return startMessage;
-    }
-
-    public String getCompleteMessage() {
-        return completeMessage;
-    }
-
-    protected Player getPlayer() {
-        return player;
     }
 
     protected void registerEvents(Listener listener) {

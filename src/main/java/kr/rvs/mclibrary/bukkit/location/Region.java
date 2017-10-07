@@ -12,7 +12,7 @@ public class Region {
     private final Location max;
 
     public Region(Location pointA, Location pointB) {
-        Validate.isTrue(pointA.getWorld().equals(pointB.getWorld()));
+        Validate.isTrue(pointA.getWorld().equals(pointB.getWorld()), "Two worlds are different.");
 
         double minX = Math.min(pointA.getX(), pointB.getX());
         double maxX = Math.max(pointA.getX(), pointB.getX());
