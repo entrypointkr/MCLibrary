@@ -33,6 +33,12 @@ public class CommandSenderWrapper {
         return new PlayerWrapper(getPlayer());
     }
 
+    public void sendMessage(CharSequence... messages) {
+        for (CharSequence message : messages) {
+            sender.sendMessage(MCUtils.colorize(message.toString()));
+        }
+    }
+
     public void sendMessage(Object... messages) {
         for (Object message : messages) {
             sender.sendMessage(MCUtils.colorize(String.valueOf(message)));
