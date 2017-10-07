@@ -4,13 +4,15 @@ import org.apache.commons.lang.Validate;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
+import org.bukkit.util.Vector;
 
 /**
  * Created by Junhyeong Lim on 2017-10-07.
  */
 public class Region {
-    private final Location min;
-    private final Location max;
+    private final String world;
+    private final Vector min;
+    private final Vector max;
 
     public Region(Location pointA, Location pointB) {
         Validate.isTrue(pointA.getWorld().equals(pointB.getWorld()), "Two worlds are different.");
@@ -29,8 +31,9 @@ public class Region {
         pointB.setY(maxY);
         pointB.setZ(maxZ);
 
-        this.min = pointA;
-        this.max = pointB;
+        this.world = pointA.getWorld().getName();
+        this.min = pointA.toVector();
+        this.max = pointB.toVector();
     }
 
     public boolean isIn(Location location) {
@@ -38,7 +41,7 @@ public class Region {
         double x = location.getX();
         double y = location.getY();
         double z = location.getZ();
-        return world.equals(min.getWorld())
+        return world.getName().equals(this.world)
                 && min.getX() <= x && max.getX() >= x
                 && min.getY() <= y && max.getY() >= y
                 && min.getZ() <= z && max.getZ() >= z;
