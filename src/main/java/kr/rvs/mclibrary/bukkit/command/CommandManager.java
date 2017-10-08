@@ -10,6 +10,7 @@ import kr.rvs.mclibrary.bukkit.command.duplex.ComplexCommand;
 import kr.rvs.mclibrary.bukkit.command.duplex.CompositionCommand;
 import kr.rvs.mclibrary.bukkit.command.executor.AnnotationProxyExecutor;
 import kr.rvs.mclibrary.bukkit.command.executor.ReflectiveExecutor;
+import kr.rvs.mclibrary.bukkit.plugin.PluginUtils;
 import kr.rvs.mclibrary.reflection.ClassProbe;
 import kr.rvs.mclibrary.reflection.ConstructorEx;
 import kr.rvs.mclibrary.reflection.FieldEx;
@@ -17,7 +18,6 @@ import kr.rvs.mclibrary.reflection.Reflections;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandMap;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.SimplePluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -28,11 +28,9 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.logging.Level;
-import java.util.regex.Pattern;
 
 /**
  * Created by Junhyeong Lim on 2017-09-29.
@@ -50,7 +48,6 @@ public class CommandManager {
             }
         });
     };
-    public static final Pattern SPACE_PATTERN = Pattern.compile(" ", Pattern.LITERAL);
     private final CommandMap commandMap;
 
     public CommandManager(CommandMap commandMap) {
@@ -68,16 +65,8 @@ public class CommandManager {
         }
     }
 
-    public void registerAll() {
-        String name = MCLibrary.getPlugin().getName();
-        for (Plugin plugin : Bukkit.getPluginManager().getPlugins()) {
-            PluginDescriptionFile desc = plugin.getDescription();
-            List<String> softDepend = desc.getSoftDepend();
-            List<String> depend = desc.getDepend();
-            if ((softDepend == null || !softDepend.contains(name))
-                    && (depend == null || !depend.contains(name)))
-                continue;
-
+    public void registerAll(MCLibrary superPlugin) {
+        for (Plugin plugin : PluginUtils.getDependPlugins(superPlugin)) {
             FieldEx fileField = Reflections.getFieldEx(JavaPlugin.class, "file");
             fileField.<File>get(plugin).ifPresent(file -> {
                 ClassProbe probe = new ClassProbe(file);
@@ -109,7 +98,7 @@ public class CommandManager {
     public void registerCommand(Class<?> commandClass, CommandFactory factory, Plugin plugin) {
         getCommandAnnotation(commandClass).ifPresent(commandAnnot -> {
             ComplexCommand complexCommand = new ComplexCommand();
-            String[] args = SPACE_PATTERN.split(commandAnnot.args());
+            String[] args = commandAnnot.args().split(" ");
             String firstArg = args[0];
             CommandAdaptor adaptor = new CommandAdaptor(
                     firstArg,
@@ -144,7 +133,7 @@ public class CommandManager {
             String args = commandAnnot != null ?
                     commandAnnot.args() :
                     completerAnnot.args();
-            String[] splited = SPACE_PATTERN.split(args);
+            String[] splited = args.split(" ");
             String lastArg = splited[splited.length - 1];
             ComplexCommand newComplexCommand = complexCommand.setupComposite(splited, 0, splited.length - 1);
             ICommand command = newComplexCommand.computeIfAbsent(lastArg, k -> new CompositionCommand());
@@ -184,7 +173,7 @@ public class CommandManager {
     public void registerCommandFromClass(Class<?> commandClass, CommandAdaptor adaptor, CommandFactory factory, ComplexCommand complexCommand) {
         getCommandAnnotation(commandClass).ifPresent(commandAnnot -> {
             Object instance = factory.create(commandClass, adaptor);
-            String[] args = SPACE_PATTERN.split(commandAnnot.args());
+            String[] args = commandAnnot.args().split(" ");
             ComplexCommand newComplexCommand = complexCommand.setupComposite(args, 0, args.length);
             registerCommandFromMethod(commandClass, instance, newComplexCommand);
             registerCommandFromSubClass(commandClass, adaptor, factory, complexCommand);

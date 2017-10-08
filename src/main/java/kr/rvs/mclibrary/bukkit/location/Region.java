@@ -17,12 +17,12 @@ public class Region {
     public Region(Location pointA, Location pointB) {
         Validate.isTrue(pointA.getWorld().equals(pointB.getWorld()), "Two worlds are different.");
 
-        double minX = Math.min(pointA.getX(), pointB.getX());
-        double maxX = Math.max(pointA.getX(), pointB.getX());
-        double minY = Math.min(pointA.getY(), pointB.getY());
-        double maxY = Math.max(pointA.getY(), pointB.getY());
-        double minZ = Math.min(pointA.getZ(), pointB.getZ());
-        double maxZ = Math.max(pointA.getZ(), pointB.getZ());
+        double minX = Math.min(pointA.getBlockX(), pointB.getBlockX());
+        double maxX = Math.max(pointA.getBlockX(), pointB.getBlockX()) + 1;
+        double minY = Math.min(pointA.getBlockY(), pointB.getBlockY());
+        double maxY = Math.max(pointA.getBlockY(), pointB.getBlockY());
+        double minZ = Math.min(pointA.getBlockZ(), pointB.getBlockZ());
+        double maxZ = Math.max(pointA.getBlockZ(), pointB.getBlockZ()) + 1;
 
         pointA.setX(minX);
         pointA.setY(minY);

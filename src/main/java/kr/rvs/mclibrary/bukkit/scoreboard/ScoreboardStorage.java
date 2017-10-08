@@ -1,6 +1,7 @@
 package kr.rvs.mclibrary.bukkit.scoreboard;
 
 import kr.rvs.mclibrary.bukkit.MCUtils;
+import kr.rvs.mclibrary.collection.StringArrayList;
 import kr.rvs.mclibrary.general.VarargsParser;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -9,9 +10,8 @@ import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Score;
 import org.bukkit.scoreboard.Scoreboard;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -20,7 +20,7 @@ import java.util.Map;
 public class ScoreboardStorage {
     private final String id;
     private final String title;
-    private final List<String> contents = new ArrayList<>();
+    private final StringArrayList contents = new StringArrayList();
     private transient Map<String, String> replacements = new HashMap<>();
 
     public ScoreboardStorage(String id, String title) {
@@ -43,13 +43,18 @@ public class ScoreboardStorage {
         return MCUtils.colorize(content);
     }
 
-    public ScoreboardStorage addReplacements(String... args) {
+    public ScoreboardStorage content(String... contents) {
+        this.contents.addAll(Arrays.asList(contents));
+        return this;
+    }
+
+    public ScoreboardStorage replacement(Object... args) {
         VarargsParser parser = new VarargsParser(args);
         parser.parse(section -> getReplacements().put(section.getString(0), section.getString(1)));
         return this;
     }
 
-    public void show(Player player) {
+    public Scoreboard show(Iterable<Player> players) {
         Scoreboard scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
         Objective objective = scoreboard.registerNewObjective(id, "dummy");
         objective.setDisplaySlot(DisplaySlot.SIDEBAR);
@@ -61,6 +66,14 @@ public class ScoreboardStorage {
             score.setScore(number);
         }
 
-        player.setScoreboard(scoreboard);
+        for(Player player : players) {
+            player.setScoreboard(scoreboard);
+        }
+
+        return scoreboard;
+    }
+
+    public Scoreboard show(Player... players) {
+        return show(Arrays.asList(players));
     }
 }
