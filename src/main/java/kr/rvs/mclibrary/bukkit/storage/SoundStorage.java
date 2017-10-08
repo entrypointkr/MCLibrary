@@ -1,4 +1,4 @@
-package kr.rvs.mclibrary.bukkit.sound;
+package kr.rvs.mclibrary.bukkit.storage;
 
 import org.bukkit.Location;
 import org.bukkit.Sound;

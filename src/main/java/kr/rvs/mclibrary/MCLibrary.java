@@ -25,10 +25,10 @@ import java.util.Map;
 public class MCLibrary extends JavaPlugin {
     public static final String PACKET_DEBUG = "packet-debug";
     public static final String DETAIL_LOG = "stacktrace";
-    private static final CommandManager commandManager = new CommandManager();
-    private static final GsonManager gsonManager = new GsonManager();
-    private static final SettingManager settingManager = new SettingManager();
-    private static final Version bukkitVersion = new Version(Bukkit.getBukkitVersion());
+    private static final CommandManager COMMAND_MANAGER = new CommandManager();
+    private static final GsonManager GSON_MANAGER = new GsonManager();
+    private static final SettingManager SETTING_MANAGER = new SettingManager();
+    private static final Version BUKKIT_VERSION = new Version(Bukkit.getBukkitVersion());
     private static String address = "unknown";
 
     private static Plugin plugin;
@@ -38,19 +38,19 @@ public class MCLibrary extends JavaPlugin {
     }
 
     public static CommandManager getCommandManager() {
-        return commandManager;
+        return COMMAND_MANAGER;
     }
 
     public static GsonManager getGsonManager() {
-        return gsonManager;
+        return GSON_MANAGER;
     }
 
     public static SettingManager getSettingManager() {
-        return settingManager;
+        return SETTING_MANAGER;
     }
 
     public static Version getBukkitVersion() {
-        return bukkitVersion;
+        return BUKKIT_VERSION;
     }
 
     public static Plugin getPlugin() {
@@ -61,8 +61,6 @@ public class MCLibrary extends JavaPlugin {
     public void onEnable() {
         // Plugin
         saveDefaultConfig();
-        getCommandManager().registerAll(this);
-        getCommandManager().registerCommand(LibraryCommand.class, this);
         getConfig().options().copyDefaults(true);
         configInit();
 
@@ -70,6 +68,8 @@ public class MCLibrary extends JavaPlugin {
         GUI.init(this);
         ServerHostnameGetter.init(this);
         LibraryCommand.init(this);
+        getCommandManager().registerAll(this);
+        getCommandManager().registerCommand(LibraryCommand.class, this);
 
         // Metrics
         Metrics metrics = new Metrics(this);
@@ -98,7 +98,7 @@ public class MCLibrary extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        settingManager.save();
+        SETTING_MANAGER.save();
         saveConfig();
     }
 
