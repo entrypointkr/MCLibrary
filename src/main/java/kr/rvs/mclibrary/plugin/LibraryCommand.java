@@ -38,7 +38,7 @@ import java.util.Optional;
         args = "mclibrary"
 )
 public class LibraryCommand {
-    private static final EntityHashSet<Player> blockInfoPlayers = new EntityHashSet<>();
+    private static final EntityHashSet<Player> blockInfoListeners = new EntityHashSet<>();
     private final MCLibrary instance = (MCLibrary) MCLibrary.getPlugin();
 
     public static void init(MCLibrary plugin) {
@@ -51,7 +51,7 @@ public class LibraryCommand {
 
                 Player player = e.getPlayer();
                 Block block = e.getClickedBlock();
-                if (block == null || !blockInfoPlayers.contains(player))
+                if (block == null || !blockInfoListeners.contains(player))
                     return;
 
                 Location loc = block.getLocation();
@@ -138,11 +138,11 @@ public class LibraryCommand {
     public void blockInfo(CommandSenderWrapper wrapper, CommandArguments args) {
         Player player = wrapper.getPlayer();
         String message;
-        if (!blockInfoPlayers.contains(player)) {
-            blockInfoPlayers.add(player);
+        if (!blockInfoListeners.contains(player)) {
+            blockInfoListeners.add(player);
             message = "&aOn";
         } else {
-            blockInfoPlayers.remove(player);
+            blockInfoListeners.remove(player);
             message = "&cOff";
         }
         wrapper.sendMessage(message);

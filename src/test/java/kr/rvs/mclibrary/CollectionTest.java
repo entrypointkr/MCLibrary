@@ -16,7 +16,7 @@ public class CollectionTest extends Assert {
         String test = "The\nTest\nString";
         list.add(test);
         list.addAll(Arrays.asList(test, test));
-        assertArrayEquals(list.toArray(new String[0]), new String[] {
+        assertEquals(list, Arrays.asList(
                 "The",
                 "Test",
                 "String",
@@ -26,6 +26,6 @@ public class CollectionTest extends Assert {
                 "The",
                 "Test",
                 "String"
-        });
+        ));
     }
 }
