@@ -30,12 +30,7 @@ public class MCLibrary extends JavaPlugin {
     private static final SettingManager SETTING_MANAGER = new SettingManager();
     private static final Version BUKKIT_VERSION = new Version(Bukkit.getBukkitVersion());
     private static String address = "unknown";
-
     private static Plugin plugin;
-
-    public MCLibrary() {
-        plugin = this;
-    }
 
     public static CommandManager getCommandManager() {
         return COMMAND_MANAGER;
@@ -55,6 +50,10 @@ public class MCLibrary extends JavaPlugin {
 
     public static Plugin getPlugin() {
         return plugin;
+    }
+
+    public MCLibrary() {
+        plugin = this;
     }
 
     @Override
@@ -89,17 +88,17 @@ public class MCLibrary extends JavaPlugin {
         }));
     }
 
+    @Override
+    public void onDisable() {
+        SETTING_MANAGER.save();
+        saveConfig();
+    }
+
     public void configInit() {
         if (MCUtils.isEnabled("ProtocolLib")
                 && getConfig().getBoolean(PACKET_DEBUG, false)) {
             PacketMonitoringListener.register(this);
         }
-    }
-
-    @Override
-    public void onDisable() {
-        SETTING_MANAGER.save();
-        saveConfig();
     }
 
     public static String getAddress() {

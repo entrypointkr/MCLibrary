@@ -1,7 +1,6 @@
 package kr.rvs.mclibrary.reflection;
 
 import kr.rvs.mclibrary.Static;
-import org.apache.commons.lang.ArrayUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -77,8 +76,8 @@ public class ClassProbe {
 
         public void add(Class<?> aClass) {
             classes.add(aClass);
-            methods.addAll(Arrays.asList((Method[]) ArrayUtils.addAll(aClass.getDeclaredMethods(), aClass.getMethods())));
-            fields.addAll(Arrays.asList((Field[]) ArrayUtils.addAll(aClass.getDeclaredFields(), aClass.getFields())));
+            methods.addAll(Arrays.asList(Reflections.getAllMethods(aClass)));
+            fields.addAll(Arrays.asList(Reflections.getAllFields(aClass)));
         }
     }
 }
