@@ -99,12 +99,12 @@ ItemStack item = new ItemBuilder(Material.DIAMOND)
 ## modify
 ```java
 
-        new ItemWrapper(item)
-                .setName("Modified Display")
-                .setLore(
-                        "Modified",
-                        "Lore"
-                );
+new ItemWrapper(item)
+        .setName("Modified Display")
+        .setLore(
+                "Modified",
+                "Lore"
+        );
 ```
 
 # Events
