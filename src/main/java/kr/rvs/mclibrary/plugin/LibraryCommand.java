@@ -29,8 +29,6 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 
-import java.util.Optional;
-
 /**
  * Created by Junhyeong Lim on 2017-09-20.
  */
@@ -87,21 +85,13 @@ public class LibraryCommand {
             desc = "모든 몬스터를 제거합니다."
     )
     public void killallCommand(CommandSenderWrapper wrapper, CommandArguments args) {
-        Optional<World> worldOpt;
-        if (args.size() > 0) {
-            worldOpt = args.getWorld(0);
-        } else if (wrapper.isPlayer()) {
-            worldOpt = Optional.ofNullable(wrapper.getPlayer().getWorld());
-        } else {
-            throw new InvalidUsageException(this, "&c월드 이름을 입력하세요.");
-        }
-
-        if (worldOpt.isPresent()) {
-            worldOpt.get().getEntities().stream()
+        World world = args.size() > 0 ? args.getWorld(0) : wrapper.isPlayer() ? wrapper.getPlayer().getWorld() : null;
+        if (world != null) {
+            world.getEntities().stream()
                     .filter(entity -> entity instanceof Creature)
                     .forEach(Entity::remove);
         } else {
-            wrapper.sendMessage("알 수 없는 월드입니다.");
+            throw new InvalidUsageException(this, "올바른 월드명을 입력하세요.");
         }
     }
 
@@ -146,5 +136,23 @@ public class LibraryCommand {
             message = "&cOff";
         }
         wrapper.sendMessage(message);
+    }
+
+    @Command(
+            args = "heal",
+            perm = "mclibrary.heal",
+            usage = "[플레이어]",
+            desc = "체력과 허기를 회복합니다."
+    )
+    @SuppressWarnings("deprecation")
+    public void heal(CommandSenderWrapper wrapper, CommandArguments args) {
+        Player player = args.size() > 0 ? args.getPlayer(0) : wrapper.getPlayer();
+        if (player != null) {
+            player.setHealth(player.getMaxHealth());
+            player.setFoodLevel(30);
+            wrapper.sendMessage("완료.");
+        } else {
+            throw new InvalidUsageException(this, "올바른 플레이어명을 입력하세요.");
+        }
     }
 }

@@ -1,7 +1,6 @@
 package kr.rvs.mclibrary.bukkit.player;
 
 import kr.rvs.mclibrary.bukkit.MCUtils;
-import org.apache.commons.lang.Validate;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
@@ -25,8 +24,7 @@ public class CommandSenderWrapper {
     }
 
     public Player getPlayer() {
-        Validate.isTrue(isPlayer());
-        return (Player) sender;
+        return Player.class.isInstance(sender) ? (Player) sender : null;
     }
 
     public PlayerWrapper getWrappedPlayer() {

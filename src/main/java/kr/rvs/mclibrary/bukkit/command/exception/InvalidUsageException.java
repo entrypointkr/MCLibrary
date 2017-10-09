@@ -12,6 +12,6 @@ public class InvalidUsageException extends CommandException {
     }
 
     public String getUsage() {
-        return usage;
+        return "&c" + usage;
     }
 }

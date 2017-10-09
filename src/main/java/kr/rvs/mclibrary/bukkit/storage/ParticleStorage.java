@@ -27,7 +27,7 @@ public class ParticleStorage<D> {
     }
 
     public ParticleStorage(Particle particle, int count, double extra, D data) {
-        this(particle, count,0, 0, 0, extra, data);
+        this(particle, count,0.5, 0.5, 0.5, extra, data);
     }
 
     public ParticleStorage(Particle particle, int count, double extra) {

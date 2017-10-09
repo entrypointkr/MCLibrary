@@ -1,9 +1,11 @@
 package kr.rvs.mclibrary.bukkit.command;
 
+import kr.rvs.mclibrary.bukkit.command.exception.InvalidUsageException;
 import kr.rvs.mclibrary.collection.VolatileArrayList;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
+import org.bukkit.entity.Player;
 
 import java.util.Collection;
 import java.util.Optional;
@@ -51,11 +53,34 @@ public class CommandArguments extends VolatileArrayList { // TODO: Implement Lis
         return builder.toString();
     }
 
-    public Optional<World> getWorld(int index) {
-        String worldName = get(index, null);
-        return StringUtils.isNotEmpty(worldName) ?
-                Optional.ofNullable(Bukkit.getWorld(worldName)) :
-                Optional.empty();
+    private <T> T requireNotNull(T object, String usage) {
+        if (object == null)
+            throw new InvalidUsageException(this, usage);
+        return object;
+    }
+
+    public World getWorld(int index) {
+        return Bukkit.getWorld(get(index));
+    }
+
+    public World getWorldWithCheck(int index, String usage) {
+        return requireNotNull(getWorld(index), usage);
+    }
+
+    public Optional<World> getWorldOptional(int index) {
+        return Optional.ofNullable(getWorld(index));
+    }
+
+    public Player getPlayer(int index) {
+        return Bukkit.getPlayer(get(index));
+    }
+
+    public Player getPlayerWithCheck(int index, String usage) {
+        return requireNotNull(getPlayer(index), usage);
+    }
+
+    public Optional<Player> getPlayerOptional(int index) {
+        return Optional.ofNullable(getPlayer(index));
     }
 
     public CommandInfo getLastCommand() {
