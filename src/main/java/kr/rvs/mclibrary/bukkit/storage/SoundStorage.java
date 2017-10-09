@@ -26,14 +26,17 @@ public class SoundStorage {
     }
 
     public void play(Location location) {
-        location.getWorld().playSound(location, sound, category, volume, pitch);
+        if (location != null)
+            location.getWorld().playSound(location, sound, category, volume, pitch);
     }
 
     public void play(Player player, Location location) {
-        player.playSound(location, sound, category, volume, pitch);
+        if (player != null)
+            player.playSound(location, sound, category, volume, pitch);
     }
 
     public void play(Player player) {
-        play(player, player.getLocation());
+        if (player != null)
+            play(player, player.getLocation());
     }
 }

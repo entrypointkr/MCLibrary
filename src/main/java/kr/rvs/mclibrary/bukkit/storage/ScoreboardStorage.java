@@ -56,6 +56,8 @@ public class ScoreboardStorage extends ReplaceableStoorage<ScoreboardStorage> {
     public Scoreboard show(Iterable<Player> players) {
         Scoreboard scoreboard = create();
         for (Player player : players) {
+            if (player == null)
+                continue;
             player.setScoreboard(scoreboard);
         }
         return scoreboard;

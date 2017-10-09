@@ -21,6 +21,7 @@ public class TitleStorage extends ReplaceableStoorage<TitleStorage> {
     }
 
     public void send(Player player) {
-        player.sendTitle(formatting(title), formatting(subTitle), fadeIn, stay, fadeOut);
+        if (player != null)
+            player.sendTitle(formatting(title), formatting(subTitle), fadeIn, stay, fadeOut);
     }
 }
