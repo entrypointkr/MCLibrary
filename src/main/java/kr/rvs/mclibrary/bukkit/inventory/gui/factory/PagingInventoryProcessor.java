@@ -97,20 +97,20 @@ public class PagingInventoryProcessor extends InventoryProcessor {
             inv.setItem(i - start, gui.getSignature().getContents().get(i));
         }
         inv.setItem(getPrevPageIndex(), new ItemBuilder(prevPageBtn)
-                .addReplacements(
+                .replacement(
                         PAGE, currentPage,
                         MAX_PAGE, maxPage
                 )
                 .build());
         inv.setItem(getPageInfoIndex(), new ItemBuilder(pageInfoBtn)
-                .addReplacements(
+                .replacement(
                         PAGE, currentPage,
                         MAX_PAGE, maxPage
                 )
                 .amount(currentPage)
                 .build());
         inv.setItem(getNextPageIndex(), new ItemBuilder(nextPageBtn)
-                .addReplacements(
+                .replacement(
                         PAGE, currentPage,
                         MAX_PAGE, maxPage
                 )

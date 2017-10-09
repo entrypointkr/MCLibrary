@@ -10,7 +10,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -99,7 +98,6 @@ public class ItemBuilder {
 
     public ItemBuilder loreWithLineBreak(int count, Collection<String> lores) {
         metaProcessors.add(meta -> {
-            List<String> loreList = new ArrayList<>();
             StringBuilder serialized = new StringBuilder(lores.size());
             lores.forEach(serialized::append);
             meta.setLore(StringUtil.lineBreak(serialized, count));
@@ -120,7 +118,7 @@ public class ItemBuilder {
     }
 
     @SuppressWarnings("deprecation")
-    public ItemBuilder setSkullOwner(String owner) {
+    public ItemBuilder skullOwner(String owner) {
         Validate.isTrue(material == Material.SKULL_ITEM);
 
         data = 3;
@@ -133,11 +131,11 @@ public class ItemBuilder {
         return this;
     }
 
-    public ItemBuilder setSkullOwner(HumanEntity human) {
-        return setSkullOwner(human.getName());
+    public ItemBuilder skullOwner(HumanEntity human) {
+        return skullOwner(human.getName());
     }
 
-    public ItemBuilder addReplacements(Object... args) {
+    public ItemBuilder replacement(Object... args) {
         metaProcessors.add(meta ->
                 new VarargsParser(args).parse(section ->
                         ItemUtils.replaceString(meta, section.getString(0), section.getString(1))));

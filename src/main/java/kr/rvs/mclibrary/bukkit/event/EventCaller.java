@@ -4,6 +4,7 @@ import kr.rvs.mclibrary.MCLibrary;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 
@@ -15,12 +16,17 @@ public class EventCaller implements Listener {
         Bukkit.getPluginManager().registerEvents(new EventCaller(), plugin);
     }
 
-    @EventHandler
-    public void onMove(PlayerMoveEvent e) {
-        Location from = e.getFrom();
-        Location to = e.getTo();
-        if (!from.toVector().equals(to.toVector())) {
-            Bukkit.getPluginManager().callEvent(new PlayerWalkEvent(e));
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onMove(PlayerMoveEvent event) {
+        Location from = event.getFrom();
+        Location to = event.getTo();
+        if (from.toVector().equals(to.toVector()))
+            return;
+
+        PlayerWalkEvent custom = new PlayerWalkEvent(event);
+        Bukkit.getPluginManager().callEvent(custom);
+        if (event.isCancelled() != custom.isCancelled()) {
+            event.setCancelled(custom.isCancelled());
         }
     }
 }

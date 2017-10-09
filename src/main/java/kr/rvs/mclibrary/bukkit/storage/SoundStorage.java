@@ -9,10 +9,10 @@ import org.bukkit.entity.Player;
  * Created by Junhyeong Lim on 2017-10-08.
  */
 public class SoundStorage {
-    private final Sound sound;
-    private final SoundCategory category;
-    private final float volume;
-    private final float pitch;
+    private Sound sound;
+    private SoundCategory category;
+    private float volume;
+    private float pitch;
 
     public SoundStorage(Sound sound, SoundCategory category, float volume, float pitch) {
         this.sound = sound;
@@ -38,5 +38,37 @@ public class SoundStorage {
     public void play(Player player) {
         if (player != null)
             play(player, player.getLocation());
+    }
+
+    public Sound getSound() {
+        return sound;
+    }
+
+    public void setSound(Sound sound) {
+        this.sound = sound;
+    }
+
+    public SoundCategory getCategory() {
+        return category;
+    }
+
+    public void setCategory(SoundCategory category) {
+        this.category = category;
+    }
+
+    public float getVolume() {
+        return volume;
+    }
+
+    public void setVolume(float volume) {
+        this.volume = volume;
+    }
+
+    public float getPitch() {
+        return pitch;
+    }
+
+    public void setPitch(float pitch) {
+        this.pitch = pitch;
     }
 }

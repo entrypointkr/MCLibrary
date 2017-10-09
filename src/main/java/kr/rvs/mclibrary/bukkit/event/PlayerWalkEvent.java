@@ -17,6 +17,7 @@ public class PlayerWalkEvent extends PlayerMoveEvent {
 
     public PlayerWalkEvent(PlayerMoveEvent event) {
         this(event.getPlayer(), event.getFrom(), event.getTo());
+        setCancelled(event.isCancelled());
     }
 
     @Override

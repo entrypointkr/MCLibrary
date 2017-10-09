@@ -14,9 +14,9 @@ import java.util.Arrays;
  * Created by Junhyeong Lim on 2017-10-08.
  */
 public class ScoreboardStorage extends ReplaceableStoorage<ScoreboardStorage> {
-    private final String id;
+    private String id;
     private final String title;
-    private final StringArrayList contents = new StringArrayList();
+    private StringArrayList contents = new StringArrayList();
 
     public ScoreboardStorage(String id, String title) {
         this.id = id;
@@ -65,5 +65,17 @@ public class ScoreboardStorage extends ReplaceableStoorage<ScoreboardStorage> {
 
     public Scoreboard show(Player... players) {
         return show(Arrays.asList(players));
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getTitle() {
+        return title;
     }
 }

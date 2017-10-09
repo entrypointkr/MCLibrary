@@ -26,7 +26,7 @@ public class PerformanceTest {
                 .addRunnable("contents", () -> {
                     new ItemBuilder(item)
                             .display("a b c")
-                            .addReplacements(
+                            .replacement(
                                     "a", "1",
                                     "b", "2",
                                     "c", "3"

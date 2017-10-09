@@ -1,5 +1,6 @@
 package kr.rvs.mclibrary.bukkit.item;
 
+import kr.rvs.mclibrary.collection.StringArrayList;
 import kr.rvs.mclibrary.general.VarargsParser;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -32,14 +33,14 @@ public class ItemUtils {
         }
 
         List<String> lore = meta.getLore();
+        StringArrayList newLore = new StringArrayList();
         if (lore != null) {
-            for (int i = 0; i < lore.size(); i++) {
-                String element = lore.get(i);
-                lore.set(i, element.replace(target, replacement));
+            for (String element : lore) {
+                newLore.add(element.replace(target, replacement));
             }
         }
 
         meta.setDisplayName(display);
-        meta.setLore(lore);
+        meta.setLore(newLore);
     }
 }
