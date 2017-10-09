@@ -58,6 +58,8 @@ Example command 4
 ```
 
 ## GUI
+
+## usage
 ```java
 new GUI(
 	new GUISignature(InventoryType.CHEST)
@@ -75,3 +77,43 @@ new GUI(
 	}
 ).open(player);
 ```
+
+## processors
+
+* **DefaultInventoryProcessor**: Default GUI
+* **PagingInventoryProcessor**: Pageable GUI
+
+# ItemStack
+
+## create
+```java
+ItemStack item = new ItemBuilder(Material.DIAMOND)
+        .display("A Diamond")
+        .lore(
+                "MCLibrary",
+                "ItemStack"
+        )
+        .build();
+```
+
+## modify
+```java
+
+        new ItemWrapper(item)
+                .setName("Modified Display")
+                .setLore(
+                        "Modified",
+                        "Lore"
+                );
+```
+
+# Events
+
+* PlayerWalkEvent: Fires when player's x or y or z is changed
+
+# ETC
+
+* Cooldown: Cooldown util
+* Region: Simple region
+* ClickWizard: Get player's clicked pos
+* RegionWizard: Get defined region by the player

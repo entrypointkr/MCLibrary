@@ -2,6 +2,7 @@ package kr.rvs.mclibrary;
 
 import kr.rvs.mclibrary.bukkit.MCUtils;
 import kr.rvs.mclibrary.bukkit.command.CommandManager;
+import kr.rvs.mclibrary.bukkit.event.EventCaller;
 import kr.rvs.mclibrary.bukkit.inventory.gui.GUI;
 import kr.rvs.mclibrary.bukkit.player.PlayerUtils;
 import kr.rvs.mclibrary.bukkit.plugin.PluginUtils;
@@ -67,6 +68,7 @@ public class MCLibrary extends JavaPlugin {
         GUI.init(this);
         ServerHostnameGetter.init(this);
         LibraryCommand.init(this);
+        EventCaller.init(this);
         getCommandManager().registerAll(this);
         getCommandManager().registerCommand(LibraryCommand.class, this);
 
