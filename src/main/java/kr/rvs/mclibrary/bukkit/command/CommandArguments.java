@@ -59,11 +59,15 @@ public class CommandArguments extends VolatileArrayList { // TODO: Implement Lis
         return object;
     }
 
+    public Integer getInt(int index, String usage) {
+        return requireNotNull(getInt(index, (Integer) null), usage);
+    }
+
     public World getWorld(int index) {
         return Bukkit.getWorld(get(index));
     }
 
-    public World getWorldWithCheck(int index, String usage) {
+    public World getWorld(int index, String usage) {
         return requireNotNull(getWorld(index), usage);
     }
 
@@ -75,7 +79,7 @@ public class CommandArguments extends VolatileArrayList { // TODO: Implement Lis
         return Bukkit.getPlayer(get(index));
     }
 
-    public Player getPlayerWithCheck(int index, String usage) {
+    public Player getPlayer(int index, String usage) {
         return requireNotNull(getPlayer(index), usage);
     }
 

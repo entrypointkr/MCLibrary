@@ -17,7 +17,7 @@ public class VolatileArrayList extends OptionalArrayList<String> {
         super(c);
     }
 
-    public Integer getInt(int i, int def) {
+    public Integer getInt(int i, Integer def) {
         Integer ret = def;
         String elem = get(i);
 
