@@ -9,6 +9,7 @@ import org.bukkit.entity.HumanEntity;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.material.MaterialData;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -20,36 +21,35 @@ import static kr.rvs.mclibrary.bukkit.MCUtils.colorize;
 /**
  * Created by Junhyeong Lim on 2017-07-27.
  */
+@SuppressWarnings("deprecation")
 public class ItemBuilder {
     private final Material material;
-    private int amount = 1;
-    private short data = 0;
+    private int amount;
+    private short durability;
+    private MaterialData data;
     private final MetaProcessors metaProcessors = new MetaProcessors();
 
-    public ItemBuilder(Material material) {
+    public ItemBuilder(Material material, int amount, short durability, MaterialData data) {
         this.material = material;
+        this.amount = amount;
+        this.durability = durability;
+        this.data = data;
+    }
+
+    public ItemBuilder(Material material, int durability, MaterialData data) {
+        this(material, 1, (short) durability, data);
     }
 
     public ItemBuilder(Material material, int amount) {
-        this.material = material;
-        this.amount = amount;
+        this(material, amount, (short) 0, new MaterialData(material));
     }
 
-    public ItemBuilder(Material material, short data) {
-        this.material = material;
-        this.data = data;
-    }
-
-    public ItemBuilder(Material material, int amount, short data) {
-        this.material = material;
-        this.amount = amount;
-        this.data = data;
+    public ItemBuilder(Material material) {
+        this(material, 1);
     }
 
     public ItemBuilder(ItemStack item) {
-        this.material = item.getType();
-        this.amount = item.getAmount();
-        this.data = item.getDurability();
+        this(item.getType(), item.getAmount(), item.getDurability(), item.getData());
 
         ItemMeta meta = item.getItemMeta();
         String displayName = meta.getDisplayName();
@@ -71,7 +71,12 @@ public class ItemBuilder {
     }
 
     public ItemBuilder data(int data) {
-        this.data = (short) data;
+        this.durability = (short) data;
+        return this;
+    }
+
+    public ItemBuilder data(MaterialData data) {
+        this.data = data;
         return this;
     }
 
@@ -117,11 +122,10 @@ public class ItemBuilder {
         return loreWithLineBreak(Arrays.asList(lores));
     }
 
-    @SuppressWarnings("deprecation")
     public ItemBuilder skullOwner(String owner) {
         Validate.isTrue(material == Material.SKULL_ITEM);
 
-        data = 3;
+        durability = 3;
         metaProcessors.add(meta -> {
             if (meta instanceof SkullMeta) {
                 SkullMeta skullMeta = (SkullMeta) meta;
@@ -143,10 +147,11 @@ public class ItemBuilder {
     }
 
     public ItemStack build() {
-        ItemStack itemStack = new ItemStack(material, amount, data);
+        ItemStack itemStack = new ItemStack(material, amount, durability);
         ItemMeta meta = itemStack.getItemMeta();
         metaProcessors.process(meta);
         itemStack.setItemMeta(meta);
+        itemStack.setData(data);
         return itemStack;
     }
 

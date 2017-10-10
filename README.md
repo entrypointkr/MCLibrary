@@ -10,7 +10,6 @@ Jenkins Build Server: http://builds.rvs.kr/job/MCLibrary/
 @Command(
 	args = "test"
 )
-@SubCommand(TestSubCommand.class)
 static class TestCommand {
 	@Command(
 		args = "first"

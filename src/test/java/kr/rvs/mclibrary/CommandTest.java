@@ -3,7 +3,6 @@ package kr.rvs.mclibrary;
 import kr.rvs.mclibrary.bukkit.command.CommandArguments;
 import kr.rvs.mclibrary.bukkit.command.CommandManager;
 import kr.rvs.mclibrary.bukkit.command.annotation.Command;
-import kr.rvs.mclibrary.bukkit.command.annotation.SubCommand;
 import kr.rvs.mclibrary.bukkit.command.annotation.TabCompleter;
 import kr.rvs.mclibrary.bukkit.player.CommandSenderWrapper;
 import kr.rvs.mclibrary.struct.Injector;
@@ -66,7 +65,6 @@ public class CommandTest extends Assert {
     @Command(
             args = "test"
     )
-    @SubCommand(TestCommand.TestSubCommand.class)
     static class TestCommand {
         @Command(
                 args = "first"

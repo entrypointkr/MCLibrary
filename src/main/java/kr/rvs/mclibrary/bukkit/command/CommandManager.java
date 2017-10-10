@@ -28,6 +28,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 import java.util.logging.Level;
@@ -79,6 +80,8 @@ public class CommandManager {
                 }
 
                 for (Class<?> annotatedClass : commandClasses) {
+                    if (annotatedClass.isMemberClass())
+                        continue;
                     registerCommand(annotatedClass, plugin);
                 }
             });
@@ -163,11 +166,12 @@ public class CommandManager {
     }
 
     public void registerCommandFromSubClass(Class<?> commandClass, CommandAdaptor adaptor, CommandFactory factory, ComplexCommand complexCommand) {
-        Reflections.getAnnotation(commandClass, SubCommand.class).ifPresent(subCommandAnnot -> {
-            for (Class<?> subClass : subCommandAnnot.value()) {
-                registerCommandFromClass(subClass, adaptor, factory, complexCommand);
-            }
-        });
+        Set<Class<?>> subClasses = new HashSet<>(Arrays.asList(commandClass.getDeclaredClasses()));
+        Reflections.getAnnotation(commandClass, SubCommand.class).ifPresent(subCommandAnnot ->
+                subClasses.addAll(Arrays.asList(subCommandAnnot.value())));
+        for (Class<?> subClass : subClasses) {
+            registerCommandFromClass(subClass, adaptor, factory, complexCommand);
+        }
     }
 
     public void registerCommandFromClass(Class<?> commandClass, CommandAdaptor adaptor, CommandFactory factory, ComplexCommand complexCommand) {

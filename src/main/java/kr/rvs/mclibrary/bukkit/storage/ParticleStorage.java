@@ -4,6 +4,8 @@ import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.entity.Player;
 
+import java.util.Arrays;
+
 /**
  * Created by Junhyeong Lim on 2017-10-10.
  */
@@ -27,7 +29,7 @@ public class ParticleStorage<D> {
     }
 
     public ParticleStorage(Particle particle, int count, double extra, D data) {
-        this(particle, count,0.5, 0.5, 0.5, extra, data);
+        this(particle, count,0, 0, 0, extra, data);
     }
 
     public ParticleStorage(Particle particle, int count, double extra) {
@@ -42,16 +44,24 @@ public class ParticleStorage<D> {
         location.getWorld().spawnParticle(particle, location, count, offsetX, offsetY, offsetZ, extra, data);
     }
 
-    public void spawn(Location location, Player... players) {
+    public void spawn(Location location, Iterable<Player> players) {
         for (Player player : players) {
-            player.spawnParticle(particle, location, count, offsetX, offsetY, offsetZ, extra, data);
+            player.spawnParticle(particle, location.add(0.5, 0, 0.5), count, offsetX, offsetY, offsetZ, extra, data);
+        }
+    }
+
+    public void spawn(Location location, Player... players) {
+        spawn(location, Arrays.asList(players));
+    }
+
+    public void spawn(Iterable<Player> players) {
+        for (Player player : players) {
+            spawn(player.getLocation(), player);
         }
     }
 
     public void spawn(Player... players) {
-        for (Player player : players) {
-            spawn(player.getLocation(), player);
-        }
+        spawn(Arrays.asList(players));
     }
 
     public Particle getParticle() {

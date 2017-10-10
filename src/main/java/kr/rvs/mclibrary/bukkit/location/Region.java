@@ -1,6 +1,7 @@
 package kr.rvs.mclibrary.bukkit.location;
 
 import org.apache.commons.lang.Validate;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
@@ -61,5 +62,9 @@ public class Region {
                 min.getY() + diffY / 2,
                 min.getZ() + diffZ / 2
         );
+    }
+
+    public World getWorld() {
+        return Bukkit.getWorld(world);
     }
 }
