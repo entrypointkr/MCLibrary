@@ -50,4 +50,16 @@ public class Region {
     public boolean isIn(Entity entity) {
         return isIn(entity.getLocation());
     }
+
+    public Vector getCenter() {
+        double diffX = max.getX() - min.getX();
+        double diffY = max.getY() - min.getY();
+        double diffZ = max.getZ() - min.getZ();
+
+        return new Vector(
+                min.getX() + diffX / 2,
+                min.getY() + diffY / 2,
+                min.getZ() + diffZ / 2
+        );
+    }
 }
