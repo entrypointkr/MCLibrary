@@ -16,6 +16,12 @@ public class GUIEvent<E extends InventoryEvent> implements Cancellable {
         this.event = event;
     }
 
+    public GUIEvent(GUIEvent<E> event) {
+        this.event = event.getEvent();
+        this.consume = event.isConsume();
+        setCancelled(event.isCancelled());
+    }
+
     @Override
     public boolean isCancelled() {
         return event instanceof Cancellable && ((Cancellable) event).isCancelled();

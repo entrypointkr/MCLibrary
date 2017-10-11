@@ -18,7 +18,7 @@ public class StringArrayList extends ArrayList<String> {
         super(c);
     }
 
-    public int addWithLineBreak(int index, String element) {
+    private int addWithLineBreak(int index, String element) {
         for (String content : element.split("\n")) {
             super.add(index++, content);
         }

@@ -29,8 +29,8 @@ public abstract class ClickHandler extends TopInventoryHandler {
     public void receive(GUIEvent event) {
         event.getEvent(GUIClickEvent.class).ifPresent(e -> {
             InventoryClickEvent clickEvent = (InventoryClickEvent) e;
-            if (clickEvent.getAction() != InventoryAction.NOTHING
-                    && this.slots.contains(clickEvent.getRawSlot())) {
+            if (clickEvent.getAction() != InventoryAction.NOTHING &&
+                    (slots.isEmpty() || slots.contains(clickEvent.getRawSlot()))) {
                 this.click(event);
             }
         });
