@@ -1,8 +1,7 @@
 package kr.rvs.mclibrary.reflection;
 
-import kr.rvs.mclibrary.Static;
-
 import java.lang.reflect.Method;
+import java.util.Optional;
 import java.util.function.Consumer;
 
 /**
@@ -14,16 +13,17 @@ public class MethodEx extends AccessibleObjectWrapper<Method> {
         super(object);
     }
 
-    public <T> T invoke(Object object, Consumer<Exception> callback, Object... args) {
+    public <T> Optional<T> invoke(Object object, Consumer<Exception> callback, Object... args) {
         try {
-            return (T) getAccessibleObject().invoke(object, args);
+            return Optional.ofNullable((T) getAccessibleObject().invoke(object, args));
         } catch (Exception ex) {
             callback.accept(ex);
         }
-        return null;
+        return Optional.empty();
     }
 
-    public <T> T invoke(Object object, Object... args) {
-        return invoke(object, Static::log, args);
+    public <T> Optional<T> invoke(Object object, Object... args) {
+        return invoke(object, e -> {
+        }, args);
     }
 }

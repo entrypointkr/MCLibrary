@@ -54,6 +54,16 @@ public class Reflections {
         return new FieldEx(null);
     }
 
+    public static MethodEx getMethodEx(Class<?> aClass, String methodName, Class<?>... paramTypes) {
+        for (Method method : getAllMethods(aClass)) {
+            if (method.getName().equals(methodName)
+                    && Arrays.equals(method.getParameterTypes(), paramTypes)) {
+                return new MethodEx(method);
+            }
+        }
+        return new MethodEx(null);
+    }
+
     public static ConstructorEx getConstructorEx(Class<?> aClass, Class<?>... parameters) {
         for (Constructor<?> constructor : getAllConstructors(aClass)) {
             if (Arrays.equals(constructor.getParameterTypes(), parameters))
