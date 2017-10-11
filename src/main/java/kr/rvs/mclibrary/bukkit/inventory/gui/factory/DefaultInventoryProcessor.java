@@ -13,6 +13,10 @@ public class DefaultInventoryProcessor extends InventoryProcessor {
         super(baseFactory);
     }
 
+    public DefaultInventoryProcessor() {
+        this(new BaseInventoryFactory());
+    }
+
     @Override
     public void process(GUI gui, HumanEntity viewer, Inventory baseInv) {
         gui.getSignature().getContents().forEach(baseInv::setItem);
