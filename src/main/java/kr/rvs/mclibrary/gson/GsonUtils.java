@@ -5,11 +5,23 @@ import kr.rvs.mclibrary.MCLibrary;
 import kr.rvs.mclibrary.Static;
 import kr.rvs.mclibrary.general.FileUtils;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.Reader;
+import java.io.UnsupportedEncodingException;
+import java.io.Writer;
 import java.lang.reflect.Type;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
+import java.util.logging.Level;
 
 /**
  * Created by Junhyeong Lim on 2017-08-21.
@@ -58,5 +70,9 @@ public class GsonUtils {
             if (callback != null)
                 callback.accept(e);
         }
+    }
+
+    public static void write(File file, Object obj) {
+        write(file, obj, ex -> Static.log(Level.WARNING, "Error while write " + file.getName()));
     }
 }
