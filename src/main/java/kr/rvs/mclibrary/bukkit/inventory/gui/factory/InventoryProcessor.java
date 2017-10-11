@@ -15,6 +15,10 @@ public abstract class InventoryProcessor implements InventoryFactory {
         this.baseFactory = baseFactory;
     }
 
+    public InventoryProcessor() {
+        this(BaseInventoryFactory.INSTANCE);
+    }
+
     @Override
     public void initialize(GUI gui) {
         baseFactory.initialize(gui);

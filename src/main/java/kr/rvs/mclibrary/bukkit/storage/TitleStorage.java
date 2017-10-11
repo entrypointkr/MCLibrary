@@ -1,11 +1,12 @@
 package kr.rvs.mclibrary.bukkit.storage;
 
+import kr.rvs.mclibrary.bukkit.Replaceable;
 import org.bukkit.entity.Player;
 
 /**
  * Created by Junhyeong Lim on 2017-10-09.
  */
-public class TitleStorage extends ReplaceableStoorage<TitleStorage> {
+public class TitleStorage extends Replaceable<TitleStorage> {
     private String title;
     private String subTitle;
     private int fadeIn;

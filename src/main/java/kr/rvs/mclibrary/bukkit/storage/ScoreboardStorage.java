@@ -1,5 +1,6 @@
 package kr.rvs.mclibrary.bukkit.storage;
 
+import kr.rvs.mclibrary.bukkit.Replaceable;
 import kr.rvs.mclibrary.collection.StringArrayList;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -13,7 +14,7 @@ import java.util.Arrays;
 /**
  * Created by Junhyeong Lim on 2017-10-08.
  */
-public class ScoreboardStorage extends ReplaceableStoorage<ScoreboardStorage> {
+public class ScoreboardStorage extends Replaceable<ScoreboardStorage> {
     private String id;
     private final String title;
     private StringArrayList contents = new StringArrayList();

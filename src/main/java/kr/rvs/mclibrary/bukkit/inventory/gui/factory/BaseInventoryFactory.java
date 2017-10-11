@@ -12,6 +12,8 @@ import org.bukkit.inventory.Inventory;
  * Created by Junhyeong Lim on 2017-09-13.
  */
 public class BaseInventoryFactory implements InventoryFactory {
+    public static final BaseInventoryFactory INSTANCE = new BaseInventoryFactory();
+
     @Override
     public Inventory create(GUI gui, HumanEntity viewer) {
         GUISignature signature = gui.getSignature();

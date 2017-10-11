@@ -14,7 +14,7 @@ public class DefaultInventoryProcessor extends InventoryProcessor {
     }
 
     public DefaultInventoryProcessor() {
-        this(new BaseInventoryFactory());
+        this(BaseInventoryFactory.INSTANCE);
     }
 
     @Override

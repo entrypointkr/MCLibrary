@@ -1,6 +1,5 @@
-package kr.rvs.mclibrary.bukkit.storage;
+package kr.rvs.mclibrary.bukkit;
 
-import kr.rvs.mclibrary.bukkit.MCUtils;
 import kr.rvs.mclibrary.general.VarargsParser;
 
 import java.util.HashMap;
@@ -9,7 +8,7 @@ import java.util.Map;
 /**
  * Created by Junhyeong Lim on 2017-10-09.
  */
-public abstract class ReplaceableStoorage<S extends ReplaceableStoorage<?>> {
+public abstract class Replaceable<S extends Replaceable<?>> {
     private transient Map<String, String> replacements = new HashMap<>();
 
     private Map<String, String> getReplacements() {
