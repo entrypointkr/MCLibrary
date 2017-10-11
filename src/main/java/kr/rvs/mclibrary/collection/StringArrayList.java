@@ -39,8 +39,9 @@ public class StringArrayList extends ArrayList<String> {
     @Override
     public boolean addAll(int index, Collection<? extends String> c) {
         for (String content : c) {
-            add(index, content);
-            index++;
+            for (String parse : content.split("\n")) {
+                super.add(index++, parse);
+            }
         }
         return true;
     }
