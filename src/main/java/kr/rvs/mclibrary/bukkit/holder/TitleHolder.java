@@ -1,4 +1,4 @@
-package kr.rvs.mclibrary.bukkit.storage;
+package kr.rvs.mclibrary.bukkit.holder;
 
 import kr.rvs.mclibrary.bukkit.Replaceable;
 import org.bukkit.entity.Player;
@@ -6,14 +6,14 @@ import org.bukkit.entity.Player;
 /**
  * Created by Junhyeong Lim on 2017-10-09.
  */
-public class TitleStorage extends Replaceable<TitleStorage> {
+public class TitleHolder extends Replaceable<TitleHolder> {
     private String title;
     private String subTitle;
     private int fadeIn;
     private int stay;
     private int fadeOut;
 
-    public TitleStorage(String title, String subTitle, int fadeIn, int stay, int fadeOut) {
+    public TitleHolder(String title, String subTitle, int fadeIn, int stay, int fadeOut) {
         this.title = title;
         this.subTitle = subTitle;
         this.fadeIn = fadeIn;

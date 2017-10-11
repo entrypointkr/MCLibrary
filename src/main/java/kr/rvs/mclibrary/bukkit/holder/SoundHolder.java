@@ -1,4 +1,4 @@
-package kr.rvs.mclibrary.bukkit.storage;
+package kr.rvs.mclibrary.bukkit.holder;
 
 import org.bukkit.Location;
 import org.bukkit.Sound;
@@ -8,20 +8,20 @@ import org.bukkit.entity.Player;
 /**
  * Created by Junhyeong Lim on 2017-10-08.
  */
-public class SoundStorage {
+public class SoundHolder {
     private Sound sound;
     private SoundCategory category;
     private float volume;
     private float pitch;
 
-    public SoundStorage(Sound sound, SoundCategory category, float volume, float pitch) {
+    public SoundHolder(Sound sound, SoundCategory category, float volume, float pitch) {
         this.sound = sound;
         this.category = category;
         this.volume = volume;
         this.pitch = pitch;
     }
 
-    public SoundStorage(Sound sound, float volume, float pitch) {
+    public SoundHolder(Sound sound, float volume, float pitch) {
         this(sound, SoundCategory.MASTER, volume, pitch);
     }
 

@@ -1,4 +1,4 @@
-package kr.rvs.mclibrary.bukkit.storage;
+package kr.rvs.mclibrary.bukkit.holder;
 
 import org.bukkit.Location;
 import org.bukkit.Particle;
@@ -9,7 +9,7 @@ import java.util.Arrays;
 /**
  * Created by Junhyeong Lim on 2017-10-10.
  */
-public class ParticleStorage<D> {
+public class ParticleHolder<D> {
     private Particle particle;
     private int count;
     private double offsetX;
@@ -18,7 +18,7 @@ public class ParticleStorage<D> {
     private double extra;
     private D data;
 
-    public ParticleStorage(Particle particle, int count, double offsetX, double offsetY, double offsetZ, double extra, D data) {
+    public ParticleHolder(Particle particle, int count, double offsetX, double offsetY, double offsetZ, double extra, D data) {
         this.particle = particle;
         this.count = count;
         this.offsetX = offsetX;
@@ -28,15 +28,15 @@ public class ParticleStorage<D> {
         this.data = data;
     }
 
-    public ParticleStorage(Particle particle, int count, double extra, D data) {
+    public ParticleHolder(Particle particle, int count, double extra, D data) {
         this(particle, count,0, 0, 0, extra, data);
     }
 
-    public ParticleStorage(Particle particle, int count, double extra) {
+    public ParticleHolder(Particle particle, int count, double extra) {
         this(particle, count, extra, null);
     }
 
-    public ParticleStorage(Particle particle, int count) {
+    public ParticleHolder(Particle particle, int count) {
         this(particle, count, 1.0);
     }
 

@@ -1,4 +1,4 @@
-package kr.rvs.mclibrary.bukkit.storage;
+package kr.rvs.mclibrary.bukkit.holder;
 
 import kr.rvs.mclibrary.Static;
 import kr.rvs.mclibrary.bukkit.Replaceable;
@@ -16,21 +16,21 @@ import java.util.logging.Level;
 /**
  * Created by Junhyeong Lim on 2017-10-08.
  */
-public class ScoreboardStorage extends Replaceable<ScoreboardStorage> {
+public class ScoreboardHolder extends Replaceable<ScoreboardHolder> {
     private String id;
     private final String title;
     private StringArrayList contents = new StringArrayList();
 
-    public ScoreboardStorage(String id, String title) {
+    public ScoreboardHolder(String id, String title) {
         this.id = id;
         this.title = title;
     }
 
-    public ScoreboardStorage(String title) {
+    public ScoreboardHolder(String title) {
         this("mclibrary", title);
     }
 
-    public ScoreboardStorage content(String... contents) {
+    public ScoreboardHolder content(String... contents) {
         this.contents.addAll(Arrays.asList(contents));
         return this;
     }
