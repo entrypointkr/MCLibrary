@@ -18,6 +18,13 @@ public class StringArrayList extends ArrayList<String> {
         super(c);
     }
 
+    public int addWithLineBreak(int index, String element) {
+        for (String content : element.split("\n")) {
+            super.add(index++, content);
+        }
+        return index;
+    }
+
     @Override
     public boolean add(String s) {
         add(size(), s);
@@ -26,9 +33,7 @@ public class StringArrayList extends ArrayList<String> {
 
     @Override
     public void add(int index, String element) {
-        for (String content : element.split("\n")) {
-            super.add(index++, content);
-        }
+        addWithLineBreak(index, element);
     }
 
     @Override
@@ -39,9 +44,7 @@ public class StringArrayList extends ArrayList<String> {
     @Override
     public boolean addAll(int index, Collection<? extends String> c) {
         for (String content : c) {
-            for (String parse : content.split("\n")) {
-                super.add(index++, parse);
-            }
+            index = addWithLineBreak(index, content);
         }
         return true;
     }
