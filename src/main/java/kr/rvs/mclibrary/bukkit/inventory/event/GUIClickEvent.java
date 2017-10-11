@@ -18,6 +18,7 @@ import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Created by Junhyeong Lim on 2017-08-24.
@@ -79,6 +80,13 @@ public class GUIClickEvent extends InventoryClickEvent {
 
     public void setIgnore(boolean ignore) {
         this.ignore = ignore;
+    }
+
+    public Optional<Player> getPlayer() {
+        HumanEntity human = getWhoClicked();
+        return human instanceof Player ?
+                Optional.of((Player) human) :
+                Optional.empty();
     }
 
     @Override
