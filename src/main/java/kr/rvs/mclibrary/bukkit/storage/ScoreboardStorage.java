@@ -1,5 +1,6 @@
 package kr.rvs.mclibrary.bukkit.storage;
 
+import kr.rvs.mclibrary.Static;
 import kr.rvs.mclibrary.bukkit.Replaceable;
 import kr.rvs.mclibrary.collection.StringArrayList;
 import org.bukkit.Bukkit;
@@ -10,6 +11,7 @@ import org.bukkit.scoreboard.Score;
 import org.bukkit.scoreboard.Scoreboard;
 
 import java.util.Arrays;
+import java.util.logging.Level;
 
 /**
  * Created by Junhyeong Lim on 2017-10-08.
@@ -33,6 +35,14 @@ public class ScoreboardStorage extends Replaceable<ScoreboardStorage> {
         return this;
     }
 
+    private String ensure(String content) {
+        if (content.length() > 40) {
+            Static.log(Level.WARNING, "스코어보드 내용 \"" + content + "\" 이 40 글자를 넘었습니다.");
+            content = content.substring(0, 40);
+        }
+        return content;
+    }
+
     public Scoreboard create() {
         Scoreboard scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
         Objective objective = scoreboard.registerNewObjective(id, "dummy");
@@ -45,7 +55,7 @@ public class ScoreboardStorage extends Replaceable<ScoreboardStorage> {
         }
 
         for (int i = 0; i < contents.size(); i++) {
-            String content = formatting(contents.get(i));
+            String content = ensure(formatting(contents.get(i)));
             int number = contents.size() - i;
             Score score = objective.getScore(content);
             score.setScore(number);
