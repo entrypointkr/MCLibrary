@@ -38,8 +38,7 @@ public class Version {
     }
 
     public boolean after(Version version) {
-        return major == version.major ? minor == version.minor ?
-                maintenance > version.maintenance : minor > version.minor : major > version.major;
+        return major > version.major || minor > version.minor || maintenance > version.maintenance;
     }
 
     public boolean afterEquals(Version version) {
@@ -48,8 +47,7 @@ public class Version {
     }
 
     public boolean before(Version version) {
-        return major == version.major ? minor == version.minor ?
-                maintenance < version.maintenance : minor < version.minor : major < version.minor;
+        return major < version.major || minor < version.minor || maintenance < version.maintenance;
     }
 
     public boolean beforeEquals(Version version) {
@@ -67,5 +65,25 @@ public class Version {
 
     public int getMaintenance() {
         return maintenance;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Version version = (Version) o;
+
+        if (major != version.major) return false;
+        if (minor != version.minor) return false;
+        return maintenance == version.maintenance;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = major;
+        result = 31 * result + minor;
+        result = 31 * result + maintenance;
+        return result;
     }
 }
