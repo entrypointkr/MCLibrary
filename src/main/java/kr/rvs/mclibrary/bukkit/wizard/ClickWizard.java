@@ -1,6 +1,7 @@
 package kr.rvs.mclibrary.bukkit.wizard;
 
 import kr.rvs.mclibrary.bukkit.MCUtils;
+import kr.rvs.mclibrary.bukkit.event.SafePlayerInteractEvent;
 import kr.rvs.mclibrary.bukkit.location.LocationUtils;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -54,8 +55,9 @@ public class ClickWizard extends Wizard<List<Block>, List<Block>> {
     protected void process(List<Block> data) {
         registerEvents(new Listener() {
             @EventHandler
-            public void onClick(PlayerInteractEvent event) {
-                if (event.getHand() != EquipmentSlot.HAND)
+            public void onClick(SafePlayerInteractEvent e) {
+                PlayerInteractEvent event = e.getDelegate();
+                if (e.hasGetHandMethod() && event.getHand() != EquipmentSlot.HAND)
                     return;
 
                 Player player = event.getPlayer();

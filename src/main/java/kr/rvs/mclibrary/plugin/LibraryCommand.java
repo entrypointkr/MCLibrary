@@ -1,11 +1,12 @@
 package kr.rvs.mclibrary.plugin;
 
 import kr.rvs.mclibrary.MCLibrary;
-import kr.rvs.mclibrary.bukkit.collection.EntityHashSet;
+import kr.rvs.mclibrary.bukkit.collection.PlayerHashSet;
 import kr.rvs.mclibrary.bukkit.command.CommandArguments;
 import kr.rvs.mclibrary.bukkit.command.CommandType;
 import kr.rvs.mclibrary.bukkit.command.annotation.Command;
 import kr.rvs.mclibrary.bukkit.command.exception.InvalidUsageException;
+import kr.rvs.mclibrary.bukkit.event.SafePlayerInteractEvent;
 import kr.rvs.mclibrary.bukkit.inventory.event.GUIClickEvent;
 import kr.rvs.mclibrary.bukkit.inventory.gui.GUI;
 import kr.rvs.mclibrary.bukkit.inventory.gui.GUIEvent;
@@ -36,15 +37,16 @@ import org.bukkit.inventory.EquipmentSlot;
         args = "mclibrary"
 )
 public class LibraryCommand {
-    private static final EntityHashSet<Player> INFO_LISTENERS = new EntityHashSet<>();
+    private static final PlayerHashSet<Player> INFO_LISTENERS = new PlayerHashSet<>();
     private final MCLibrary instance = (MCLibrary) MCLibrary.getPlugin();
 
     public static void init(MCLibrary plugin) {
         Bukkit.getPluginManager().registerEvents(new Listener() {
             @EventHandler
             @SuppressWarnings("deprecation")
-            public void onInteract(PlayerInteractEvent e) {
-                if (e.getHand() != EquipmentSlot.HAND)
+            public void onInteract(SafePlayerInteractEvent event) {
+                PlayerInteractEvent e = event.getDelegate();
+                if (event.hasGetHandMethod() && e.getHand() != EquipmentSlot.HAND)
                     return;
 
                 Player player = e.getPlayer();

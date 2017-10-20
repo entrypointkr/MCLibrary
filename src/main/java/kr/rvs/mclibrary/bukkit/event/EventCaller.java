@@ -6,6 +6,7 @@ import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 
 /**
@@ -28,5 +29,10 @@ public class EventCaller implements Listener {
         if (event.isCancelled() != custom.isCancelled()) {
             event.setCancelled(custom.isCancelled());
         }
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onInteract(PlayerInteractEvent event) {
+        Bukkit.getPluginManager().callEvent(new SafePlayerInteractEvent(event));
     }
 }

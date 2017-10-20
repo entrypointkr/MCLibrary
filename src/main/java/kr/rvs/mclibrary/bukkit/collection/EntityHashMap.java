@@ -1,7 +1,7 @@
 package kr.rvs.mclibrary.bukkit.collection;
 
 import kr.rvs.mclibrary.collection.OptionalHashMap;
-import org.bukkit.entity.Entity;
+import org.bukkit.entity.HumanEntity;
 
 import java.util.Map;
 import java.util.Optional;
@@ -26,27 +26,27 @@ public class EntityHashMap<V> extends OptionalHashMap<String, V> {
         super(m);
     }
 
-    public V put(Entity entity, V value) {
+    public V put(HumanEntity entity, V value) {
         return put(entity.getName(), value);
     }
 
-    public V get(Entity entity) {
+    public V get(HumanEntity entity) {
         return get(entity.getName());
     }
 
-    public Optional<V> getOptional(Entity entity) {
+    public Optional<V> getOptional(HumanEntity entity) {
         return getOptional(entity.getName());
     }
 
-    public V remove(Entity entity) {
+    public V remove(HumanEntity entity) {
         return remove(entity.getName());
     }
 
-    public V computeIfAbsent(Entity entity, Function<String, ? extends V> mappingFunction) {
+    public V computeIfAbsent(HumanEntity entity, Function<String, ? extends V> mappingFunction) {
         return computeIfAbsent(entity.getName(), mappingFunction);
     }
 
-    public boolean containsKey(Entity entity) {
+    public boolean containsKey(HumanEntity entity) {
         return containsKey(entity.getName());
     }
 }

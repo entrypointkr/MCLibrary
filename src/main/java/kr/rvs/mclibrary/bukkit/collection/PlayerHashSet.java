@@ -1,6 +1,6 @@
 package kr.rvs.mclibrary.bukkit.collection;
 
-import org.bukkit.entity.Entity;
+import org.bukkit.entity.HumanEntity;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -8,19 +8,19 @@ import java.util.HashSet;
 /**
  * Created by Junhyeong Lim on 2017-10-08.
  */
-public class EntityHashSet<E extends Entity> extends HashSet<String> {
-    public EntityHashSet() {
+public class PlayerHashSet<E extends HumanEntity> extends HashSet<String> {
+    public PlayerHashSet() {
     }
 
-    public EntityHashSet(Collection<? extends String> c) {
+    public PlayerHashSet(Collection<? extends String> c) {
         super(c);
     }
 
-    public EntityHashSet(int initialCapacity, float loadFactor) {
+    public PlayerHashSet(int initialCapacity, float loadFactor) {
         super(initialCapacity, loadFactor);
     }
 
-    public EntityHashSet(int initialCapacity) {
+    public PlayerHashSet(int initialCapacity) {
         super(initialCapacity);
     }
 
