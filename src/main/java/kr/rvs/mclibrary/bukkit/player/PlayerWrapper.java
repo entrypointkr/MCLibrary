@@ -16,8 +16,8 @@ public class PlayerWrapper {
         this.player = Objects.requireNonNull(player);
     }
 
-    public int hasItemAmount(ItemStack item) {
-        return PlayerUtils.hasItemAmount(player, item);
+    public int hasItems(ItemStack item) {
+        return PlayerUtils.hasItems(player, item);
     }
 
     public boolean isHasItem(ItemStack item, int amount) {

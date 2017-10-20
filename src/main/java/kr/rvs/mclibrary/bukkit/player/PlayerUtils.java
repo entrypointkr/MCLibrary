@@ -10,7 +10,12 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Junhyeong Lim on 2017-07-28.
@@ -43,7 +48,7 @@ public class PlayerUtils {
         }
     }
 
-    public static int hasItemAmount(Player player, ItemStack item) {
+    public static int hasItems(Player player, ItemStack item) {
         int hasAmount = 0;
         for (ItemStack elemItem : player.getInventory()) {
             if (elemItem == null || elemItem.getType() == Material.AIR
