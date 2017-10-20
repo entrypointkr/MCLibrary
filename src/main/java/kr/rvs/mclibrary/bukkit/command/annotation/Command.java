@@ -15,7 +15,7 @@ import java.lang.annotation.Target;
 public @interface Command {
     CommandType type() default CommandType.DEFAULT;
 
-    String args();
+    String args() default "";
 
     String usage() default "";
 

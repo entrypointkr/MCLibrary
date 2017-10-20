@@ -35,7 +35,7 @@ import java.util.Set;
 /**
  * Created by Junhyeong Lim on 2017-09-29.
  */
-public class CommandManager {
+public class CommandManager { // TODO: Cleaning
     public static final CommandFactory DEF_FACTORY = (commandClass, adaptor) -> {
         ConstructorEx constructorEx = Reflections.getConstructorEx(commandClass, CommandAdaptor.class);
         return constructorEx.newInstance(adaptor).orElseGet(() -> {
