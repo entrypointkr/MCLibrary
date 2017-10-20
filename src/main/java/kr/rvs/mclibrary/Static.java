@@ -22,13 +22,13 @@ public class Static {
         if (getBoolean(DETAIL_LOG)) {
             Logger.getGlobal().log(Level.WARNING, "[MCLibrary] 에러가 발생했습니다.", ex);
         } else {
-            log(Level.WARNING, "에러가 발생했습니다. " + ex.toString());
+            log("에러가 발생했습니다. " + ex.toString());
         }
     }
 
-    public static void log(Level level, String... messages) {
+    public static void log(String... messages) {
         for (String message : messages) {
-            Bukkit.getLogger().log(level, "[MCLibrary] " + MCUtils.colorize(message));
+            Bukkit.getConsoleSender().sendMessage("[MCLibrary] " + MCUtils.colorize(message));
         }
     }
 

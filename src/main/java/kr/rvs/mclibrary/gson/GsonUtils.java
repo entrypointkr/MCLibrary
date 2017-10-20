@@ -21,7 +21,6 @@ import java.lang.reflect.Type;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
-import java.util.logging.Level;
 
 /**
  * Created by Junhyeong Lim on 2017-08-21.
@@ -73,6 +72,6 @@ public class GsonUtils {
     }
 
     public static void write(File file, Object obj) {
-        write(file, obj, ex -> Static.log(Level.WARNING, "Error while write " + file.getName()));
+        write(file, obj, ex -> Static.log("Error while write " + file.getName()));
     }
 }

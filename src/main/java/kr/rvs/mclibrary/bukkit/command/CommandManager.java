@@ -31,7 +31,6 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
-import java.util.logging.Level;
 
 /**
  * Created by Junhyeong Lim on 2017-09-29.
@@ -93,7 +92,7 @@ public class CommandManager {
         if (optional.isPresent()) {
             return optional;
         } else {
-            Static.log(Level.WARNING, commandClass.getSimpleName() + " is not annotation presented");
+            Static.log(commandClass.getSimpleName() + " is not annotation presented");
             return Optional.empty();
         }
     }
@@ -113,7 +112,7 @@ public class CommandManager {
             );
             commandMap.register(firstArg, plugin.getName(), adaptor);
 
-            Static.log(Level.INFO, "Command \"" + firstArg + "\" register from " + plugin.getName());
+            Static.log("&eCommand \"" + firstArg + "\" register from " + plugin.getName());
             ComplexCommand newComplexCommand = complexCommand.setupComposite(args, 1, args.length);
             Object instance = factory.create(commandClass, adaptor);
             registerCommandFromMethod(commandClass, instance, newComplexCommand);
@@ -146,7 +145,7 @@ public class CommandManager {
                 command = absoluteCommand != null ? absoluteCommand : command;
             }
             if (!(command instanceof CompositionCommand)) {
-                Static.log(Level.WARNING, "CompositionCommand expected, but " + command.getClass().getSimpleName());
+                Static.log("CompositionCommand expected, but " + command.getClass().getSimpleName());
                 newComplexCommand.put(lastArg, command = new CompositionCommand());
             }
 
@@ -161,7 +160,7 @@ public class CommandManager {
             if (completerAnnot != null) {
                 compositionCommand.setCompletable(new ReflectiveCompleter(instance, method));
             }
-            Static.log(Level.INFO, "... " + Arrays.toString(splited));
+            Static.log("... " + Arrays.toString(splited));
         }
     }
 

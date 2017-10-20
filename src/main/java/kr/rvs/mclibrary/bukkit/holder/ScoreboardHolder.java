@@ -11,7 +11,6 @@ import org.bukkit.scoreboard.Score;
 import org.bukkit.scoreboard.Scoreboard;
 
 import java.util.Arrays;
-import java.util.logging.Level;
 
 /**
  * Created by Junhyeong Lim on 2017-10-08.
@@ -37,7 +36,7 @@ public class ScoreboardHolder extends Replaceable<ScoreboardHolder> {
 
     private String ensure(String content) {
         if (content.length() > 40) {
-            Static.log(Level.WARNING, "스코어보드 내용 \"" + content + "\" 이 40 글자를 넘었습니다.");
+            Static.log("스코어보드 내용 \"" + content + "\" 이 40 글자를 넘었습니다.");
             content = content.substring(0, 40);
         }
         return content;

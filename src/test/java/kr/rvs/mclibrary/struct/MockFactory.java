@@ -5,9 +5,11 @@ import kr.rvs.mclibrary.mock.MockInventory;
 import kr.rvs.mclibrary.mock.MockItemFactory;
 import kr.rvs.mclibrary.mock.MockItemMeta;
 import org.apache.commons.lang.StringUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -27,6 +29,7 @@ import java.util.logging.Logger;
  */
 public class MockFactory extends Mockito {
     public static Server createMockServer() {
+        ConsoleCommandSender commandSender = (ConsoleCommandSender) createCommandSender();
         Server server = mock(Server.class);
         when(server.getLogger()).thenReturn(Logger.getGlobal());
         when(server.getPluginManager()).thenReturn(
@@ -35,17 +38,17 @@ public class MockFactory extends Mockito {
         doAnswer(invocation -> new MockInventory(InventoryType.CHEST, invocation.getArgument(1), invocation.getArgument(2)))
                 .when(server).createInventory(any(), anyInt(), anyString());
         when(server.getBukkitVersion()).thenReturn("1.0");
+        when(server.getConsoleSender()).thenReturn(commandSender);
 
         return server;
     }
 
     public static CommandSender createCommandSender() {
-        Server server = createMockServer();
         CommandSender sender = mock(
                 CommandSender.class,
-                withSettings().extraInterfaces(Player.class)
+                withSettings().extraInterfaces(Player.class, ConsoleCommandSender.class)
         );
-        when(sender.getServer()).thenReturn(server);
+        when(sender.getServer()).thenReturn(Bukkit.getServer());
         doAnswer(invocation -> {
             String fixed = StringUtils.join((String[]) invocation.getArguments()[0], '\n');
             System.out.println(ChatColor.stripColor(fixed));

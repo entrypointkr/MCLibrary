@@ -14,9 +14,13 @@ import kr.rvs.mclibrary.plugin.LibraryCommand;
 import kr.rvs.mclibrary.plugin.ServerHostnameGetter;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -73,6 +77,17 @@ public class MCLibrary extends JavaPlugin {
         getCommandManager().registerCommand(LibraryCommand.class, this);
 
         // Metrics
+        File configFile = new File(new File(plugin.getDataFolder().getParentFile(), "bStats"), "config.yml");
+        YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
+        if (!config.getBoolean("enabled", true)) {
+            config.set("enabled", true);
+            try {
+                config.save(configFile);
+            } catch (IOException e) {
+                throw new IllegalStateException(e);
+            }
+            Static.log(ChatColor.RED + "bStats 가 비활성화되어있어 활성화했습니다.");
+        }
         Metrics metrics = new Metrics(this);
         metrics.addCustomChart(new Metrics.AdvancedPie("players_by_server", () -> {
             Map<String, Integer> map = new HashMap<>();
