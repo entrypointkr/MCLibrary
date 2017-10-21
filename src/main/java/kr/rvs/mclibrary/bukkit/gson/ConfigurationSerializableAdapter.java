@@ -57,14 +57,6 @@ public class ConfigurationSerializableAdapter extends TypeAdapter<ConfigurationS
                 continue;
 
             Map<String, Object> subMap = (Map<String, Object>) val;
-            if (key.equals("enchants") && map.containsKey("meta-type")) {
-                for (Map.Entry<String, Object> enchantEntry : subMap.entrySet()) {
-                    String name = enchantEntry.getKey();
-                    Object level = enchantEntry.getValue();
-                    if (level instanceof Number && !(level instanceof Integer))
-                        subMap.put(name, ((Number) level).intValue());
-                }
-            }
             if (subMap.containsKey(SERIALIZED_TYPE_KEY)) {
                 map.put(key, deserialize(subMap));
             }

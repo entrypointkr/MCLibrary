@@ -5,6 +5,7 @@ import com.google.gson.TypeAdapter;
 import com.google.gson.TypeAdapterFactory;
 import com.google.gson.reflect.TypeToken;
 import kr.rvs.mclibrary.bukkit.inventory.gui.GUISignature;
+import org.bukkit.Location;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 
 import java.util.Collection;
@@ -20,7 +21,9 @@ public class BukkitTypeAdapterFactory implements TypeAdapterFactory {
         Class<?> rawType = type.getRawType();
         TypeAdapter<Map> mapAdapter = gson.getAdapter(Map.class);
         TypeAdapter<Collection> collectionAdapter = gson.getAdapter(Collection.class);
-        if (ConfigurationSerializable.class.isAssignableFrom(rawType)) {
+        if (Location.class.isAssignableFrom(rawType) && !ConfigurationSerializable.class.isAssignableFrom(rawType)) {
+            return (TypeAdapter<T>) new LocationTypeAdapter();
+        } else if (ConfigurationSerializable.class.isAssignableFrom(rawType)) {
             return (TypeAdapter<T>) new ConfigurationSerializableAdapter(mapAdapter);
         } else if (GUISignature.class.isAssignableFrom(rawType)) {
             return (TypeAdapter<T>) new GUISignatureTypeAdapter(mapAdapter, collectionAdapter);

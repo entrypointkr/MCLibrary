@@ -26,17 +26,21 @@ import java.util.function.Supplier;
  * Created by Junhyeong Lim on 2017-08-21.
  */
 public class GsonUtils {
-    public static <T> T read(Reader reader, Type type) {
-        Gson gson = MCLibrary.getGsonManager().getGson();
+    public static <T> T read(Gson gson, Reader reader, Type type) {
         return gson.fromJson(reader, type);
     }
 
-    public static <T> Optional<T> read(File file, Type type) {
+    public static <T> T read(Reader reader, Type type) {
+        Gson gson = MCLibrary.getGsonManager().getGson();
+        return read(gson, reader, type);
+    }
+
+    public static <T> Optional<T> read(Gson gson, File file, Type type) {
         T ret = null;
 
         if (file.isFile()) {
             try {
-                ret = read(new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF-8")), type);
+                ret = read(gson, new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF-8")), type);
             } catch (UnsupportedEncodingException | FileNotFoundException e) {
                 Static.log(e);
             }
@@ -45,14 +49,21 @@ public class GsonUtils {
         return Optional.ofNullable(ret);
     }
 
-    public static <T> T read(File file, Type type, Supplier<T> def) {
-        Optional<T> ret = read(file, type);
+    public static <T> Optional<T> read(File file, Type type) {
+        return read(MCLibrary.getGsonManager().getGson(), file, type);
+    }
+
+    public static <T> T read(Gson gson, File file, Type type, Supplier<T> def) {
+        Optional<T> ret = read(gson, file, type);
         return ret.orElseGet(def);
     }
 
-    public static void write(Writer writer, Object obj, Consumer<Exception> callback) {
+    public static <T> T read(File file, Type type, Supplier<T> def) {
+        return read(MCLibrary.getGsonManager().getGson(), file, type, def);
+    }
+
+    public static void write(Gson gson, Writer writer, Object obj, Consumer<Exception> callback) {
         try {
-            Gson gson = MCLibrary.getGsonManager().getGson();
             gson.toJson(obj, writer);
             writer.close();
         } catch (IOException e) {
@@ -61,17 +72,30 @@ public class GsonUtils {
         }
     }
 
-    public static void write(File file, Object obj, Consumer<Exception> callback) {
+    public static void write(Writer writer, Object obj, Consumer<Exception> callback) {
+        Gson gson = MCLibrary.getGsonManager().getGson();
+        write(gson, writer, obj, callback);
+    }
+
+    public static void write(Gson gson, File file, Object obj, Consumer<Exception> callback) {
         FileUtils.ensure(file);
         try {
-            write(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), "UTF-8")), obj, callback);
+            write(gson, new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), "UTF-8")), obj, callback);
         } catch (UnsupportedEncodingException | FileNotFoundException e) {
             if (callback != null)
                 callback.accept(e);
         }
     }
 
+    public static void write(File file, Object obj, Consumer<Exception> callback) {
+        write(MCLibrary.getGsonManager().getGson(), file, obj, callback);
+    }
+
+    public static void write(Gson gson, File file, Object obj) {
+        write(gson, file, obj, ex -> Static.log("Error while write " + file.getName()));
+    }
+
     public static void write(File file, Object obj) {
-        write(file, obj, ex -> Static.log("Error while write " + file.getName()));
+        write(MCLibrary.getGsonManager().getGson(), file, obj);
     }
 }
