@@ -6,13 +6,12 @@ import kr.rvs.mclibrary.bukkit.command.annotation.Command;
 import kr.rvs.mclibrary.bukkit.command.annotation.SubCommand;
 import kr.rvs.mclibrary.bukkit.command.annotation.TabCompleter;
 import kr.rvs.mclibrary.bukkit.command.completor.ReflectiveCompleter;
-import kr.rvs.mclibrary.bukkit.command.duplex.ComplexCommand;
-import kr.rvs.mclibrary.bukkit.command.duplex.CompositionCommand;
+import kr.rvs.mclibrary.bukkit.command.duplex.CompositeCommand;
+import kr.rvs.mclibrary.bukkit.command.duplex.MapCommand;
 import kr.rvs.mclibrary.bukkit.command.executor.AnnotationProxyExecutor;
 import kr.rvs.mclibrary.bukkit.command.executor.ReflectiveExecutor;
 import kr.rvs.mclibrary.bukkit.plugin.PluginUtils;
 import kr.rvs.mclibrary.reflection.ClassProbe;
-import kr.rvs.mclibrary.reflection.ConstructorEx;
 import kr.rvs.mclibrary.reflection.FieldEx;
 import kr.rvs.mclibrary.reflection.Reflections;
 import org.bukkit.Bukkit;
@@ -25,29 +24,17 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.io.File;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Consumer;
 
 /**
  * Created by Junhyeong Lim on 2017-09-29.
  */
-public class CommandManager { // TODO: Cleaning
-    public static final CommandFactory DEF_FACTORY = (commandClass, adaptor) -> {
-        ConstructorEx constructorEx = Reflections.getConstructorEx(commandClass, CommandAdaptor.class);
-        return constructorEx.newInstance(adaptor).orElseGet(() -> {
-            Constructor constructor = commandClass.getDeclaredConstructors()[0];
-            constructor.setAccessible(true);
-            try {
-                return constructor.newInstance();
-            } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
-                throw new IllegalStateException(e);
-            }
-        });
-    };
+public class CommandManager {
     private final CommandMap commandMap;
 
     public CommandManager(CommandMap commandMap) {
@@ -87,103 +74,94 @@ public class CommandManager { // TODO: Cleaning
         }
     }
 
-    private Optional<Command> getCommandAnnotation(Class<?> commandClass) {
-        Optional<Command> optional = Reflections.getAnnotation(commandClass, Command.class);
-        if (optional.isPresent()) {
-            return optional;
-        } else {
-            Static.log(commandClass.getSimpleName() + " is not annotation presented");
-            return Optional.empty();
+    private Object createInstance(Class<?> commandClass) {
+        try {
+            Constructor constructor = Reflections.getAllConstructors(commandClass)[0];
+            constructor.setAccessible(true);
+            return constructor.newInstance();
+        } catch (Exception ex) {
+            throw new IllegalStateException(ex);
         }
-    }
-
-    public void registerCommand(Class<?> commandClass, CommandFactory factory, Plugin plugin) {
-        getCommandAnnotation(commandClass).ifPresent(commandAnnot -> {
-            ComplexCommand complexCommand = new ComplexCommand();
-            String[] args = commandAnnot.args().split(" ");
-            String firstArg = args[0];
-            CommandAdaptor adaptor = new CommandAdaptor(
-                    firstArg,
-                    commandAnnot.desc(),
-                    commandAnnot.usage(),
-                    Arrays.asList(args),
-                    complexCommand,
-                    plugin
-            );
-            commandMap.register(firstArg, plugin.getName(), adaptor);
-
-            Static.log("&eCommand \"" + firstArg + "\" register from " + plugin.getName());
-            ComplexCommand newComplexCommand = complexCommand.setupComposite(args, 1, args.length);
-            Object instance = factory.create(commandClass, adaptor);
-            registerCommandFromMethod(commandClass, instance, newComplexCommand);
-            registerCommandFromSubClass(commandClass, adaptor, factory, complexCommand);
-        });
     }
 
     public void registerCommand(Class<?> commandClass, Plugin plugin) {
-        registerCommand(commandClass, DEF_FACTORY, plugin);
-    }
-
-    public void registerCommandFromMethod(Class<?> commandClass, Object instance,
-                                          ComplexCommand complexCommand) {
-        for (Method method : commandClass.getDeclaredMethods()) {
-            Command commandAnnot = method.getAnnotation(Command.class);
-            TabCompleter completerAnnot = method.getAnnotation(TabCompleter.class);
-            if (commandAnnot == null && completerAnnot == null)
-                continue;
-
-            String args = commandAnnot != null ?
-                    commandAnnot.args() :
-                    completerAnnot.args();
-            String[] splited = args.split(" ");
-            String lastArg = splited[splited.length - 1];
-            ComplexCommand newComplexCommand = complexCommand.setupComposite(splited, 0, splited.length - 1);
-            ICommand command = newComplexCommand.computeIfAbsent(lastArg, k -> new CompositionCommand());
-
-            if (command instanceof ComplexCommand) {
-                ICommand absoluteCommand = ((ComplexCommand) command).getAbsoluteCommand();
-                command = absoluteCommand != null ? absoluteCommand : command;
-            }
-            if (!(command instanceof CompositionCommand)) {
-                Static.log("CompositionCommand expected, but " + command.getClass().getSimpleName());
-                newComplexCommand.put(lastArg, command = new CompositionCommand());
-            }
-
-            CompositionCommand compositionCommand = (CompositionCommand) command;
-
-            if (commandAnnot != null) {
-                ReflectiveExecutor reflectiveExecutor = new ReflectiveExecutor(instance, method);
-                AnnotationProxyExecutor proxyExecutor = new AnnotationProxyExecutor(commandAnnot, reflectiveExecutor);
-                compositionCommand.setExecutable(proxyExecutor);
-                compositionCommand.setCommandInfo(proxyExecutor);
-            }
-            if (completerAnnot != null) {
-                compositionCommand.setCompletable(new ReflectiveCompleter(instance, method));
-            }
-            Static.log("... " + Arrays.toString(splited));
+        MapCommand mapCommand = new MapCommand();
+        CommandAnnotationWrapper annot = setupCommandWithClass(commandClass, mapCommand);
+        String firstArg = annot.firstArg();
+        MapCommand head = mapCommand.get(firstArg, MapCommand.class);
+        if (head != null) {
+            CommandAdaptor adaptor = new CommandAdaptor(
+                    firstArg,
+                    annot.desc(),
+                    annot.usage(),
+                    Arrays.asList(annot.slicedArgs()),
+                    head,
+                    plugin
+            );
+            commandMap.register(firstArg, plugin.getName(), adaptor);
+            Static.log("&eCommand \"" + firstArg + "\" register from " + plugin.getName());
+        } else {
+            Static.log("Unexpected null");
         }
     }
 
-    public void registerCommandFromSubClass(Class<?> commandClass, CommandAdaptor adaptor, CommandFactory factory, ComplexCommand complexCommand) {
-        Set<Class<?>> subClasses = new HashSet<>(Arrays.asList(commandClass.getDeclaredClasses()));
-        Reflections.getAnnotation(commandClass, SubCommand.class).ifPresent(subCommandAnnot ->
-                subClasses.addAll(Arrays.asList(subCommandAnnot.value())));
-        for (Class<?> subClass : subClasses) {
-            registerCommandFromClass(subClass, adaptor, factory, complexCommand);
-        }
-    }
+    public CommandAnnotationWrapper setupCommandWithClass(Class<?> commandClass, MapCommand parent) {
+        AtomicReference<CommandAnnotationWrapper> annotRef = new AtomicReference<>();
+        Reflections.getAnnotation(commandClass, Command.class).ifPresent(commandAnnot -> {
+            CommandAnnotationWrapper wrapper = new CommandAnnotationWrapper(commandAnnot);
+            Object instance = createInstance(commandClass);
+            String[] args = wrapper.slicedArgs();
+            MapCommand base = parent.setupMap(args, 0, args.length);
+            Set<Class<?>> subClasses = new HashSet<>(Arrays.asList(commandClass.getDeclaredClasses()));
+            Reflections.getAnnotation(commandClass, SubCommand.class).ifPresent(subCommandAnnot ->
+                    subClasses.addAll(Arrays.asList(subCommandAnnot.value())));
 
-    public void registerCommandFromClass(Class<?> commandClass, CommandAdaptor adaptor, CommandFactory factory, ComplexCommand complexCommand) {
-        getCommandAnnotation(commandClass).ifPresent(commandAnnot -> {
-            Object instance = factory.create(commandClass, adaptor);
-            String[] args = commandAnnot.args().split(" ");
-            ComplexCommand newComplexCommand = complexCommand.setupComposite(args, 0, args.length);
-            registerCommandFromMethod(commandClass, instance, newComplexCommand);
-            registerCommandFromSubClass(commandClass, adaptor, factory, complexCommand);
+            setupCommandWithMethod(commandClass, commandAnnot, instance, base);
+            for (Class<?> subClass : subClasses) {
+                setupCommandWithClass(subClass, base);
+            }
+            annotRef.set(wrapper);
         });
+        return annotRef.get();
     }
 
-    interface CommandFactory {
-        Object create(Class<?> commandClass, CommandAdaptor adaptor);
+    private void setupCommandWithMethod(Class<?> commandClass, Command commandAnnot, Object instance, MapCommand parent) {
+        for (Method method : commandClass.getDeclaredMethods()) {
+            String[] slice = null;
+            Consumer<CompositeCommand> callback = compositeCommand -> {};
+            if (method.isAnnotationPresent(Command.class)) {
+                CommandAnnotationWrapper annot = new CommandAnnotationWrapper(method.getAnnotation(Command.class));
+                slice = annot.slicedArgs();
+                callback = composition -> {
+                    ReflectiveExecutor reflectiveExecutor = new ReflectiveExecutor(instance, method);
+                    AnnotationProxyExecutor proxyExecutor = new AnnotationProxyExecutor(commandAnnot, reflectiveExecutor);
+                    composition.setExecutable(proxyExecutor);
+                    composition.setCommandInfo(proxyExecutor);
+                };
+            } else if (method.isAnnotationPresent(TabCompleter.class)) {
+                TabCompleter annot = method.getAnnotation(TabCompleter.class);
+                slice = annot.args().split(" ");
+                callback = composition -> {
+                    composition.setCompletable(new ReflectiveCompleter(instance, method));
+                };
+            }
+
+            // Process
+            if (slice == null)
+                continue;
+            String lastArg = slice[slice.length - 1];
+            MapCommand child = parent.setupMap(slice, 0, slice.length - 1);
+            ICommand command = child.computeIfAbsent(lastArg, k -> new CompositeCommand());
+            if (command instanceof MapCommand) {
+                ICommand baseCommand = ((MapCommand) command).getBaseCommand();
+                command = baseCommand != null ? baseCommand : command;
+            }
+            if (!(command instanceof CompositeCommand)) {
+                Static.log("CompositeCommand expected, but " + command.getClass().getSimpleName());
+                child.put(lastArg, command = new CompositeCommand());
+            }
+            CompositeCommand compositeCommand = (CompositeCommand) command;
+            callback.accept(compositeCommand);
+        }
     }
 }

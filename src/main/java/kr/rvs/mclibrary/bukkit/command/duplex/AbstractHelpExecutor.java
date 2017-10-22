@@ -26,8 +26,8 @@ public abstract class AbstractHelpExecutor implements ICommand {
         this.line = line;
         this.helpArg = label.matches("[a-zA-Z]+") ? "help" : "도움말";
 
-        if (command instanceof ComplexCommand) {
-            ComplexCommand compositeExecutor = (ComplexCommand) command;
+        if (command instanceof MapCommand) {
+            MapCommand compositeExecutor = (MapCommand) command;
             if (!compositeExecutor.containsKey(helpArg))
                 compositeExecutor.put(helpArg, this);
         }
@@ -47,19 +47,19 @@ public abstract class AbstractHelpExecutor implements ICommand {
     }
 
     private void init(String args, ICommand command) {
-        if (command instanceof ComplexCommand) {
-            ComplexCommand compositeExecutor = (ComplexCommand) command;
+        if (command instanceof MapCommand) {
+            MapCommand compositeExecutor = (MapCommand) command;
 
             for (Map.Entry<String, ICommand> entry : compositeExecutor.entrySet()) {
                 String key = entry.getKey();
                 ICommand val = entry.getValue();
 
-                if (val instanceof ComplexCommand) {
-                    ComplexCommand complexCommand = (ComplexCommand) val;
-                    ICommand absolute = complexCommand.getAbsoluteCommand();
+                if (val instanceof MapCommand) {
+                    MapCommand mapCommand = (MapCommand) val;
+                    ICommand base = mapCommand.getBaseCommand();
                     init(argSpacing(args, key), val);
-                    if (absolute != null)
-                        init(argSpacing(args, ""), absolute);
+                    if (base != null)
+                        init(argSpacing(args, ""), base);
                 } else if (val instanceof CommandInfo) {
                     CommandStorage storage = new CommandStorage(argSpacing(args, key), (CommandInfo) val);
                     storageList.add(storage);

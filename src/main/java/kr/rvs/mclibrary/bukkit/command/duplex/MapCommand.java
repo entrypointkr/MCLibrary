@@ -15,13 +15,11 @@ import java.util.stream.Collectors;
 /**
  * Created by Junhyeong Lim on 2017-09-25.
  */
-public class ComplexCommand extends LinkedHashMap<String, ICommand> implements ICommand {
-    private ICommand absoluteCommand;
-
+public class MapCommand extends LinkedHashMap<String, ICommand> implements ICommand {
     @Override
     public void execute(CommandSenderWrapper wrapper, CommandArguments args) throws CommandException {
         String arg = args.get(0);
-        ICommand command = arg != null ? get(arg) : absoluteCommand;
+        ICommand command = arg != null ? get(arg) : getBaseCommand();
         if (command != null) {
             args.remove(0);
             if (command instanceof CommandInfo)
@@ -35,7 +33,7 @@ public class ComplexCommand extends LinkedHashMap<String, ICommand> implements I
     @Override
     public List<String> tabComplete(CommandSenderWrapper wrapper, CommandArguments args) { // /test first
         String arg = args.remove(0);
-        TabCompletable completable = arg != null && args.size() > 0 ? get(arg) : absoluteCommand;
+        TabCompletable completable = arg != null && args.size() > 0 ? get(arg) : getBaseTabCompleter();
         return completable != null ?
                 completable.tabComplete(wrapper, args) :
                 keySet().stream()
@@ -43,26 +41,35 @@ public class ComplexCommand extends LinkedHashMap<String, ICommand> implements I
                         .collect(Collectors.toList());
     }
 
-    public ComplexCommand setupComposite(String[] args, int start, int end) {
-        ComplexCommand ret = this;
+    public ICommand getBaseCommand() {
+        return get("");
+    }
+
+    public TabCompletable getBaseTabCompleter() {
+        ICommand command = getBaseCommand();
+        return command instanceof CompositeCommand ? ((CompositeCommand) command).getCompletable() : command;
+    }
+
+    public <T extends ICommand> T get(String key, Class<? extends T> commandClass) {
+        ICommand element = get(key);
+        if (element != null && commandClass.isInstance(element)) {
+            return (T) get(key);
+        }
+        return null;
+    }
+
+    public MapCommand setupMap(String[] args, int start, int end) {
+        MapCommand ret = this;
         for (int i = start; i < end; i++) {
             String arg = args[i];
-            ICommand command = ret.computeIfAbsent(arg, k -> new ComplexCommand());
-            if (!(command instanceof ComplexCommand)) {
-                ComplexCommand complexCommand = new ComplexCommand();
-                complexCommand.setAbsoluteCommand(command);
-                ret.put(arg, command = complexCommand);
+            ICommand command = ret.computeIfAbsent(arg, k -> new MapCommand());
+            if (!(command instanceof MapCommand)) {
+                MapCommand mapCommand = new MapCommand();
+                mapCommand.put("", command);
+                ret.put(arg, command = mapCommand);
             }
-            ret = (ComplexCommand) command;
+            ret = (MapCommand) command;
         }
         return ret;
-    }
-
-    public ICommand getAbsoluteCommand() {
-        return absoluteCommand;
-    }
-
-    public void setAbsoluteCommand(ICommand absoluteCommand) {
-        this.absoluteCommand = absoluteCommand;
     }
 }

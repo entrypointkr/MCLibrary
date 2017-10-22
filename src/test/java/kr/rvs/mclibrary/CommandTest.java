@@ -40,8 +40,9 @@ public class CommandTest extends Assert {
         commandMap.dispatch(mockSender, "test second");
         commandMap.dispatch(mockSender, "test first b 10");
         commandMap.dispatch(mockSender, "test second b");
+        commandMap.dispatch(mockSender, "test");
 
-        if (integer.get() < 4) {
+        if (integer.get() < 5) {
             throw new Error("Command testing fail");
         }
     }
@@ -114,6 +115,12 @@ public class CommandTest extends Assert {
                 wrapper.sendMessage("Example command 4");
                 integer.incrementAndGet();
             }
+        }
+
+        @Command
+        public void test(CommandSenderWrapper wrapper, CommandArguments args) {
+            wrapper.sendMessage("Example command 5");
+            integer.incrementAndGet();
         }
 
         @Command(

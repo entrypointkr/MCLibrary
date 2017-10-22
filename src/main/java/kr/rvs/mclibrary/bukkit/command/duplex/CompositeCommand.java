@@ -1,6 +1,10 @@
 package kr.rvs.mclibrary.bukkit.command.duplex;
 
-import kr.rvs.mclibrary.bukkit.command.*;
+import kr.rvs.mclibrary.bukkit.command.CommandArguments;
+import kr.rvs.mclibrary.bukkit.command.CommandInfo;
+import kr.rvs.mclibrary.bukkit.command.Executable;
+import kr.rvs.mclibrary.bukkit.command.ICommand;
+import kr.rvs.mclibrary.bukkit.command.TabCompletable;
 import kr.rvs.mclibrary.bukkit.player.CommandSenderWrapper;
 
 import java.util.List;
@@ -8,7 +12,7 @@ import java.util.List;
 /**
  * Created by Junhyeong Lim on 2017-09-30.
  */
-public class CompositionCommand implements ICommand, CommandInfo {
+public class CompositeCommand implements ICommand, CommandInfo {
     private Executable executable;
     private TabCompletable completable;
     private CommandInfo commandInfo = CommandInfo.DEFAULT;
@@ -52,5 +56,17 @@ public class CompositionCommand implements ICommand, CommandInfo {
 
     public void setCommandInfo(CommandInfo commandInfo) {
         this.commandInfo = commandInfo;
+    }
+
+    public Executable getExecutable() {
+        return executable;
+    }
+
+    public TabCompletable getCompletable() {
+        return completable;
+    }
+
+    public CommandInfo getCommandInfo() {
+        return commandInfo;
     }
 }

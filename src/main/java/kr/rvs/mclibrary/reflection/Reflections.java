@@ -75,4 +75,8 @@ public class Reflections {
     public static <T extends Annotation> Optional<T> getAnnotation(Class<?> aClass, Class<T> annotationClass) {
         return Optional.ofNullable(aClass.getAnnotation(annotationClass));
     }
+
+    public static <T extends Annotation> Optional<T> getAnnotation(Method method, Class<T> annotClass) {
+        return Optional.ofNullable(method.getAnnotation(annotClass));
+    }
 }
