@@ -85,7 +85,7 @@ public class CommandManager {
     }
 
     public void registerCommand(Class<?> commandClass, Plugin plugin) {
-        MapCommand mapCommand = new MapCommand();
+        MapCommand mapCommand = new MapCommand(); // TODO: ICommand is should provide a full args
         CommandAnnotationWrapper annot = setupCommandWithClass(commandClass, mapCommand);
         String firstArg = annot.firstArg();
         MapCommand head = mapCommand.get(firstArg, MapCommand.class);
@@ -134,7 +134,7 @@ public class CommandManager {
                 slice = annot.slicedArgs();
                 callback = composition -> {
                     ReflectiveExecutor reflectiveExecutor = new ReflectiveExecutor(instance, method);
-                    AnnotationProxyExecutor proxyExecutor = new AnnotationProxyExecutor(commandAnnot, reflectiveExecutor);
+                    AnnotationProxyExecutor proxyExecutor = new AnnotationProxyExecutor(annot, reflectiveExecutor);
                     composition.setExecutable(proxyExecutor);
                     composition.setCommandInfo(proxyExecutor);
                 };
@@ -162,6 +162,7 @@ public class CommandManager {
             }
             CompositeCommand compositeCommand = (CompositeCommand) command;
             callback.accept(compositeCommand);
+            Static.log("... " + Arrays.toString(slice));
         }
     }
 }

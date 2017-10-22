@@ -50,6 +50,7 @@ public class MapCommand extends LinkedHashMap<String, ICommand> implements IComm
         return command instanceof CompositeCommand ? ((CompositeCommand) command).getCompletable() : command;
     }
 
+    @SuppressWarnings("unchecked")
     public <T extends ICommand> T get(String key, Class<? extends T> commandClass) {
         ICommand element = get(key);
         if (element != null && commandClass.isInstance(element)) {

@@ -99,7 +99,7 @@ public abstract class AbstractHelpExecutor implements ICommand {
         // Additional
         if (paging) {
             wrapper.sendMessage(String.format(
-                    "&7'/%s %s [페이지]' 를 입력할 수 있습니다.",
+                    "&7'/%1$s [페이지]' 또는 '/%1$s %2$s [페이지]' 를 입력할 수 있습니다.",
                     label, helpArg
             ));
         } else {
