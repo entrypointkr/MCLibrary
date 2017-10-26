@@ -54,8 +54,8 @@ public abstract class Wizard<D, C> {
     }
 
     protected void release(C callbackData) {
-        callback.accept(callbackData);
         wizardMap.remove(player);
+        callback.accept(callbackData);
         player.sendMessage(messageCaught(completeMessage));
     }
 

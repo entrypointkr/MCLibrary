@@ -25,7 +25,8 @@ public class ConfigurationSerializableAdapter extends TypeAdapter<ConfigurationS
 
     @Override
     public void write(JsonWriter out, ConfigurationSerializable value) throws IOException {
-        mapAdapter.write(out, serialize(value));
+        if (value != null)
+            mapAdapter.write(out, serialize(value));
     }
 
     @Override

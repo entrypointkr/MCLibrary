@@ -7,6 +7,7 @@ import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
@@ -57,7 +58,8 @@ public class ClickWizard extends Wizard<List<Block>, List<Block>> {
             @EventHandler
             public void onClick(SafePlayerInteractEvent e) {
                 PlayerInteractEvent event = e.getDelegate();
-                if (e.hasGetHandMethod() && event.getHand() != EquipmentSlot.HAND)
+                if (e.hasGetHandMethod() && event.getHand() != EquipmentSlot.HAND
+                        || !event.getPlayer().equals(player))
                     return;
 
                 Player player = event.getPlayer();
@@ -68,7 +70,7 @@ public class ClickWizard extends Wizard<List<Block>, List<Block>> {
                     lastLocation = clickedBlock.getLocation();
                     if (remainCount <= 0) {
                         release(data);
-                        event.getHandlers().unregister(this);
+                        HandlerList.unregisterAll(this);
                     } else {
                         player.sendMessage(messageCaught(remainMessage));
                     }
