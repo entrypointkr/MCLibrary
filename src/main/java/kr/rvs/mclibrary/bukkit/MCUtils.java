@@ -6,10 +6,8 @@ import com.comphenix.protocol.events.PacketContainer;
 import kr.rvs.mclibrary.Static;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Server;
 import org.bukkit.entity.Player;
 
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -24,19 +22,11 @@ public class MCUtils {
 
     public static String getNMSPackageVersion() {
         if (packageVersion == null) {
-            try {
-                Server server = Bukkit.getServer();
-                Field field = server.getClass().getDeclaredField("console");
-                field.setAccessible(true);
-                Object nmsServer = field.get(server);
-                String packageName = nmsServer.getClass().getName();
-                int point = packageName.indexOf(".v") + 1;
+            String packageName = Bukkit.getServer().getClass().getName();
+            int point = packageName.indexOf(".v") + 1;
 
-                packageVersion = packageName.substring(
-                        point, packageName.indexOf('.', point));
-            } catch (NoSuchFieldException | IllegalAccessException e) {
-                Static.log(e);
-            }
+            packageVersion = packageName.substring(
+                    point, packageName.indexOf('.', point));
         }
         return packageVersion;
     }
