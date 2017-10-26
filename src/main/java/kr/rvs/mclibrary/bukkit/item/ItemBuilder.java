@@ -5,6 +5,7 @@ import kr.rvs.mclibrary.general.StringUtil;
 import kr.rvs.mclibrary.general.VarargsParser;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -98,6 +99,17 @@ public class ItemBuilder {
     public ItemBuilder lore(String... lores) {
         Validate.notNull(lores);
         lore(Arrays.asList(lores));
+        return this;
+    }
+
+    public ItemBuilder enchant(Object... args) {
+        metaProcessors.add(meta ->
+                new VarargsParser(args).parse(section ->
+                        meta.addEnchant(
+                                section.<Enchantment>get(0),
+                                section.<Integer>get(1),
+                                false
+                        )));
         return this;
     }
 
