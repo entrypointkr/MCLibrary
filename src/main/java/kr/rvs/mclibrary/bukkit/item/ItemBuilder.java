@@ -15,7 +15,6 @@ import org.bukkit.material.MaterialData;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static kr.rvs.mclibrary.bukkit.MCUtils.colorize;
 
@@ -89,10 +88,12 @@ public class ItemBuilder {
 
     public ItemBuilder lore(List<String> lores) {
         Validate.notNull(lores);
-        metaProcessors.add(meta ->
-                meta.setLore(lores.parallelStream()
-                        .map(MCUtils::colorize)
-                        .collect(Collectors.toList())));
+        metaProcessors.add(meta -> {
+            for (int i = 0; i < lores.size(); i++) {
+                lores.set(i, MCUtils.colorize("&f" + lores.get(i)));
+            }
+            meta.setLore(lores);
+        });
         return this;
     }
 

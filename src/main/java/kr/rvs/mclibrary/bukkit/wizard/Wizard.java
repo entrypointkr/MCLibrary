@@ -14,7 +14,7 @@ import java.util.function.Consumer;
 /**
  * Created by Junhyeong Lim on 2017-10-06.
  */
-public abstract class Wizard<D, C> {
+public abstract class Wizard<D, C> { // TODO: Rewrite
     protected static final EntityHashMap<Wizard<?, ?>> wizardMap = new EntityHashMap<>();
     protected final Player player;
     protected Consumer<C> callback;
