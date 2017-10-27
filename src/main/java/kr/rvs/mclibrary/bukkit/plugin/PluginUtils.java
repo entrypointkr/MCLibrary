@@ -4,10 +4,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * Created by Junhyeong Lim on 2017-10-08.
@@ -26,8 +25,14 @@ public class PluginUtils {
     }
 
     public static Set<Plugin> getDependPlugins(Plugin superPlugin) {
-        return Stream.of(Bukkit.getPluginManager().getPlugins())
-                .filter(element -> isDepend(superPlugin, element))
-                .collect(Collectors.toSet());
+        Set<Plugin> ret = new HashSet<>(); // Can't use stream for Cauldron support
+        for (Plugin plugin : Bukkit.getPluginManager().getPlugins()) {
+            if (isDepend(superPlugin, plugin))
+                ret.add(plugin);
+        }
+        return ret;
+//        return Stream.of(Bukkit.getPluginManager().getPlugins())
+//                .filter(element -> isDepend(superPlugin, element))
+//                .collect(Collectors.toSet());
     }
 }

@@ -1,10 +1,12 @@
 package kr.rvs.mclibrary.bukkit.yaml;
 
+import kr.rvs.mclibrary.Static;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.Reader;
 import java.util.function.Consumer;
 
@@ -14,13 +16,25 @@ import java.util.function.Consumer;
 public class Config {
     private final FileConfiguration config;
 
+    public Config(File file) {
+        this(YamlConfiguration.loadConfiguration(ensure(file)));
+    }
+
     public Config(FileConfiguration config) {
         this.config = config;
         config.options().copyDefaults(true);
     }
 
-    public Config(File file) {
-        this(YamlConfiguration.loadConfiguration(file));
+    public static File ensure(File file) {
+        file.getParentFile().mkdirs();
+        if (!file.isFile()) {
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                Static.log(e);
+            }
+        }
+        return file;
     }
 
     public Config(Reader reader) {
