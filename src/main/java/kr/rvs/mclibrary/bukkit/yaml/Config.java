@@ -16,6 +16,7 @@ public class Config {
 
     public Config(FileConfiguration config) {
         this.config = config;
+        config.options().copyDefaults(true);
     }
 
     public Config(File file) {
