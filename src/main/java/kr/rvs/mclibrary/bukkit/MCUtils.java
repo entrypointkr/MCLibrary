@@ -20,7 +20,7 @@ import java.util.List;
 public class MCUtils {
     private static String packageVersion;
 
-    public static String getNMSPackageVersion() {
+    public static String getBukkitInternalPackageVersion() {
         if (packageVersion == null) {
             String packageName = Bukkit.getServer().getClass().getName();
             int point = packageName.indexOf(".v") + 1;
@@ -32,7 +32,7 @@ public class MCUtils {
     }
 
     public static String getNMSClassName(String className) {
-        return "net.minecraft.server." + getNMSPackageVersion() + "." + className;
+        return "net.minecraft.server." + getBukkitInternalPackageVersion() + "." + className;
     }
 
     public static Class<?> getNMSClass(String name) {
@@ -44,7 +44,7 @@ public class MCUtils {
     }
 
     public static String getOBCClassName(String className) {
-        return "org.bukkit.craftbukkit." + getNMSPackageVersion() + "." + className;
+        return "org.bukkit.craftbukkit." + getBukkitInternalPackageVersion() + "." + className;
     }
 
     public static Class<?> getOBCClass(String name) {
