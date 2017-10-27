@@ -47,8 +47,7 @@ public class Config {
     }
 
     public void save(File file) {
-        save(file, e -> {
-        });
+        save(file, Exception::printStackTrace);
     }
 
     public FileConfiguration getInternalConfig() {
