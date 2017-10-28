@@ -15,6 +15,9 @@ import java.io.IOException;
 public class LocationTypeAdapter extends TypeAdapter<Location> {
     @Override
     public void write(JsonWriter out, Location value) throws IOException {
+        if (value == null)
+            return;
+
         out.beginObject();
         out.name("world").value(value.getWorld().getName());
         out.name("x").value(value.getX());
@@ -27,7 +30,6 @@ public class LocationTypeAdapter extends TypeAdapter<Location> {
 
     @Override
     public Location read(JsonReader in) throws IOException {
-        in.beginObject();
         World world = null;
         Double x = null;
         Double y = null;
@@ -35,6 +37,7 @@ public class LocationTypeAdapter extends TypeAdapter<Location> {
         Double yaw = null;
         Double pitch = null;
 
+        in.beginObject();
         while (in.hasNext()) {
             switch (in.nextName()) {
                 case "world":
