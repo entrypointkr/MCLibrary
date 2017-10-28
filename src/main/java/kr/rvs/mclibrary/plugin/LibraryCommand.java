@@ -167,14 +167,15 @@ public class LibraryCommand {
             type = CommandType.PLAYER,
             args = "serialize",
             usage = "[파일이름]",
-            desc = "손에 든 아이템을 plugins/MCLibrary 폴더에 파일 형태로 직렬화합니다.",
+            desc = "손에 든 아이템을 plugins/MCLibrary/items 폴더에 파일 형태로 직렬화합니다.",
             perm = "mclibrary.serialize"
     )
     @SuppressWarnings("deprecation")
     public void serialize(CommandSenderWrapper sender, CommandArguments args) throws IOException {
         ItemStack item = sender.getItemInHandWithThrow("손에 아이템을 들어주세요.");
-        String fileName = args.get(0, "serialize") + ".json";
+        String fileName = "items/" + args.get(0, "serialize") + ".json";
         File file = new File(MCLibrary.getPlugin().getDataFolder(), fileName);
         GsonUtils.write(file, item, ex -> sender.sendMessage("에러가 발생했습니다." + ex.toString()));
+        sender.sendMessage("다음 파일에 저장됩니다. " + file.getPath());
     }
 }
