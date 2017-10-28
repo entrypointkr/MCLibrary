@@ -41,8 +41,9 @@ public class GsonUtils {
         if (file.isFile()) {
             try {
                 ret = read(gson, new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF-8")), type);
-            } catch (UnsupportedEncodingException | FileNotFoundException e) {
-                Static.log(e);
+            } catch (IOException e) {
+                Static.log("Error while read " + file.getName());
+                e.printStackTrace();
             }
         }
 

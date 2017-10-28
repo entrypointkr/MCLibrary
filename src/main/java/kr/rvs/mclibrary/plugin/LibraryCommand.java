@@ -15,6 +15,7 @@ import kr.rvs.mclibrary.bukkit.inventory.gui.handler.ClickHandler;
 import kr.rvs.mclibrary.bukkit.inventory.gui.handler.EventCancelHandler;
 import kr.rvs.mclibrary.bukkit.item.ItemBuilder;
 import kr.rvs.mclibrary.bukkit.player.CommandSenderWrapper;
+import kr.rvs.mclibrary.gson.GsonUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -29,6 +30,10 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.ItemStack;
+
+import java.io.File;
+import java.io.IOException;
 
 /**
  * Created by Junhyeong Lim on 2017-09-20.
@@ -156,5 +161,20 @@ public class LibraryCommand {
         } else {
             throw new InvalidUsageException(this, "올바른 플레이어명을 입력하세요.");
         }
+    }
+
+    @Command(
+            type = CommandType.PLAYER,
+            args = "serialize",
+            usage = "[파일이름]",
+            desc = "손에 든 아이템을 plugins/MCLibrary 폴더에 파일 형태로 직렬화합니다.",
+            perm = "mclibrary.serialize"
+    )
+    @SuppressWarnings("deprecation")
+    public void serialize(CommandSenderWrapper sender, CommandArguments args) throws IOException {
+        ItemStack item = sender.getPlayer().getItemInHand();
+        String fileName = args.get(0, "serialize") + ".json";
+        File file = new File(MCLibrary.getPlugin().getDataFolder(), fileName);
+        GsonUtils.write(file, item, ex -> sender.sendMessage("에러가 발생했습니다." + ex.toString()));
     }
 }
