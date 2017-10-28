@@ -8,6 +8,7 @@ import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Server;
+import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.command.SimpleCommandMap;
@@ -28,6 +29,12 @@ import java.util.logging.Logger;
  * Created by Junhyeong Lim on 2017-07-26.
  */
 public class MockFactory extends Mockito {
+    public static World createMockWorld() {
+        World world = mock(World.class);
+        when(world.getName()).thenReturn("world");
+        return world;
+    }
+
     public static Server createMockServer() {
         ConsoleCommandSender commandSender = (ConsoleCommandSender) createCommandSender();
         Server server = mock(Server.class);
@@ -39,6 +46,8 @@ public class MockFactory extends Mockito {
                 .when(server).createInventory(any(), anyInt(), anyString());
         when(server.getBukkitVersion()).thenReturn("1.0");
         when(server.getConsoleSender()).thenReturn(commandSender);
+        doAnswer(invocation -> createMockWorld())
+                .when(server).getWorld(anyString());
 
         return server;
     }

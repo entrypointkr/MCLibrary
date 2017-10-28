@@ -6,6 +6,7 @@ import kr.rvs.mclibrary.mock.MockItemMeta;
 import kr.rvs.mclibrary.struct.Injector;
 import kr.rvs.mclibrary.struct.ItemFactory;
 import kr.rvs.mclibrary.struct.MockFactory;
+import org.bukkit.Location;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.ItemStack;
@@ -46,9 +47,19 @@ public class GsonTest extends Assert {
             throw new AssertionError(e);
         });
 
-        System.out.println("Serialized: " + writer.toString());
         GUISignature deserialized = GsonUtils.read(new StringReader(writer.toString()), GUISignature.class);
-        System.out.println("Deserialized: " + deserialized);
         assertEquals(signature, deserialized);
+    }
+
+    @Test
+    public void location() {
+        Location location = new Location(MockFactory.createMockWorld(), 0, 0, 0);
+        StringWriter writer = new StringWriter();
+        GsonUtils.write(writer, location, AssertionError::new);
+
+        Location convert = GsonUtils.read(new StringReader(writer.toString()), Location.class);
+        assertTrue(location.getWorld().getName().equals(convert.getWorld().getName()));
+        convert.setWorld(location.getWorld());
+        assertEquals(location, convert);
     }
 }
