@@ -45,6 +45,7 @@ public class CommandSenderWrapper {
         return new PlayerWrapper(getPlayer());
     }
 
+    @SuppressWarnings("deprecation")
     public ItemStack getItemInHand() {
         ItemStack ret = null;
         Player player = getPlayer();
