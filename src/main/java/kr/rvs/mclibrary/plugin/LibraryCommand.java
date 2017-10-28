@@ -172,7 +172,7 @@ public class LibraryCommand {
     )
     @SuppressWarnings("deprecation")
     public void serialize(CommandSenderWrapper sender, CommandArguments args) throws IOException {
-        ItemStack item = sender.getPlayer().getItemInHand();
+        ItemStack item = sender.getItemInHandWithThrow("손에 아이템을 들어주세요.");
         String fileName = args.get(0, "serialize") + ".json";
         File file = new File(MCLibrary.getPlugin().getDataFolder(), fileName);
         GsonUtils.write(file, item, ex -> sender.sendMessage("에러가 발생했습니다." + ex.toString()));
