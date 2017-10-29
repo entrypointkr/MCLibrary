@@ -19,9 +19,10 @@ public class MapCommand extends LinkedHashMap<String, ICommand> implements IComm
     @Override
     public void execute(CommandSenderWrapper wrapper, CommandArguments args) throws CommandException {
         String arg = args.get(0, "");
-        ICommand command = getOrDefault(arg, getBaseCommand());
+        ICommand baseCommand = getBaseCommand();
+        ICommand command = getOrDefault(arg, baseCommand);
         if (command != null) {
-            if (!command.equals(getBaseCommand()))
+            if (!command.equals(baseCommand))
                 args.remove(0);
             if (command instanceof CommandInfo)
                 args.setLastCommand((CommandInfo) command);
