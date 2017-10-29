@@ -1,7 +1,11 @@
 package kr.rvs.mclibrary.bukkit.inventory.gui.factory;
 
 import kr.rvs.mclibrary.bukkit.inventory.event.GUIClickEvent;
-import kr.rvs.mclibrary.bukkit.inventory.gui.*;
+import kr.rvs.mclibrary.bukkit.inventory.gui.GUI;
+import kr.rvs.mclibrary.bukkit.inventory.gui.GUIClickHandler;
+import kr.rvs.mclibrary.bukkit.inventory.gui.GUIEvent;
+import kr.rvs.mclibrary.bukkit.inventory.gui.GUIHandler;
+import kr.rvs.mclibrary.bukkit.inventory.gui.InventoryFactory;
 import kr.rvs.mclibrary.bukkit.inventory.gui.handler.DelegateClickHandler;
 import kr.rvs.mclibrary.bukkit.inventory.gui.handler.EventCancelHandler;
 import kr.rvs.mclibrary.bukkit.item.ItemBuilder;
@@ -62,7 +66,7 @@ public class PagingInventoryProcessor extends InventoryProcessor {
     @Override
     public void initialize(GUI gui) {
         int size = gui.getSignature().getSize();
-        Validate.isTrue(size > 18);
+        Validate.isTrue(size >= 18);
         int lastKey = gui.getSignature().getContents().lastKey();
         this.size = size - 9;
         this.maxPage = lastKey / this.size + (lastKey + 1 % this.size > 0 ? 1 : 0);
