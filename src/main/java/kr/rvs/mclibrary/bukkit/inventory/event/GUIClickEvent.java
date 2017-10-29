@@ -29,7 +29,6 @@ public class GUIClickEvent extends InventoryClickEvent {
     private final GUI gui;
     private int rawSlot;
     private int slot;
-    private boolean ignore = false;
 
     public GUIClickEvent(InventoryClickEvent delegate, GUI gui) {
         super(delegate.getView(), delegate.getSlotType(), delegate.getRawSlot(), delegate.getClick(), delegate.getAction(), delegate.getHotbarButton());
@@ -72,14 +71,6 @@ public class GUIClickEvent extends InventoryClickEvent {
 
     public void setSlot(int slot) {
         this.slot = slot;
-    }
-
-    public boolean isIgnore() {
-        return ignore;
-    }
-
-    public void setIgnore(boolean ignore) {
-        this.ignore = ignore;
     }
 
     public Optional<Player> getPlayer() {

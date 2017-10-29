@@ -130,7 +130,7 @@ public class PagingInventoryProcessor extends InventoryProcessor {
                     e.setRawSlot(e.getRawSlot() + (currentPage - 1) * size);
                 }
                 if (slot >= size)
-                    e.setIgnore(true);
+                    event.setConsume(true);
             });
         }
     }
