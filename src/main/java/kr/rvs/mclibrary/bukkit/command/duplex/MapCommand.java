@@ -18,10 +18,11 @@ import java.util.stream.Collectors;
 public class MapCommand extends LinkedHashMap<String, ICommand> implements ICommand {
     @Override
     public void execute(CommandSenderWrapper wrapper, CommandArguments args) throws CommandException {
-        String arg = args.get(0);
-        ICommand command = arg != null ? get(arg) : getBaseCommand();
+        String arg = args.get(0, "");
+        ICommand command = getOrDefault(arg, getBaseCommand());
         if (command != null) {
-            args.remove(0);
+            if (!command.equals(getBaseCommand()))
+                args.remove(0);
             if (command instanceof CommandInfo)
                 args.setLastCommand((CommandInfo) command);
             command.execute(wrapper, args);
