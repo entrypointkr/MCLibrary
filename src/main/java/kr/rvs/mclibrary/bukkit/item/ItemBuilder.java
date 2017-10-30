@@ -12,6 +12,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.material.MaterialData;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -65,6 +66,12 @@ public class ItemBuilder {
         this(wrapped.getHandle());
     }
 
+    private void loreFormatting(List<String> lore) {
+        for (int i = 0; i < lore.size(); i++) {
+            lore.set(i, MCUtils.colorize("&f" + lore.get(i)));
+        }
+    }
+
     public ItemBuilder amount(int amount) {
         this.amount = amount;
         return this;
@@ -88,11 +95,12 @@ public class ItemBuilder {
 
     public ItemBuilder lore(List<String> lores) {
         Validate.notNull(lores);
+        loreFormatting(lores);
         metaProcessors.add(meta -> {
-            for (int i = 0; i < lores.size(); i++) {
-                lores.set(i, MCUtils.colorize("&f" + lores.get(i)));
-            }
-            meta.setLore(lores);
+            List<String> lore = meta.getLore() != null
+                    ? meta.getLore() : new ArrayList<>();
+            lore.addAll(lores);
+            meta.setLore(lore);
         });
         return this;
     }
@@ -100,6 +108,12 @@ public class ItemBuilder {
     public ItemBuilder lore(String... lores) {
         Validate.notNull(lores);
         lore(Arrays.asList(lores));
+        return this;
+    }
+
+    public ItemBuilder setLore(List<String> lores) {
+        metaProcessors.add(meta -> meta.setLore(new ArrayList<>()));
+        lore(lores);
         return this;
     }
 
