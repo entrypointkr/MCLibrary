@@ -58,7 +58,7 @@ public class PlayerUtils {
 
     public static int getMaxHealth(Player player) {
         try {
-            Method maxHealthMethod = Player.class.getMethod("getMaxHealth");
+            Method maxHealthMethod = Damageable.class.getMethod("getMaxHealth");
             return (int) maxHealthMethod.invoke(player);
         } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
             throw new IllegalStateException(e);
