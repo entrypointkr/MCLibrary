@@ -2,4 +2,4 @@ main: @mainPackage@.@pluginName@
 name: @pluginName@
 version: @version@
 author: @author@
-softdepend: [ProtocolLib, Multiverse-Core, MultiWorld]
+softdepend: [ProtocolLib, Multiverse-Core, MultiWorld, Vault]
