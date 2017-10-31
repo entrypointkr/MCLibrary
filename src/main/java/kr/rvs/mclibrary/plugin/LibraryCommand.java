@@ -15,6 +15,7 @@ import kr.rvs.mclibrary.bukkit.inventory.gui.handler.ClickHandler;
 import kr.rvs.mclibrary.bukkit.inventory.gui.handler.EventCancelHandler;
 import kr.rvs.mclibrary.bukkit.item.ItemBuilder;
 import kr.rvs.mclibrary.bukkit.player.CommandSenderWrapper;
+import kr.rvs.mclibrary.bukkit.player.PlayerUtils;
 import kr.rvs.mclibrary.gson.GsonUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -155,7 +156,7 @@ public class LibraryCommand {
     public void heal(CommandSenderWrapper wrapper, CommandArguments args) {
         Player player = args.size() > 0 ? args.getPlayer(0) : wrapper.getPlayer();
         if (player != null) {
-            player.setHealth(player.getMaxHealth());
+            PlayerUtils.setMaxHealth(player, PlayerUtils.getMaxHealth(player));
             player.setFoodLevel(30);
             wrapper.sendMessage("완료.");
         } else {

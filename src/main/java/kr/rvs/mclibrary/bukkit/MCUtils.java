@@ -13,8 +13,6 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 
 /**
  * Created by Junhyeong Lim on 2017-07-28.
@@ -103,13 +101,5 @@ public class MCUtils {
 
     public static boolean isEnabled(String name) {
         return Bukkit.getPluginManager().isPluginEnabled(name);
-    }
-
-    public static Optional<Player> getPlayerOptional(String name) {
-        return Optional.ofNullable(Bukkit.getPlayer(name));
-    }
-
-    public static Optional<Player> getPlayerOptional(UUID uuid) {
-        return Optional.ofNullable(Bukkit.getPlayer(uuid));
     }
 }

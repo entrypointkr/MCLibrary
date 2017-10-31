@@ -31,4 +31,8 @@ public class PlayerWrapper {
     public void sendBaseComponent(BaseComponent component) {
         PlayerUtils.sendBaseComponent(player, component);
     }
+
+    public int getMaxHealth() {
+        return PlayerUtils.getMaxHealth(player);
+    }
 }

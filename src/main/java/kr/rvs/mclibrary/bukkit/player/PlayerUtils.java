@@ -5,10 +5,12 @@ import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.chat.ComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.entity.Damageable;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,6 +18,9 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.UUID;
+import java.util.stream.Stream;
 
 /**
  * Created by Junhyeong Lim on 2017-07-28.
@@ -109,6 +114,36 @@ public class PlayerUtils {
         }
 
         return false;
+    }
+
+    public static Optional<Player> getPlayerOptional(String name) {
+        return Optional.ofNullable(Bukkit.getPlayer(name));
+    }
+
+    public static Optional<Player> getPlayerOptional(UUID uuid) {
+        return Optional.ofNullable(Bukkit.getPlayer(uuid));
+    }
+
+    public static int getMaxHealth(Player player) {
+        try {
+            Method maxHealthMethod = Player.class.getMethod("getMaxHealth");
+            return (int) maxHealthMethod.invoke(player);
+        } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
+            throw new IllegalStateException(e);
+        }
+    }
+
+    public static void setMaxHealth(Player player, int maxHealth) {
+        Optional<Method> setMaxHealthMethod = Stream.of(Damageable.class.getDeclaredMethods())
+                .filter(method -> method.getName().equals("setMaxHealth"))
+                .findFirst();
+        setMaxHealthMethod.ifPresent(method -> {
+            try {
+                method.invoke(player, maxHealth);
+            } catch (IllegalAccessException | InvocationTargetException e) {
+                throw new IllegalStateException(e);
+            }
+        });
     }
 
     public static void sendBaseComponent(Player player, BaseComponent component) {
