@@ -25,8 +25,7 @@ public class ModernHelpExecutor extends AbstractHelpExecutor {
     public void sendCommandInfo(CommandSenderWrapper wrapper, String args, CommandInfo commandInfo) {
         CommandSender nativeSender = wrapper.getSender();
         String usage = commandInfo.usage();
-        String perm = commandInfo.perm();
-        boolean hasPerm = StringUtils.isEmpty(perm) || nativeSender.hasPermission(perm);
+        boolean hasPerm = hasPerm(commandInfo, nativeSender);
         ChatColor color = hasPerm ? ChatColor.GOLD : ChatColor.RED;
         String desc = commandInfo.desc();
         StringBuilder builder = new StringBuilder()

@@ -4,6 +4,8 @@ import kr.rvs.mclibrary.bukkit.command.CommandArguments;
 import kr.rvs.mclibrary.bukkit.command.CommandInfo;
 import kr.rvs.mclibrary.bukkit.command.ICommand;
 import kr.rvs.mclibrary.bukkit.player.CommandSenderWrapper;
+import org.apache.commons.lang.StringUtils;
+import org.bukkit.command.CommandSender;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -75,10 +77,19 @@ public abstract class AbstractHelpExecutor implements ICommand {
         return storageList.size() / line + (storageList.size() % line > 0 ? 1 : 0);
     }
 
+    protected boolean hasPerm(CommandInfo info, CommandSender sender) {
+        return StringUtils.isEmpty(info.perm()) || sender.hasPermission(info.perm());
+    }
+
     @Override
     public void execute(CommandSenderWrapper wrapper, CommandArguments args) {
         checkDiff();
 
+        // Sort
+        CommandSender sender = wrapper.getSender();
+        List<CommandStorage> storageList = new ArrayList<>(this.storageList);
+        storageList.sort((o1, o2) ->
+                Boolean.compare(hasPerm(o2.info, sender), hasPerm(o1.info, sender)));
         int maxPage = getMaxPage();
         int currPage = Math.min(Math.max(args.getInt(0, 1), 1), maxPage);
         int start = (currPage - 1) * line;
