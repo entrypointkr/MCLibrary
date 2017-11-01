@@ -117,6 +117,10 @@ public class ItemBuilder {
         return this;
     }
 
+    public ItemBuilder setLore(String... lores) {
+        return setLore(Arrays.asList(lores));
+    }
+
     public ItemBuilder enchant(Object... args) {
         metaProcessors.add(meta ->
                 new VarargsParser(args).parse(section ->

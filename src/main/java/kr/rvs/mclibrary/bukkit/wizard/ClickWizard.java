@@ -3,85 +3,65 @@ package kr.rvs.mclibrary.bukkit.wizard;
 import kr.rvs.mclibrary.bukkit.MCUtils;
 import kr.rvs.mclibrary.bukkit.event.SafePlayerInteractEvent;
 import kr.rvs.mclibrary.bukkit.location.LocationUtils;
-import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
-import org.bukkit.util.Vector;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 /**
- * Created by Junhyeong Lim on 2017-10-06.
+ * Created by Junhyeong Lim on 2017-11-01.
  */
-public class ClickWizard extends Wizard<List<Block>, List<Block>> {
-    public static final String COUNT = "%count%";
-    public static final String REMAIN_COUNT = "%remain_count";
-    public static final String LOCATION = "%location%";
-    private final String remainMessage;
+public class ClickWizard extends ListenerWizard<List<Block>> {
+    private final List<Block> data = new ArrayList<>();
     private final int count;
-    private int remainCount = 0;
-    private Location lastLocation = null;
+    private final String selectMessage;
+    private final String endMessage;
 
-    public ClickWizard(Player player, String startMessage, String completeMessage, String remainMessage, int count) {
-        super(player, new ArrayList<>(), startMessage, completeMessage);
-        this.remainMessage = remainMessage;
+    public ClickWizard(Player player, Consumer<List<Block>> callback, int count, String selectMessage, String endMessage) {
+        super(player, callback);
         this.count = count;
-        this.remainCount = count;
+        this.selectMessage = MCUtils.colorize(selectMessage);
+        this.endMessage = MCUtils.colorize(endMessage);
     }
 
-    public ClickWizard(Player player, int count) {
-        this(
-                player,
-                "&a블럭을 &f" + COUNT + " &a회 클릭하세요.",
-                "&a완료했습니다.",
-                String.format("&f%s &a회 남았습니다 (%s)", REMAIN_COUNT, LOCATION),
-                count
+    public ClickWizard(Player player, Consumer<List<Block>> callback, int count) {
+        this(player, callback, count,
+                "&f{0} &a회 남았습니다. {1}",
+                "&a완료했습니다."
         );
     }
 
-    private String formatting(String target, int remainCount, Vector vector) {
-        return MCUtils.colorize(target
-                .replace(COUNT, String.valueOf(count))
-                .replace(REMAIN_COUNT, String.valueOf(remainCount))
-                .replace(LOCATION, LocationUtils.toString(vector)));
-    }
-
     @Override
-    protected void process(List<Block> data) {
-        registerEvents(new Listener() {
+    protected void process() {
+        registerListener(new Listener() {
             @EventHandler
             public void onClick(SafePlayerInteractEvent e) {
                 PlayerInteractEvent event = e.getDelegate();
                 if (e.hasGetHandMethod() && event.getHand() != EquipmentSlot.HAND
-                        || !event.getPlayer().equals(player))
+                        || !event.getPlayer().equals(getPlayer()))
                     return;
 
                 Player player = event.getPlayer();
                 Block clickedBlock = event.getClickedBlock();
                 if (clickedBlock != null && !clickedBlock.isEmpty()) {
                     data.add(clickedBlock);
-                    remainCount = count - data.size();
-                    lastLocation = clickedBlock.getLocation();
-                    if (remainCount <= 0) {
-                        release(data);
-                        HandlerList.unregisterAll(this);
+                    if (data.size() >= count) {
+                        release();
+                        getCallback().accept(data);
+                        player.sendMessage(endMessage);
                     } else {
-                        player.sendMessage(messageCaught(remainMessage));
+                        player.sendMessage(MessageFormat.format(selectMessage, count - data.size(),
+                                LocationUtils.toString(clickedBlock.getLocation().toVector())));
                     }
-                    event.setCancelled(true);
                 }
             }
         });
-    }
-
-    @Override
-    protected String messageCaught(String message) {
-        return formatting(message, remainCount, lastLocation != null ? lastLocation.toVector() : null);
     }
 }

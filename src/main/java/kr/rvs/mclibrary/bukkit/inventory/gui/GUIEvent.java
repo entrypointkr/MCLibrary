@@ -8,16 +8,18 @@ import java.util.Optional;
 /**
  * Created by Junhyeong Lim on 2017-10-06.
  */
-public class GUIEvent<E extends InventoryEvent> implements Cancellable {
+public class GUIEvent<E extends InventoryEvent> implements Cancellable { // TODO: Remove
+    private final GUI gui;
     private final E event;
     private boolean consume = false;
 
-    public GUIEvent(E event) {
+    public GUIEvent(GUI gui, E event) {
+        this.gui = gui;
         this.event = event;
     }
 
     public GUIEvent(GUIEvent<E> event) {
-        this.event = event.getEvent();
+        this(event.getGui(), event.getEvent());
         this.consume = event.isConsume();
         setCancelled(event.isCancelled());
     }
@@ -45,10 +47,14 @@ public class GUIEvent<E extends InventoryEvent> implements Cancellable {
         return event;
     }
 
+    public GUI getGui() {
+        return gui;
+    }
+
     @SuppressWarnings("unchecked")
     public <T extends InventoryEvent> Optional<T> getEvent(Class<T> eventClass) {
         E event = getEvent();
-        return eventClass.isAssignableFrom(event.getClass()) ?
+        return eventClass.isInstance(event) ?
                 Optional.ofNullable((T) event) :
                 Optional.empty();
     }

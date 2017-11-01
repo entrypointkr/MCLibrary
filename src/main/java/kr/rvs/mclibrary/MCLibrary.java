@@ -77,7 +77,7 @@ public class MCLibrary extends JavaPlugin {
         getCommandManager().registerCommand(LibraryCommand.class, this);
 
         // Metrics
-        File configFile = new File(new File(plugin.getDataFolder().getParentFile(), "bStats"), "config.yml");
+        File configFile = new File(new File(getPlugin().getDataFolder().getParentFile(), "bStats"), "config.yml");
         YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
         if (!config.getBoolean("enabled", true)) {
             config.set("enabled", true);

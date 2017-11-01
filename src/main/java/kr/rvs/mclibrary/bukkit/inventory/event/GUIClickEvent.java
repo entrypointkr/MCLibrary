@@ -43,21 +43,23 @@ public class GUIClickEvent extends InventoryClickEvent {
             return;
 
         ItemWrapper clickedItem = new ItemWrapper(getInventory().getItem(getSlot()));
-        if (clickedItem.isNotEmpty() && !messageItemMap.containsKey(getSlot())) {
-            messageItemMap.put(getSlot(), clickedItem.getHandle());
-            ItemStack newItem = new ItemBuilder(clickedItem)
+        if (clickedItem.isNotEmpty()) {
+            if (!messageItemMap.containsKey(getSlot())) {
+                messageItemMap.put(getSlot(), clickedItem.getHandle());
+
+                // Delay & Restore
+                Bukkit.getScheduler().runTaskLater(MCLibrary.getPlugin(), () -> {
+                    messageItemMap.getOptional(getSlot()).ifPresent(item -> {
+                        getInventory().setItem(getSlot(), item);
+                        messageItemMap.remove(getSlot());
+                    });
+                }, tick);
+            }
+            ItemStack newItem = new ItemBuilder(clickedItem.getHandle())
                     .display(title)
-                    .lore(messages).build();
+                    .setLore(messages).build();
 
             getInventory().setItem(getSlot(), newItem);
-
-            // Delay & Restore
-            Bukkit.getScheduler().runTaskLater(MCLibrary.getPlugin(), () -> {
-                messageItemMap.getOptional(getSlot()).ifPresent(item -> {
-                    getInventory().setItem(getSlot(), item);
-                    messageItemMap.remove(getSlot());
-                });
-            }, tick);
         }
     }
 

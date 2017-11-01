@@ -1,65 +1,46 @@
 package kr.rvs.mclibrary.bukkit.wizard;
 
-import kr.rvs.mclibrary.MCLibrary;
-import kr.rvs.mclibrary.bukkit.MCUtils;
 import kr.rvs.mclibrary.bukkit.collection.EntityHashMap;
-import org.apache.commons.lang.Validate;
-import org.bukkit.Bukkit;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Listener;
 
+import java.util.Optional;
 import java.util.function.Consumer;
 
 /**
- * Created by Junhyeong Lim on 2017-10-06.
+ * Created by Junhyeong Lim on 2017-11-01.
  */
-public abstract class Wizard<D, C> { // TODO: Rewrite
-    protected static final EntityHashMap<Wizard<?, ?>> wizardMap = new EntityHashMap<>();
-    protected final Player player;
-    protected Consumer<C> callback;
-    protected final D data;
-    protected final String startMessage;
-    protected final String completeMessage;
+public abstract class Wizard<C> {
+    private static final EntityHashMap<Wizard<?>> WIZARD_MAP = new EntityHashMap<>();
+    private final Player player;
+    private final Consumer<C> callback;
 
-    public Wizard(Player player, D data, String startMessage, String completeMessage) {
+    public Wizard(Player player, Consumer<C> callback) {
         this.player = player;
-        this.data = data;
-        this.startMessage = MCUtils.colorize(startMessage);
-        this.completeMessage = MCUtils.colorize(completeMessage);
-    }
-
-    public void start(Consumer<C> callback) throws Exception {
-        Validate.isTrue(!wizardMap.containsKey(player), "Already has a wizard");
-
         this.callback = callback;
-
-        player.sendMessage(messageCaught(startMessage));
-        process(data);
-        wizardMap.put(player, this);
     }
 
-    public void start(Consumer<C> callback, CommandSender sender) {
-        try {
-            start(callback);
-        } catch (Exception e) {
-            sender.sendMessage("&c이미 진행중입니다.");
-        }
+    protected Player getPlayer() {
+        return player;
     }
 
-    protected abstract void process(D data);
-
-    protected String messageCaught(String message) {
-        return message; // Hook
+    protected Consumer<C> getCallback() {
+        return callback;
     }
 
-    protected void release(C callbackData) {
-        wizardMap.remove(player);
-        callback.accept(callbackData);
-        player.sendMessage(messageCaught(completeMessage));
+    protected abstract void process();
+
+    protected abstract void release();
+
+    public void start(String message) {
+        Player player = getPlayer();
+        Optional.ofNullable(WIZARD_MAP.get(player)).ifPresent(Wizard::release);
+        WIZARD_MAP.put(player, this);
+
+        process();
+        player.sendMessage(message);
     }
 
-    protected void registerEvents(Listener listener) {
-        Bukkit.getPluginManager().registerEvents(listener, MCLibrary.getPlugin());
+    public void start() {
+        start("시작되었습니다.");
     }
 }

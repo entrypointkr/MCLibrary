@@ -70,7 +70,7 @@ public class MockFactory extends Mockito {
         return sender;
     }
 
-    public static Player createPlayer() {
+    public static Player createPlayer(String name) {
         Player player = mock(Player.class);
         when(player.getOpenInventory()).thenReturn(createInventoryView());
         doAnswer(invocation -> {
@@ -92,7 +92,12 @@ public class MockFactory extends Mockito {
             System.out.println(builder.toString());
             return null;
         }).when(player).openInventory(any(Inventory.class));
+        when(player.getName()).thenReturn(name);
         return player;
+    }
+
+    public static Player createPlayer() {
+        return createPlayer("EntryPoint");
     }
 
     public static InventoryView createInventoryView() {
