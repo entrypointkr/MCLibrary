@@ -14,6 +14,7 @@ import java.util.List;
 /**
  * Created by Junhyeong Lim on 2017-10-31.
  */
+@SuppressWarnings("deprecation")
 public class VaultHolder extends Permission implements Economy { // Chat abstract?
     private static final VaultHolder INSTANCE = new VaultHolder();
 
@@ -67,7 +68,7 @@ public class VaultHolder extends Permission implements Economy { // Chat abstrac
 
     @Override
     public boolean hasAccount(OfflinePlayer offlinePlayer) {
-        return getEconomy().hasAccount(offlinePlayer);
+        return getEconomy().hasAccount(offlinePlayer.getName());
     }
 
     @Override
@@ -78,7 +79,7 @@ public class VaultHolder extends Permission implements Economy { // Chat abstrac
 
     @Override
     public boolean hasAccount(OfflinePlayer offlinePlayer, String s) {
-        return getEconomy().hasAccount(offlinePlayer, s);
+        return getEconomy().hasAccount(offlinePlayer.getName(), s);
     }
 
     @Override
@@ -89,7 +90,7 @@ public class VaultHolder extends Permission implements Economy { // Chat abstrac
 
     @Override
     public double getBalance(OfflinePlayer offlinePlayer) {
-        return getEconomy().getBalance(offlinePlayer);
+        return getEconomy().getBalance(offlinePlayer.getName());
     }
 
     @Override
@@ -100,7 +101,7 @@ public class VaultHolder extends Permission implements Economy { // Chat abstrac
 
     @Override
     public double getBalance(OfflinePlayer offlinePlayer, String s) {
-        return getEconomy().getBalance(offlinePlayer, s);
+        return getEconomy().getBalance(offlinePlayer.getName(), s);
     }
 
     @Override
@@ -111,7 +112,7 @@ public class VaultHolder extends Permission implements Economy { // Chat abstrac
 
     @Override
     public boolean has(OfflinePlayer offlinePlayer, double v) {
-        return getEconomy().has(offlinePlayer, v);
+        return getEconomy().has(offlinePlayer.getName(), v);
     }
 
     @Override
@@ -122,7 +123,7 @@ public class VaultHolder extends Permission implements Economy { // Chat abstrac
 
     @Override
     public boolean has(OfflinePlayer offlinePlayer, String s, double v) {
-        return getEconomy().has(offlinePlayer, s, v);
+        return getEconomy().has(offlinePlayer.getName(), s, v);
     }
 
     @Override
@@ -144,7 +145,7 @@ public class VaultHolder extends Permission implements Economy { // Chat abstrac
 
     @Override
     public EconomyResponse withdrawPlayer(OfflinePlayer offlinePlayer, String s, double v) {
-        return getEconomy().withdrawPlayer(offlinePlayer, s, v);
+        return getEconomy().withdrawPlayer(offlinePlayer.getName(), s, v);
     }
 
     @Override

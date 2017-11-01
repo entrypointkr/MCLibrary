@@ -89,7 +89,7 @@ public class InventoryUtils {
         return takeItem(holder.getInventory(), item, takeAmount);
     }
 
-    public static boolean hasSpace(Inventory inv, ItemStack item, int amount) {
+    public static int hasSpace(Inventory inv, ItemStack item) {
         int space = 0;
         for (int i = 0; i < inv.getSize(); i++) {
             ItemStack element = inv.getItem(i);
@@ -99,7 +99,15 @@ public class InventoryUtils {
                 space += item.getMaxStackSize() - element.getAmount();
             }
         }
-        return space >= amount;
+        return space;
+    }
+
+    public static int hasSpace(InventoryHolder holder, ItemStack item) {
+        return hasSpace(holder.getInventory(), item);
+    }
+
+    public static boolean hasSpace(Inventory inv, ItemStack item, int amount) {
+        return hasSpace(inv, item) >= amount;
     }
 
     public static boolean hasSpace(InventoryHolder holder, ItemStack item, int amount) {
