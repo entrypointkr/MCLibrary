@@ -14,11 +14,10 @@ public class RegionWizard extends Wizard<Region> {
     public RegionWizard(Player player, Consumer<Region> callback) {
         super(player, callback);
         this.wizard = new ClickWizard(player, blocks -> {
-            callback.accept(new Region(
+            release(new Region(
                     blocks.get(0).getLocation(),
                     blocks.get(1).getLocation()
             ));
-            release();
         }, 2);
     }
 

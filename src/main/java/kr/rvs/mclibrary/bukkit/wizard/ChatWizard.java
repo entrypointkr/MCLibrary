@@ -22,8 +22,7 @@ public class ChatWizard extends ListenerWizard<String> {
             public void onChat(AsyncPlayerChatEvent event) {
                 if (event.getPlayer().equals(getPlayer())) {
                     event.setCancelled(true);
-                    getCallback().accept(event.getMessage());
-                    release();
+                    release(event.getMessage());
                 }
             }
         });

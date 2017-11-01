@@ -53,8 +53,7 @@ public class ClickWizard extends ListenerWizard<List<Block>> {
                 if (clickedBlock != null && !clickedBlock.isEmpty()) {
                     data.add(clickedBlock);
                     if (data.size() >= count) {
-                        release();
-                        getCallback().accept(data);
+                        release(data);
                         player.sendMessage(endMessage);
                     } else {
                         player.sendMessage(MessageFormat.format(selectMessage, count - data.size(),

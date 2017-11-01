@@ -31,6 +31,11 @@ public abstract class Wizard<C> {
 
     protected abstract void release();
 
+    protected void release(C data) {
+        release();
+        getCallback().accept(data);
+    }
+
     public void start(String message) {
         Player player = getPlayer();
         Optional.ofNullable(WIZARD_MAP.get(player)).ifPresent(Wizard::release);
