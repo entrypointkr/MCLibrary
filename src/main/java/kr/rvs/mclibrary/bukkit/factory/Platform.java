@@ -1,6 +1,5 @@
 package kr.rvs.mclibrary.bukkit.factory;
 
-import kr.rvs.mclibrary.MCLibrary;
 import kr.rvs.mclibrary.bukkit.factory.packet.DefaultPacketFactory;
 import kr.rvs.mclibrary.bukkit.factory.packet.ModernPacketFactory;
 import kr.rvs.mclibrary.bukkit.factory.packet.PacketFactory;
@@ -14,7 +13,7 @@ public class Platform {
 
     public static PacketFactory getPacketFactory() {
         if (packetFactory == null) {
-            if (MCLibrary.getBukkitVersion().afterEquals(Version.V1_11))
+            if (Version.BUKKIT.afterEquals(Version.V1_11))
                 packetFactory = new ModernPacketFactory();
             else
                 packetFactory = new DefaultPacketFactory();

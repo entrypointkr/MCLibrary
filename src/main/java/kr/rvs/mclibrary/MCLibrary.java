@@ -13,7 +13,6 @@ import kr.rvs.mclibrary.gson.SettingManager;
 import kr.rvs.mclibrary.plugin.LibraryCommand;
 import kr.rvs.mclibrary.plugin.ServerHostnameGetter;
 import org.bstats.bukkit.Metrics;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
@@ -33,7 +32,6 @@ public class MCLibrary extends JavaPlugin {
     private static final CommandManager COMMAND_MANAGER = new CommandManager();
     private static final GsonManager GSON_MANAGER = new GsonManager();
     private static final SettingManager SETTING_MANAGER = new SettingManager();
-    private static final Version BUKKIT_VERSION = new Version(Bukkit.getBukkitVersion());
     private static String address = "unknown";
     private static Plugin plugin;
 
@@ -47,10 +45,6 @@ public class MCLibrary extends JavaPlugin {
 
     public static SettingManager getSettingManager() {
         return SETTING_MANAGER;
-    }
-
-    public static Version getBukkitVersion() {
-        return BUKKIT_VERSION;
     }
 
     public static Plugin getPlugin() {
@@ -69,6 +63,7 @@ public class MCLibrary extends JavaPlugin {
         configInit();
 
         // Function
+        Version.init(this);
         GUI.init(this);
         ServerHostnameGetter.init(this);
         LibraryCommand.init(this);

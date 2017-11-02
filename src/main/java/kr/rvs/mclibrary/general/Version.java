@@ -1,5 +1,8 @@
 package kr.rvs.mclibrary.general;
 
+import org.bukkit.Bukkit;
+import org.bukkit.plugin.Plugin;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -7,6 +10,7 @@ import java.util.regex.Pattern;
  * Created by Junhyeong Lim on 2017-08-27.
  */
 public class Version {
+    public static Version BUKKIT = new Version(1, 12, 2);
     public static final Version V1_11 = new Version(1, 11, 0);
     public static final Version V1_8 = new Version(1, 8, 0);
     private static final Pattern PATTERN = Pattern.compile("(\\d+)(?:\\.(\\d+))?(?:\\.(\\d+))?");
@@ -14,6 +18,10 @@ public class Version {
     private int major = 0;
     private int minor = 0;
     private int maintenance = 0;
+
+    public static void init(Plugin plugin) {
+        BUKKIT = new Version(Bukkit.getBukkitVersion());
+    }
 
     public Version(int major, int minor, int maintenance) {
         this.major = major;

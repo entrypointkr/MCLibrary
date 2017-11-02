@@ -1,6 +1,5 @@
 package kr.rvs.mclibrary.bukkit.command;
 
-import kr.rvs.mclibrary.MCLibrary;
 import kr.rvs.mclibrary.bukkit.command.duplex.AbstractHelpExecutor;
 import kr.rvs.mclibrary.bukkit.command.duplex.LegacyHelpExecutor;
 import kr.rvs.mclibrary.bukkit.command.duplex.ModernHelpExecutor;
@@ -19,7 +18,7 @@ public class DefaultExceptionHandler implements CommandExceptionHandler {
     @Override
     public void init(CommandAdaptor adaptor) {
         ICommand command = adaptor.getCommand();
-        this.helpExecutor = MCLibrary.getBukkitVersion().afterEquals(Version.V1_8) ?
+        this.helpExecutor = Version.BUKKIT.afterEquals(Version.V1_8) ?
                 new ModernHelpExecutor(command, adaptor.getLabel(), 8) :
                 new LegacyHelpExecutor(command, adaptor.getLabel(), 8);
     }
