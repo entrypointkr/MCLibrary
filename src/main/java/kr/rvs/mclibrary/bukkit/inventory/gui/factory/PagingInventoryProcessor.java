@@ -7,7 +7,7 @@ import kr.rvs.mclibrary.bukkit.inventory.gui.GUIEvent;
 import kr.rvs.mclibrary.bukkit.inventory.gui.GUIHandler;
 import kr.rvs.mclibrary.bukkit.inventory.gui.InventoryFactory;
 import kr.rvs.mclibrary.bukkit.inventory.gui.handler.DelegateClickHandler;
-import kr.rvs.mclibrary.bukkit.inventory.gui.handler.EventCancelHandler;
+import kr.rvs.mclibrary.bukkit.inventory.gui.handler.TopInventoryHandler;
 import kr.rvs.mclibrary.bukkit.item.ItemBuilder;
 import kr.rvs.mclibrary.bukkit.item.ItemUtils;
 import org.apache.commons.lang.Validate;
@@ -71,7 +71,7 @@ public class PagingInventoryProcessor extends InventoryProcessor {
         this.size = size - 9;
         this.maxPage = lastKey / this.size + (lastKey + 1 % this.size > 0 ? 1 : 0);
         gui.getHandlers().addFirst(
-                new EventCancelHandler(),
+                new CancelHandler(),
                 new DelegateClickHandler(new PrevPageHandler(), getPrevPageIndex()),
                 new DelegateClickHandler(new NextPageHandler(), getNextPageIndex()),
                 new EventSlotModerator()
@@ -119,6 +119,16 @@ public class PagingInventoryProcessor extends InventoryProcessor {
                         MAX_PAGE, maxPage
                 )
                 .build());
+    }
+
+    class CancelHandler extends TopInventoryHandler {
+        @Override
+        public void receive(GUIEvent<InventoryEvent> guiEvent) {
+            guiEvent.getEvent(GUIClickEvent.class).ifPresent(click -> {
+                if (click.getRawSlot() >= size)
+                    click.setCancelled(true);
+            });
+        }
     }
 
     class EventSlotModerator implements GUIHandler {
