@@ -8,6 +8,7 @@ import org.apache.commons.lang.Validate;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -41,7 +42,6 @@ public class ReflectiveCompleter implements TabCompletable {
         } catch (IllegalAccessException | InvocationTargetException e) {
             Static.log(e);
         }
-
-        return ret;
+        return ret != null ? ret : new ArrayList<>();
     }
 }

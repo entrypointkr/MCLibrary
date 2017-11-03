@@ -7,6 +7,7 @@ import kr.rvs.mclibrary.bukkit.command.ICommand;
 import kr.rvs.mclibrary.bukkit.command.TabCompletable;
 import kr.rvs.mclibrary.bukkit.player.CommandSenderWrapper;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -28,7 +29,7 @@ public class CompositeCommand implements ICommand, CommandInfo {
         if (completable != null) {
             return completable.tabComplete(wrapper, args);
         }
-        return null;
+        return new ArrayList<>();
     }
 
     @Override

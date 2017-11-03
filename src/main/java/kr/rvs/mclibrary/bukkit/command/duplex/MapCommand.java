@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 public class MapCommand extends LinkedHashMap<String, ICommand> implements ICommand {
     @Override
     public void execute(CommandSenderWrapper wrapper, CommandArguments args) throws CommandException {
-        String arg = args.get(0, "");
+        String arg = args.get(0, ""); // TODO: Send help message when execute failed from BaseCommand, Simplify getBaseCommand
         ICommand baseCommand = getBaseCommand();
         ICommand command = getOrDefault(arg, baseCommand);
         if (command != null) {
@@ -45,6 +45,10 @@ public class MapCommand extends LinkedHashMap<String, ICommand> implements IComm
 
     public ICommand getBaseCommand() {
         return get("");
+    }
+
+    public ICommand getBaseCommandWithCompute() {
+        return computeIfAbsent("", k -> new CompositeCommand());
     }
 
     public TabCompletable getBaseTabCompleter() {

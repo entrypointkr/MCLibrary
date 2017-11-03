@@ -153,7 +153,7 @@ public class CommandManager {
             MapCommand child = parent.setupMap(slice, 0, slice.length - 1);
             ICommand command = child.computeIfAbsent(lastArg, k -> new CompositeCommand());
             if (command instanceof MapCommand) {
-                ICommand baseCommand = ((MapCommand) command).getBaseCommand();
+                ICommand baseCommand = ((MapCommand) command).getBaseCommandWithCompute();
                 command = baseCommand != null ? baseCommand : command;
             }
             if (!(command instanceof CompositeCommand)) {
