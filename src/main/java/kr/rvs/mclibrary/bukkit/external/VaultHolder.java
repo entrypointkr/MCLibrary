@@ -156,7 +156,7 @@ public class VaultHolder extends Permission implements Economy { // Chat abstrac
 
     @Override
     public EconomyResponse depositPlayer(OfflinePlayer offlinePlayer, double v) {
-        return getEconomy().depositPlayer(offlinePlayer, v);
+        return getEconomy().depositPlayer(offlinePlayer.getName(), v);
     }
 
     @Override
@@ -167,7 +167,7 @@ public class VaultHolder extends Permission implements Economy { // Chat abstrac
 
     @Override
     public EconomyResponse depositPlayer(OfflinePlayer offlinePlayer, String s, double v) {
-        return getEconomy().depositPlayer(offlinePlayer, s, v);
+        return getEconomy().depositPlayer(offlinePlayer.getName(), s, v);
     }
 
     @Override
