@@ -17,6 +17,7 @@ public class GsonManager {
     public static GsonBuilder createDefaultBuilder() {
         return new GsonBuilder().setPrettyPrinting()
                 .disableHtmlEscaping()
+                .enableComplexMapKeySerialization()
                 .registerTypeAdapterFactory(new BukkitTypeAdapterFactory())
                 .registerTypeAdapter(MaterialAndData.class, new MaterialAndDataAdapter())
                 .registerTypeAdapter(Double.class, (JsonSerializer<Double>) (src, typeOfSrc, context) ->

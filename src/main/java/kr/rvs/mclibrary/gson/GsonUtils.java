@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import kr.rvs.mclibrary.MCLibrary;
 import kr.rvs.mclibrary.Static;
 import kr.rvs.mclibrary.general.FileUtils;
+import org.bukkit.plugin.Plugin;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -63,6 +64,14 @@ public class GsonUtils {
         return read(MCLibrary.getGsonManager().getGson(), file, type, def);
     }
 
+    public static <T> T read(Gson gson, Plugin plugin, String fileName, Type type, Supplier<T> def) {
+        return read(gson, new File(plugin.getDataFolder(), fileName), type, def);
+    }
+
+    public static <T> T read(Plugin plugin, String fileName, Type type, Supplier<T> def) {
+        return read(new File(plugin.getDataFolder(), fileName), type, def);
+    }
+
     public static void write(Gson gson, Writer writer, Object obj, Consumer<Exception> callback) {
         try {
             gson.toJson(obj, writer);
@@ -98,5 +107,14 @@ public class GsonUtils {
 
     public static void write(File file, Object obj) {
         write(MCLibrary.getGsonManager().getGson(), file, obj);
+    }
+
+    public static void write(Gson gson, Plugin plugin, String fileName, Object obj) {
+        File file = new File(plugin.getDataFolder(), fileName);
+        write(gson, file, obj, ex -> Static.log("Error while write " + file.getName()));
+    }
+
+    public static void write(Plugin plugin, String fileName, Object obj) {
+        write(MCLibrary.getGsonManager().getGson(), new File(plugin.getDataFolder(), fileName), obj);
     }
 }

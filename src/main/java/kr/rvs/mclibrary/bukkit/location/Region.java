@@ -52,12 +52,13 @@ public class Region {
         return isIn(entity.getLocation());
     }
 
-    public Vector getCenter() {
+    public Location getCenter() {
         double diffX = max.getX() - min.getX();
         double diffY = max.getY() - min.getY();
         double diffZ = max.getZ() - min.getZ();
 
-        return new Vector(
+        return new Location(
+                getWorld(),
                 min.getX() + diffX / 2,
                 min.getY() + diffY / 2,
                 min.getZ() + diffZ / 2
