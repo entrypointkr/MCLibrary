@@ -29,7 +29,7 @@ import java.util.Map;
 public class MCLibrary extends JavaPlugin {
     public static final String PACKET_DEBUG = "packet-debug";
     public static final String DETAIL_LOG = "stacktrace";
-    private static final CommandManager COMMAND_MANAGER = new CommandManager();
+    private static final CommandManager COMMAND_MANAGER = new CommandManager(); // TODO: Separation?
     private static final GsonManager GSON_MANAGER = new GsonManager();
     private static final SettingManager SETTING_MANAGER = new SettingManager();
     private static String address = "unknown";
