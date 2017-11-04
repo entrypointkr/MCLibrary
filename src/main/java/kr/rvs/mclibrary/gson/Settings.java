@@ -2,6 +2,7 @@ package kr.rvs.mclibrary.gson;
 
 import kr.rvs.mclibrary.MCLibrary;
 import kr.rvs.mclibrary.Static;
+import org.bukkit.plugin.Plugin;
 
 import java.io.File;
 import java.lang.reflect.Constructor;
@@ -42,6 +43,14 @@ public abstract class Settings {
 
             return ret;
         });
+    }
+
+    public static <T extends Settings> T load(Plugin plugin, String fileName, Class<T> aClass, Supplier<T> def) {
+        return load(new File(plugin.getDataFolder(), fileName), aClass, def);
+    }
+
+    public static <T extends Settings> T load(Plugin plugin, String fileName, Class<T> aClass) {
+        return load(new File(plugin.getDataFolder(), fileName), aClass);
     }
 
     public void setPath(File path) {
