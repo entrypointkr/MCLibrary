@@ -32,8 +32,10 @@ public class ItemStackTypeAdapter extends TypeAdapter<ItemStack> {
             out.name("damage").value(value.getDurability());
         if (value.getAmount() > 0)
             out.name("amount").value(value.getAmount());
-        out.name("meta");
-        metaAdapter.write(out, value.getItemMeta());
+        if (value.getItemMeta() != null) {
+            out.name("meta");
+            metaAdapter.write(out, value.getItemMeta());
+        }
         out.endObject();
     }
 
