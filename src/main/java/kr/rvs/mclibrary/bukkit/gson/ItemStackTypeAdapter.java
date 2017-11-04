@@ -12,6 +12,7 @@ import java.io.IOException;
 /**
  * Created by Junhyeong Lim on 2017-11-04.
  */
+@SuppressWarnings("deprecation")
 public class ItemStackTypeAdapter extends TypeAdapter<ItemStack> {
     private final TypeAdapter<ItemMeta> metaAdapter;
 

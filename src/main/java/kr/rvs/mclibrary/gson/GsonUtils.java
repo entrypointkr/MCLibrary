@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import kr.rvs.mclibrary.MCLibrary;
 import kr.rvs.mclibrary.Static;
 import kr.rvs.mclibrary.general.FileUtils;
+import org.apache.commons.io.output.StringBuilderWriter;
 import org.bukkit.plugin.Plugin;
 
 import java.io.BufferedReader;
@@ -12,10 +13,11 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.io.Reader;
+import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.lang.reflect.Type;
@@ -40,11 +42,21 @@ public class GsonUtils {
         T ret = null;
 
         if (file.isFile()) {
-            try {
-                ret = read(gson, new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF-8")), type);
-            } catch (IOException e) {
+            StringBuilder builder = new StringBuilder();
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF-8"))) {
+                String line;
+                while ((line = reader.readLine()) != null)
+                    builder.append(line).append('\n');
+                ret = read(gson, new StringReader(builder.toString()), type);
+            } catch (Exception e) {
                 Static.log("Error while read " + file.getName());
                 e.printStackTrace();
+
+                // Log file & Backup
+                builder.append('\n').append("=== 에러 로그 (수정&적용 시 이 부분을 지우세요) ===").append('\n');
+                e.printStackTrace(new PrintWriter(new StringBuilderWriter(builder)));
+                File backupFile = FileUtils.appendToName(file, "-" + System.currentTimeMillis(), ".broken");
+                FileUtils.write(backupFile, builder);
             }
         }
 
@@ -76,7 +88,7 @@ public class GsonUtils {
         try {
             gson.toJson(obj, writer);
             writer.close();
-        } catch (IOException e) {
+        } catch (Exception e) {
             if (callback != null)
                 callback.accept(e);
         }
