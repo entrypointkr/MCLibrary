@@ -1,5 +1,6 @@
 package kr.rvs.mclibrary.bukkit.inventory;
 
+import kr.rvs.mclibrary.bukkit.item.ItemBuilder;
 import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
@@ -112,5 +113,19 @@ public class InventoryUtils {
 
     public static boolean hasSpace(InventoryHolder holder, ItemStack item, int amount) {
         return hasSpace(holder.getInventory(), item, amount);
+    }
+
+    public static void giveItem(Inventory inv, ItemStack item, int amount) {
+        for (int i = 0; i < amount / 64; i++) {
+            inv.addItem(new ItemBuilder(item).amount(64).build());
+        }
+        int remain = amount % 64;
+        if (remain > 0) {
+            inv.addItem(new ItemBuilder(item).amount(remain).build());
+        }
+    }
+
+    public static void giveItem(InventoryHolder holder, ItemStack item, int amount) {
+        giveItem(holder.getInventory(), item, amount);
     }
 }

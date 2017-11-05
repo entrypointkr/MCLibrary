@@ -63,8 +63,22 @@ public class GUIClickEvent extends InventoryClickEvent {
         }
     }
 
+    public void sendMessageWithDelay(int tick, int delay, String title, String... messages) {
+        Bukkit.getScheduler().runTaskLater(MCLibrary.getPlugin(), () ->
+                sendMessage(tick, title, messages), delay);
+    }
+
     public void sendMessage(String title, String... messages) {
         sendMessage(60, title, messages);
+    }
+
+    public void sendMessageWithDelay(int delay, String title, String... messages) {
+        Bukkit.getScheduler().runTaskLater(MCLibrary.getPlugin(), () ->
+                sendMessage(title, messages), delay);
+    }
+
+    public void sendMessageWithDelay(String title, String... messages) {
+        sendMessageWithDelay(0, title, messages);
     }
 
     public void setRawSlot(int rawSlot) {

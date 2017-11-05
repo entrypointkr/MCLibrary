@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.function.Consumer;
 
 import static kr.rvs.mclibrary.bukkit.MCUtils.colorize;
 
@@ -28,7 +29,8 @@ public class ItemBuilder {
     private int amount;
     private short durability;
     private MaterialData data;
-    private final MetaProcessors metaProcessors = new MetaProcessors();
+    private final Processors<ItemStack> itemProcessors = new Processors<>();
+    private final Processors<ItemMeta> metaProcessors = new Processors<>();
 
     public ItemBuilder(Material material, int amount, short durability, MaterialData data) {
         this.material = material;
@@ -53,13 +55,7 @@ public class ItemBuilder {
         this(item.getType(), item.getAmount(), item.getDurability(), item.getData());
 
         ItemMeta meta = item.getItemMeta();
-        String displayName = meta.getDisplayName();
-        List<String> lore = meta.getLore();
-
-        if (displayName != null)
-            display(displayName);
-        if (lore != null)
-            lore(meta.getLore());
+        itemProcessors.add(data -> data.setItemMeta(meta));
     }
 
     public ItemBuilder(ItemWrapper wrapped) {
@@ -179,6 +175,7 @@ public class ItemBuilder {
 
     public ItemStack build() {
         ItemStack itemStack = new ItemStack(material, amount, durability);
+        itemProcessors.process(itemStack);
         ItemMeta meta = itemStack.getItemMeta();
         metaProcessors.process(meta);
         itemStack.setItemMeta(meta);
@@ -188,5 +185,17 @@ public class ItemBuilder {
 
     public ItemWrapper buildAndWrapping() {
         return new ItemWrapper(build());
+    }
+
+    static class Processors<T> {
+        private final List<Consumer<T>> consumers = new ArrayList<>();
+
+        public void add(Consumer<T> consumer) {
+            this.consumers.add(consumer);
+        }
+
+        public void process(T item) {
+            consumers.forEach(consumer -> consumer.accept(item));
+        }
     }
 }
