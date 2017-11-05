@@ -48,7 +48,8 @@ public class ItemStackTypeAdapter extends TypeAdapter<ItemStack> {
 
         in.beginObject();
         while (in.hasNext()) {
-            switch (in.nextName()) {
+            String name = in.nextName();
+            switch (name) {
                 case "id":
                     id = in.nextInt();
                     break;

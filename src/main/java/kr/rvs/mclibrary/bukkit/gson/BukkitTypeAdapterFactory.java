@@ -5,6 +5,7 @@ import com.google.gson.TypeAdapter;
 import com.google.gson.TypeAdapterFactory;
 import com.google.gson.reflect.TypeToken;
 import kr.rvs.mclibrary.bukkit.inventory.gui.GUISignature;
+import kr.rvs.mclibrary.bukkit.item.MaterialAndData;
 import org.bukkit.Location;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 
@@ -27,6 +28,8 @@ public class BukkitTypeAdapterFactory implements TypeAdapterFactory {
             return (TypeAdapter<T>) new ConfigurationSerializableAdapter(mapAdapter);
         } else if (GUISignature.class.isAssignableFrom(rawType)) {
             return (TypeAdapter<T>) new GUISignatureTypeAdapter(mapAdapter, collectionAdapter);
+        } else if (MaterialAndData.class.isAssignableFrom(rawType)) {
+            return (TypeAdapter<T>) new MaterialAndDataAdapter();
         }
         return null;
     }

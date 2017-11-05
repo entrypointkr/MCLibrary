@@ -2,11 +2,10 @@ package kr.rvs.mclibrary.gson;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonPrimitive;
-import com.google.gson.JsonSerializer;
 import kr.rvs.mclibrary.bukkit.gson.BukkitTypeAdapterFactory;
-import kr.rvs.mclibrary.bukkit.gson.MaterialAndDataAdapter;
-import kr.rvs.mclibrary.bukkit.item.MaterialAndData;
+import kr.rvs.mclibrary.bukkit.gson.MapDeserializer;
+
+import java.util.Map;
 
 /**
  * Created by Junhyeong Lim on 2017-08-18.
@@ -19,11 +18,7 @@ public class GsonManager {
                 .disableHtmlEscaping()
                 .enableComplexMapKeySerialization()
                 .registerTypeAdapterFactory(new BukkitTypeAdapterFactory())
-                .registerTypeAdapter(MaterialAndData.class, new MaterialAndDataAdapter())
-                .registerTypeAdapter(Double.class, (JsonSerializer<Double>) (src, typeOfSrc, context) ->
-                        src == src.longValue()
-                                ? new JsonPrimitive(src.longValue())
-                                : new JsonPrimitive(src));
+                .registerTypeAdapter(Map.class, new MapDeserializer());
     }
 
     public GsonManager(GsonBuilder builder) {
