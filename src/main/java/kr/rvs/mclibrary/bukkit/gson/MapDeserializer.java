@@ -25,7 +25,8 @@ public class MapDeserializer implements JsonDeserializer<Map> {
         Number number = null;
         try {
             number = NumberFormat.getInstance().parse(string);
-            if (number.longValue() == number.intValue())
+            if (number instanceof Long
+                    && number.longValue() == number.intValue())
                 number = number.intValue();
         } catch (ParseException e) {
             // Ignore
