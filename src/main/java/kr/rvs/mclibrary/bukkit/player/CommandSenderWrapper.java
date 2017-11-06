@@ -2,6 +2,7 @@ package kr.rvs.mclibrary.bukkit.player;
 
 import kr.rvs.mclibrary.bukkit.MCUtils;
 import kr.rvs.mclibrary.bukkit.command.exception.InvalidUsageException;
+import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
@@ -52,12 +53,17 @@ public class CommandSenderWrapper {
         if (player != null) {
             ret = player.getItemInHand();
         }
-        return ret;
+        return ret != null && ret.getType() != Material.AIR
+                ? ret : null;
     }
 
     public ItemStack getItemInHandWithThrow(String usage) {
         return Optional.ofNullable(getItemInHand()).orElseThrow(() ->
                 new InvalidUsageException(this, usage));
+    }
+
+    public ItemStack getItemInHandWithThrow() {
+        return getItemInHandWithThrow("손에 아이템을 들어주세요.");
     }
 
     public void sendMessage(CharSequence... messages) {
