@@ -65,9 +65,9 @@ public class PlayerUtils {
         }
     }
 
-    public static void setMaxHealth(Player player, int maxHealth) {
+    public static void setHealth(Player player, int maxHealth) {
         Optional<Method> setMaxHealthMethod = Stream.of(Damageable.class.getDeclaredMethods())
-                .filter(method -> method.getName().equals("setMaxHealth"))
+                .filter(method -> method.getName().equals("setHealth"))
                 .findFirst();
         setMaxHealthMethod.ifPresent(method -> {
             try {

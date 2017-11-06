@@ -156,7 +156,7 @@ public class LibraryCommand {
     public void heal(CommandSenderWrapper wrapper, CommandArguments args) {
         Player player = args.size() > 0 ? args.getPlayer(0) : wrapper.getPlayer();
         if (player != null) {
-            PlayerUtils.setMaxHealth(player, PlayerUtils.getMaxHealth(player));
+            PlayerUtils.setHealth(player, PlayerUtils.getMaxHealth(player));
             player.setFoodLevel(30);
             wrapper.sendMessage("완료.");
         } else {
