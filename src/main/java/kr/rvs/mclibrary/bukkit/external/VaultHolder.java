@@ -134,7 +134,7 @@ public class VaultHolder extends Permission implements Economy { // Chat abstrac
 
     @Override
     public EconomyResponse withdrawPlayer(OfflinePlayer offlinePlayer, double v) {
-        return getEconomy().withdrawPlayer(offlinePlayer, v);
+        return getEconomy().withdrawPlayer(offlinePlayer.getName(), v);
     }
 
     @Override
