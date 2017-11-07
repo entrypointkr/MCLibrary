@@ -52,6 +52,7 @@ public class ClickWizard extends ListenerWizard<List<Block>> {
                 Block clickedBlock = event.getClickedBlock();
                 if (clickedBlock != null && !clickedBlock.isEmpty()) {
                     data.add(clickedBlock);
+                    event.setCancelled(true);
                     if (data.size() >= count) {
                         release(data);
                         player.sendMessage(endMessage);
