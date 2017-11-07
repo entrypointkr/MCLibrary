@@ -48,11 +48,11 @@ public class PlayerUtils {
         }
     }
 
-    public static Optional<Player> getPlayerOptional(String name) {
+    public static Optional<Player> getPlayer(String name) {
         return Optional.ofNullable(Bukkit.getPlayer(name));
     }
 
-    public static Optional<Player> getPlayerOptional(UUID uuid) {
+    public static Optional<Player> getPlayer(UUID uuid) {
         return Optional.ofNullable(Bukkit.getPlayer(uuid));
     }
 

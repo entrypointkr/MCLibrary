@@ -1,9 +1,11 @@
 package kr.rvs.mclibrary.bukkit.command;
 
 import kr.rvs.mclibrary.bukkit.command.exception.InvalidUsageException;
+import kr.rvs.mclibrary.bukkit.command.exception.PermissionDeniedException;
+import kr.rvs.mclibrary.bukkit.player.PlayerUtils;
+import kr.rvs.mclibrary.bukkit.world.WorldUtils;
 import kr.rvs.mclibrary.collection.VolatileArrayList;
 import org.apache.commons.lang.StringUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
@@ -53,38 +55,37 @@ public class CommandArguments extends VolatileArrayList { // TODO: Implement Lis
         return builder.toString();
     }
 
-    private <T> T requireNotNull(T object, String usage) {
-        if (object == null)
-            throw new InvalidUsageException(this, usage);
-        return object;
+    public String get(int index, String def) {
+        return getOptional(index).orElse(def);
     }
 
-    public Integer getInt(int index, String usage) {
-        return requireNotNull(getInt(index, (Integer) null), usage);
+    public Optional<World> getWorld(int index) {
+        return getOptional(index).flatMap(WorldUtils::getWorld);
     }
 
-    public World getWorld(int index) {
-        return Bukkit.getWorld(get(index));
+    public World getWorldWithThrow(int index, String usage) {
+        return getWorld(index).orElseThrow(() -> new InvalidUsageException(usage));
     }
 
-    public World getWorld(int index, String usage) {
-        return requireNotNull(getWorld(index), usage);
+    public World getWorldWithThrow(int index) {
+        return getWorldWithThrow(index, "존재하지 않는 월드입니다.");
     }
 
-    public Optional<World> getWorldOptional(int index) {
-        return Optional.ofNullable(getWorld(index));
+    public Optional<Player> getPlayer(int index) {
+        return getOptional(index).flatMap(PlayerUtils::getPlayer);
     }
 
-    public Player getPlayer(int index) {
-        return Bukkit.getPlayer(get(index));
+    public Player getPlayerWithThrow(int index, String usage) {
+        return getPlayer(index).orElseThrow(() -> new InvalidUsageException(usage));
     }
 
-    public Player getPlayer(int index, String usage) {
-        return requireNotNull(getPlayer(index), usage);
+    public Player getPlayerWithThrow(int index) {
+        return getPlayerWithThrow(index, "온라인 중인 플레이어가 아닙니다.");
     }
 
-    public Optional<Player> getPlayerOptional(int index) {
-        return Optional.ofNullable(getPlayer(index));
+    public Player getPlayerWithPermission(int index, String permission) {
+        return Optional.of(getPlayerWithThrow(index)).filter(p -> p.hasPermission(permission)).orElseThrow(() ->
+                new PermissionDeniedException(permission));
     }
 
     public CommandInfo getLastCommand() {

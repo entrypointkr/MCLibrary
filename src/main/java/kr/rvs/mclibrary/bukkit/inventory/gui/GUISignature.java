@@ -2,7 +2,7 @@ package kr.rvs.mclibrary.bukkit.inventory.gui;
 
 import kr.rvs.mclibrary.bukkit.MCUtils;
 import kr.rvs.mclibrary.bukkit.inventory.ItemContents;
-import kr.rvs.mclibrary.collection.NullableArrayList;
+import kr.rvs.mclibrary.collection.OptionalArrayList;
 import kr.rvs.mclibrary.general.VarargsParser;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
@@ -20,7 +20,7 @@ public class GUISignature implements Cloneable {
     private String title = type.getDefaultTitle();
     private int size = type.getDefaultSize();
     private ItemContents contents = new ItemContents();
-    private NullableArrayList<Integer> handlerIndexes = new NullableArrayList<>();
+    private OptionalArrayList<Integer> handlerIndexes = new OptionalArrayList<>();
 
     public GUISignature(InventoryType type) {
         this.type = type;
@@ -121,7 +121,7 @@ public class GUISignature implements Cloneable {
         return contents;
     }
 
-    public NullableArrayList<Integer> getHandlerIndexes() {
+    public OptionalArrayList<Integer> getHandlerIndexes() {
         return handlerIndexes;
     }
 
@@ -166,7 +166,7 @@ public class GUISignature implements Cloneable {
         try {
             GUISignature signature = (GUISignature) super.clone();
             signature.contents = (ItemContents) contents.clone();
-            signature.handlerIndexes = (NullableArrayList<Integer>) handlerIndexes.clone();
+            signature.handlerIndexes = (OptionalArrayList<Integer>) handlerIndexes.clone();
             return signature;
         } catch (CloneNotSupportedException e) {
             throw new IllegalStateException(e);

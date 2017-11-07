@@ -11,6 +11,10 @@ public class InvalidUsageException extends CommandException {
         this.usage = usage;
     }
 
+    public InvalidUsageException(String usage) {
+        this.usage = usage;
+    }
+
     public String getUsage() {
         return "&c" + usage;
     }

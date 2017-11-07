@@ -1,5 +1,7 @@
 package kr.rvs.mclibrary.bukkit.command.exception;
 
+import java.util.Optional;
+
 /**
  * Created by Junhyeong Lim on 2017-09-27.
  */
@@ -10,7 +12,11 @@ public class CommandException extends RuntimeException {
         this.source = source;
     }
 
-    public Object getSource() {
-        return source;
+    public CommandException() {
+        this(null);
+    }
+
+    public Optional<Object> getSource() {
+        return Optional.ofNullable(source);
     }
 }

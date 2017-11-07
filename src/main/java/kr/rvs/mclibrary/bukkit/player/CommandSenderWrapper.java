@@ -2,7 +2,9 @@ package kr.rvs.mclibrary.bukkit.player;
 
 import kr.rvs.mclibrary.bukkit.MCUtils;
 import kr.rvs.mclibrary.bukkit.command.exception.InvalidUsageException;
+import kr.rvs.mclibrary.bukkit.command.exception.PermissionDeniedException;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
@@ -28,42 +30,48 @@ public class CommandSenderWrapper {
         return sender instanceof ConsoleCommandSender;
     }
 
-    public Player getPlayer() {
-        return sender instanceof Player ?
-                (Player) sender : null;
+    public Optional<Player> getPlayer() {
+        return sender instanceof Player
+                ? Optional.of((Player) sender)
+                : Optional.empty();
     }
 
     public Player getPlayerWithThrow(String usage) {
-        return Optional.ofNullable(getPlayer()).orElseThrow(() ->
+        return getPlayer().orElseThrow(() ->
                 new InvalidUsageException(this, usage));
     }
 
-    public Optional<Player> getPlayerOptional() {
-        return Optional.ofNullable(getPlayer());
+    public Player getPlayerWithThrow() {
+        return getPlayerWithThrow("당신은 온라인 플레이어가 아닙니다.");
     }
 
     public PlayerWrapper getWrappedPlayer() {
-        return new PlayerWrapper(getPlayer());
+        return new PlayerWrapper(getPlayerWithThrow());
     }
 
     @SuppressWarnings("deprecation")
-    public ItemStack getItemInHand() {
-        ItemStack ret = null;
-        Player player = getPlayer();
-        if (player != null) {
-            ret = player.getItemInHand();
-        }
-        return ret != null && ret.getType() != Material.AIR
-                ? ret : null;
+    public Optional<ItemStack> getItemInHand() {
+        return getPlayer().map(Player::getItemInHand).filter(item -> item.getType() != Material.AIR);
     }
 
     public ItemStack getItemInHandWithThrow(String usage) {
-        return Optional.ofNullable(getItemInHand()).orElseThrow(() ->
-                new InvalidUsageException(this, usage));
+        return getItemInHand().orElseThrow(() -> new InvalidUsageException(this, usage));
     }
 
     public ItemStack getItemInHandWithThrow() {
         return getItemInHandWithThrow("손에 아이템을 들어주세요.");
+    }
+
+    public Optional<World> getWorld() {
+        return getPlayer().map(Player::getWorld);
+    }
+
+    public World getWorldWithThrow(String usage) {
+        return getWorld().orElseThrow(() -> new InvalidUsageException(usage));
+    }
+
+    public World getWorldWithThrow() {
+        return getWorldWithThrow("존재하지 않는 월드입니다.");
     }
 
     public void sendMessage(CharSequence... messages) {
@@ -76,6 +84,16 @@ public class CommandSenderWrapper {
         for (Object message : messages) {
             sender.sendMessage(MCUtils.colorize(String.valueOf(message)));
         }
+    }
+
+    public CommandSenderWrapper checkPermission(String permission) {
+        if (!sender.hasPermission(permission))
+            throw new PermissionDeniedException(this, permission);
+        return this;
+    }
+
+    public String getName() {
+        return sender.getName();
     }
 
     public CommandSender getSender() {

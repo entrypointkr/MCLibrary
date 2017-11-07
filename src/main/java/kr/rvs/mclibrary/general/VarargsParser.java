@@ -1,6 +1,7 @@
 package kr.rvs.mclibrary.general;
 
-import kr.rvs.mclibrary.collection.NullableArrayList;
+
+import kr.rvs.mclibrary.collection.OptionalArrayList;
 
 import java.util.ArrayDeque;
 import java.util.Arrays;
@@ -27,7 +28,7 @@ public class VarargsParser {
     public void parse(Consumer<Section> sectionCallback) {
         Queue queue = new ArrayDeque<>(Arrays.asList(args));
         while (queue.size() >= count) {
-            NullableArrayList<Object> values = new NullableArrayList<>(count);
+            OptionalArrayList<Object> values = new OptionalArrayList<>(count);
             for (int i = 0; i < count; i++) {
                 values.add(queue.poll());
             }
@@ -36,9 +37,9 @@ public class VarargsParser {
     }
 
     public class Section {
-        private final NullableArrayList values;
+        private final OptionalArrayList values;
 
-        public Section(NullableArrayList values) {
+        public Section(OptionalArrayList values) {
             this.values = values;
         }
 

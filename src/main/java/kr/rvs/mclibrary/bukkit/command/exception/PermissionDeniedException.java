@@ -11,6 +11,10 @@ public class PermissionDeniedException extends CommandException {
         this.permission = permission;
     }
 
+    public PermissionDeniedException(String permission) {
+        this.permission = permission;
+    }
+
     public String getPermission() {
         return permission;
     }

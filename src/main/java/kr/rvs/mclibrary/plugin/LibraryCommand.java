@@ -5,7 +5,6 @@ import kr.rvs.mclibrary.bukkit.collection.PlayerHashSet;
 import kr.rvs.mclibrary.bukkit.command.CommandArguments;
 import kr.rvs.mclibrary.bukkit.command.CommandType;
 import kr.rvs.mclibrary.bukkit.command.annotation.Command;
-import kr.rvs.mclibrary.bukkit.command.exception.InvalidUsageException;
 import kr.rvs.mclibrary.bukkit.event.SafePlayerInteractEvent;
 import kr.rvs.mclibrary.bukkit.inventory.event.GUIClickEvent;
 import kr.rvs.mclibrary.bukkit.inventory.gui.GUI;
@@ -93,14 +92,10 @@ public class LibraryCommand {
             desc = "모든 몬스터를 제거합니다."
     )
     public void killallCommand(CommandSenderWrapper wrapper, CommandArguments args) {
-        World world = args.size() > 0 ? args.getWorld(0) : wrapper.isPlayer() ? wrapper.getPlayer().getWorld() : null;
-        if (world != null) {
-            world.getEntities().stream()
-                    .filter(entity -> entity instanceof Creature)
-                    .forEach(Entity::remove);
-        } else {
-            throw new InvalidUsageException(this, "올바른 월드명을 입력하세요.");
-        }
+        World world = args.size() > 0 ? args.getWorldWithThrow(0) : wrapper.getWorldWithThrow();
+        world.getEntities().stream()
+                .filter(entity -> entity instanceof Creature)
+                .forEach(Entity::remove);
     }
 
     @Command(
@@ -124,7 +119,7 @@ public class LibraryCommand {
                         );
                     }
                 }
-        ).open(wrapper.getPlayer());
+        ).open(wrapper.getPlayerWithThrow());
     }
 
     @Command(
@@ -134,7 +129,7 @@ public class LibraryCommand {
             desc = "클릭한 위치의 블럭 정보를 출력합니다."
     )
     public void blockInfo(CommandSenderWrapper wrapper, CommandArguments args) {
-        Player player = wrapper.getPlayer();
+        Player player = wrapper.getPlayerWithThrow();
         String message;
         if (!INFO_LISTENERS.contains(player)) {
             INFO_LISTENERS.add(player);
@@ -154,14 +149,10 @@ public class LibraryCommand {
     )
     @SuppressWarnings("deprecation")
     public void heal(CommandSenderWrapper wrapper, CommandArguments args) {
-        Player player = args.size() > 0 ? args.getPlayer(0) : wrapper.getPlayer();
-        if (player != null) {
-            PlayerUtils.setHealth(player, PlayerUtils.getMaxHealth(player));
-            player.setFoodLevel(30);
-            wrapper.sendMessage("완료.");
-        } else {
-            throw new InvalidUsageException(this, "올바른 플레이어명을 입력하세요.");
-        }
+        Player player = args.size() > 0 ? args.getPlayerWithThrow(0) : wrapper.getPlayerWithThrow();
+        PlayerUtils.setHealth(player, PlayerUtils.getMaxHealth(player));
+        player.setFoodLevel(30);
+        wrapper.sendMessage("완료.");
     }
 
     @Command(
