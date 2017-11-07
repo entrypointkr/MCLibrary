@@ -8,10 +8,9 @@ import com.google.gson.JsonParseException;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.internal.$Gson$Types;
 import kr.rvs.mclibrary.Static;
+import org.apache.commons.lang.math.NumberUtils;
 
 import java.lang.reflect.Type;
-import java.text.NumberFormat;
-import java.text.ParseException;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,11 +23,14 @@ public class MapDeserializer implements JsonDeserializer<Map> {
     private Optional<Number> getNumber(String string) {
         Number number = null;
         try {
-            number = NumberFormat.getInstance().parse(string);
+            number = NumberUtils.createNumber(string);
             if (number instanceof Long
                     && number.longValue() == number.intValue())
                 number = number.intValue();
-        } catch (ParseException e) {
+            else if (number instanceof Float
+                    && number.floatValue() == number.doubleValue())
+                number = number.doubleValue();
+        } catch (NumberFormatException e) {
             // Ignore
         }
         return Optional.ofNullable(number);
