@@ -2,6 +2,7 @@ package kr.rvs.mclibrary.bukkit.gson;
 
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
 import kr.rvs.mclibrary.MCLibrary;
 import org.bukkit.inventory.ItemStack;
@@ -26,21 +27,28 @@ public class ItemStackTypeAdapter extends TypeAdapter<ItemStack> {
 
     @Override
     public void write(JsonWriter out, ItemStack value) throws IOException {
-        out.beginObject();
-        out.name("id").value(value.getTypeId());
-        if (value.getDurability() > 0)
-            out.name("damage").value(value.getDurability());
-        if (value.getAmount() > 0)
-            out.name("amount").value(value.getAmount());
-        if (value.getItemMeta() != null) {
-            out.name("meta");
-            metaAdapter.write(out, value.getItemMeta());
+        if (value != null) {
+            out.beginObject();
+            out.name("id").value(value.getTypeId());
+            if (value.getDurability() > 0)
+                out.name("damage").value(value.getDurability());
+            if (value.getAmount() > 0)
+                out.name("amount").value(value.getAmount());
+            if (value.getItemMeta() != null) {
+                out.name("meta");
+                metaAdapter.write(out, value.getItemMeta());
+            }
+            out.endObject();
+        } else {
+            out.nullValue();
         }
-        out.endObject();
     }
 
     @Override
     public ItemStack read(JsonReader in) throws IOException {
+        if (in.peek() != JsonToken.BEGIN_OBJECT)
+            return null;
+
         int id = 1;
         short data = 0;
         int amount = 1;

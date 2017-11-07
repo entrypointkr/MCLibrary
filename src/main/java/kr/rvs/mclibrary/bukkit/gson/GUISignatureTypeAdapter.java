@@ -2,6 +2,7 @@ package kr.rvs.mclibrary.bukkit.gson;
 
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
 import kr.rvs.mclibrary.bukkit.inventory.gui.GUISignature;
 import org.bukkit.event.inventory.InventoryType;
@@ -41,26 +42,33 @@ public class GUISignatureTypeAdapter extends TypeAdapter<GUISignature> {
 
     @Override
     public void write(JsonWriter out, GUISignature value) throws IOException {
-        Map<Integer, Integer> hashCodeMap = new HashMap<>();
-        Map<Integer, Object> contents = new HashMap<>();
-        Map<Integer, ItemStack> itemMap = value.getContents();
-        for (Map.Entry<Integer, ItemStack> entry : itemMap.entrySet()) {
-            contents.put(entry.getKey(), value(contents, entry.getValue(), hashCodeMap));
-        }
+        if (value != null) {
+            Map<Integer, Integer> hashCodeMap = new HashMap<>();
+            Map<Integer, Object> contents = new HashMap<>();
+            Map<Integer, ItemStack> itemMap = value.getContents();
+            for (Map.Entry<Integer, ItemStack> entry : itemMap.entrySet()) {
+                contents.put(entry.getKey(), value(contents, entry.getValue(), hashCodeMap));
+            }
 
-        out.beginObject();
-        out.name("type").value(value.getType().name());
-        out.name("title").value(value.getTitle());
-        out.name("size").value(value.getSize());
-        out.name("contents");
-        mapAdapter.write(out, contents);
-        out.name("handlerIndexes");
-        collectionAdapter.write(out, value.getHandlerIndexes());
-        out.endObject();
+            out.beginObject();
+            out.name("type").value(value.getType().name());
+            out.name("title").value(value.getTitle());
+            out.name("size").value(value.getSize());
+            out.name("contents");
+            mapAdapter.write(out, contents);
+            out.name("handlerIndexes");
+            collectionAdapter.write(out, value.getHandlerIndexes());
+            out.endObject();
+        } else {
+            out.nullValue();
+        }
     }
 
     @Override
     public GUISignature read(JsonReader in) throws IOException {
+        if (in.peek() != JsonToken.BEGIN_OBJECT)
+            return null;
+
         GUISignature signature = new GUISignature();
         Map<String, Object> contents = new HashMap<>();
         in.beginObject();

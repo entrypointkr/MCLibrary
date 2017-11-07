@@ -21,7 +21,7 @@ public class VolatileArrayList extends OptionalArrayList<String> {
     }
 
     public Optional<Integer> getInt(int index) {
-        return getOptional(index).map(NumberUtils::createInteger);
+        return getOptional(index).filter(NumberUtils::isNumber).map(Integer::valueOf);
     }
 
     public Integer getInt(int index, Integer def) {
@@ -29,7 +29,7 @@ public class VolatileArrayList extends OptionalArrayList<String> {
     }
 
     public Optional<Double> getDouble(int index) {
-        return getOptional(index).map(NumberUtils::createDouble);
+        return getOptional(index).filter(NumberUtils::isNumber).map(Double::valueOf);
     }
 
     public Double getDouble(int index, Double def) {
@@ -37,7 +37,7 @@ public class VolatileArrayList extends OptionalArrayList<String> {
     }
 
     public Optional<Float> getFloat(int index) {
-        return getOptional(index).map(NumberUtils::createFloat);
+        return getOptional(index).filter(NumberUtils::isNumber).map(Float::valueOf);
     }
 
     public Float getFloat(int index, Float def) {
@@ -45,7 +45,7 @@ public class VolatileArrayList extends OptionalArrayList<String> {
     }
 
     public Optional<Long> getLong(int index) {
-        return getOptional(index).map(NumberUtils::createLong);
+        return getOptional(index).filter(NumberUtils::isNumber).map(Long::valueOf);
     }
 
     public Long getLong(int index, Long def) {

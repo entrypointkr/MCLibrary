@@ -23,10 +23,23 @@ public class ConfigurationSerializableAdapter extends TypeAdapter<ConfigurationS
         this.mapAdapter = mapAdapter;
     }
 
-    @Override
-    public void write(JsonWriter out, ConfigurationSerializable value) throws IOException {
-        if (value != null)
-            mapAdapter.write(out, serialize(value));
+    public static ConfigurationSerializable deserialize(Map<String, Object> map) {
+        if (map == null)
+            return null;
+
+        for (Map.Entry<String, Object> entry : map.entrySet()) {
+            String key = entry.getKey();
+            Object val = entry.getValue();
+
+            if (!(val instanceof Map))
+                continue;
+
+            Map<String, Object> subMap = (Map<String, Object>) val;
+            if (subMap.containsKey(SERIALIZED_TYPE_KEY)) {
+                map.put(key, deserialize(subMap));
+            }
+        }
+        return ConfigurationSerialization.deserializeObject(map);
     }
 
     @Override
@@ -49,19 +62,11 @@ public class ConfigurationSerializableAdapter extends TypeAdapter<ConfigurationS
         return serialized;
     }
 
-    public static ConfigurationSerializable deserialize(Map<String, Object> map) {
-        for (Map.Entry<String, Object> entry : map.entrySet()) {
-            String key = entry.getKey();
-            Object val = entry.getValue();
-
-            if (!(val instanceof Map))
-                continue;
-
-            Map<String, Object> subMap = (Map<String, Object>) val;
-            if (subMap.containsKey(SERIALIZED_TYPE_KEY)) {
-                map.put(key, deserialize(subMap));
-            }
-        }
-        return ConfigurationSerialization.deserializeObject(map);
+    @Override
+    public void write(JsonWriter out, ConfigurationSerializable value) throws IOException {
+        if (value != null)
+            mapAdapter.write(out, serialize(value));
+        else
+            out.nullValue();
     }
 }

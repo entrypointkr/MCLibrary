@@ -16,7 +16,11 @@ public class MaterialAndDataAdapter extends TypeAdapter<MaterialAndData> {
     @Override
     @SuppressWarnings({"unchecked", "deprecation"})
     public void write(JsonWriter out, MaterialAndData value) throws IOException {
-        out.value(value.getMaterial().getId() + ":" + value.getData());
+        if (value != null) {
+            out.value(value.getMaterial().getId() + ":" + value.getData());
+        } else {
+            out.nullValue();
+        }
     }
 
     @Override
