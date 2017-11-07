@@ -9,7 +9,7 @@ import java.util.function.Function;
 /**
  * Created by Junhyeong Lim on 2017-09-27.
  */
-public enum CommandType {
+public enum CommandType { // TODO: remove
     DEFAULT(sender -> true),
     PLAYER(sender -> sender instanceof Player),
     CONSOLE(sender -> sender instanceof ConsoleCommandSender)
