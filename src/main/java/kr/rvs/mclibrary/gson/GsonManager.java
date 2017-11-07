@@ -3,9 +3,7 @@ package kr.rvs.mclibrary.gson;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import kr.rvs.mclibrary.bukkit.gson.BukkitTypeAdapterFactory;
-import kr.rvs.mclibrary.bukkit.gson.MapDeserializer;
-
-import java.util.Map;
+import kr.rvs.mclibrary.bukkit.gson.NumberPredictObjectTypeAdapterFactory;
 
 /**
  * Created by Junhyeong Lim on 2017-08-18.
@@ -18,7 +16,7 @@ public class GsonManager {
                 .disableHtmlEscaping()
                 .enableComplexMapKeySerialization()
                 .registerTypeAdapterFactory(new BukkitTypeAdapterFactory())
-                .registerTypeAdapter(Map.class, new MapDeserializer());
+                .registerTypeAdapterFactory(new NumberPredictObjectTypeAdapterFactory());
     }
 
     public GsonManager(GsonBuilder builder) {
