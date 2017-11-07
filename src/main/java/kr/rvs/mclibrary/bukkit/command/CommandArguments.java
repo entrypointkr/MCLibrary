@@ -59,6 +59,22 @@ public class CommandArguments extends VolatileArrayList { // TODO: Implement Lis
         return getOptional(index).orElse(def);
     }
 
+    public Integer getInt(int index, String usage) {
+        return getInt(index).orElseThrow(() -> new InvalidUsageException(usage));
+    }
+
+    public Double getDouble(int index, String usage) {
+        return getDouble(index).orElseThrow(() -> new InvalidUsageException(usage));
+    }
+
+    public Float getFloat(int index, String usage) {
+        return getFloat(index).orElseThrow(() -> new InvalidUsageException(usage));
+    }
+
+    public Long getLong(int index, String usage) {
+        return getLong(index).orElseThrow(() -> new InvalidUsageException(usage));
+    }
+
     public Optional<World> getWorld(int index) {
         return getOptional(index).flatMap(WorldUtils::getWorld);
     }
