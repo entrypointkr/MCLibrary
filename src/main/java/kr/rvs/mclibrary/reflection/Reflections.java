@@ -6,6 +6,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.Optional;
 
@@ -78,5 +79,15 @@ public class Reflections {
 
     public static <T extends Annotation> Optional<T> getAnnotation(Method method, Class<T> annotClass) {
         return Optional.ofNullable(method.getAnnotation(annotClass));
+    }
+
+    public static void crackFinalFieldModifier(Field field) {
+        try {
+            Field modifierField = Field.class.getDeclaredField("modifiers");
+            modifierField.setAccessible(true);
+            modifierField.setInt(field, field.getModifiers() & ~Modifier.FINAL);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            throw new IllegalStateException(e);
+        }
     }
 }

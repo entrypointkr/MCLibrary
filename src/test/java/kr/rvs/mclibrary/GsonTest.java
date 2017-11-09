@@ -1,5 +1,6 @@
 package kr.rvs.mclibrary;
 
+import com.google.gson.JsonObject;
 import kr.rvs.mclibrary.bukkit.inventory.gui.GUISignature;
 import kr.rvs.mclibrary.gson.GsonUtils;
 import kr.rvs.mclibrary.mock.MockItemMeta;
@@ -16,6 +17,7 @@ import org.junit.Test;
 
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.util.Map;
 
 /**
  * Created by Junhyeong Lim on 2017-09-11.
@@ -26,6 +28,20 @@ public class GsonTest extends Assert {
         Injector.injectServer(MockFactory.createMockServer());
         ConfigurationSerialization.registerClass(ItemStack.class);
         ConfigurationSerialization.registerClass(MockItemMeta.class);
+    }
+
+    @Test
+    public void number() {
+        JsonObject object = new JsonObject();
+        object.addProperty("i", 1);
+        object.addProperty("l", 1L);
+        object.addProperty("d", 1D);
+        object.addProperty("f", 1F);
+        Map<String, Object> map = GsonUtils.read(new StringReader(object.toString()), Map.class);
+        assertTrue(map.get("i") instanceof Integer);
+        assertTrue(map.get("i") instanceof Integer);
+        assertTrue(map.get("d") instanceof Double);
+        assertTrue(map.get("f") instanceof Double);
     }
 
     @Test

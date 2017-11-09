@@ -88,6 +88,10 @@ public class ItemWrapper extends Wrapper<ItemStack> {
         return displayName != null ? displayName : def;
     }
 
+    public String getDisplayName() {
+        return getDisplayName(getHandle().getType().name());
+    }
+
     public ItemWrapper replaceString(Object... args) {
         ItemUtils.replaceString(getHandle(), args);
         return this;
