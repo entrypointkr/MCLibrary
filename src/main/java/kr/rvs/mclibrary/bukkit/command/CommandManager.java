@@ -27,6 +27,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
@@ -87,21 +88,20 @@ public class CommandManager {
     public void registerCommand(Class<?> commandClass, Plugin plugin) {
         MapCommand mapCommand = new MapCommand(); // TODO: ICommand is should provide a full args
         CommandAnnotationWrapper annot = setupCommandWithClass(commandClass, mapCommand);
-        String firstArg = annot.firstArg();
-        MapCommand head = mapCommand.get(firstArg, MapCommand.class);
-        if (head != null) {
+        for (Map.Entry<String, ICommand> entry : mapCommand.entrySet()) {
+            String key = entry.getKey();
+            ICommand val = entry.getValue();
+
             CommandAdaptor adaptor = new CommandAdaptor(
-                    firstArg,
+                    key,
                     annot.desc(),
                     annot.usage(),
                     Arrays.asList(annot.slicedArgs()),
-                    head,
+                    val,
                     plugin
             );
-            commandMap.register(firstArg, plugin.getName(), adaptor);
-            Static.log("&eCommand \"" + firstArg + "\" register from " + plugin.getName());
-        } else {
-            Static.log("Unexpected null");
+            commandMap.register(key, plugin.getName(), adaptor);
+            Static.log(String.format("&eCommand \"%s\" registered from &a%s", key, plugin.getName()));
         }
     }
 
@@ -128,7 +128,8 @@ public class CommandManager {
     private void setupCommandWithMethod(Class<?> commandClass, Command commandAnnot, Object instance, MapCommand parent) {
         for (Method method : commandClass.getDeclaredMethods()) {
             String[] slice = null;
-            Consumer<CompositeCommand> callback = compositeCommand -> {};
+            Consumer<CompositeCommand> callback = compositeCommand -> {
+            };
             if (method.isAnnotationPresent(Command.class)) {
                 CommandAnnotationWrapper annot = new CommandAnnotationWrapper(method.getAnnotation(Command.class));
                 slice = annot.slicedArgs();

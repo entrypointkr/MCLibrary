@@ -43,6 +43,7 @@ public class PlayerWrapper {
         return PlayerUtils.getMaxHealth(player);
     }
 
+    @SuppressWarnings("deprecation")
     public Optional<ItemStack> getItemInHand() {
         ItemStack handItem = player.getItemInHand();
         return handItem != null && handItem.getType() != Material.AIR
