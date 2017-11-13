@@ -2,10 +2,12 @@ package kr.rvs.mclibrary.bukkit.player;
 
 import kr.rvs.mclibrary.bukkit.inventory.InventoryUtils;
 import net.md_5.bungee.api.chat.BaseComponent;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * Created by Junhyeong Lim on 2017-07-29.
@@ -39,5 +41,12 @@ public class PlayerWrapper {
 
     public int getMaxHealth() {
         return PlayerUtils.getMaxHealth(player);
+    }
+
+    public Optional<ItemStack> getItemInHand() {
+        ItemStack handItem = player.getItemInHand();
+        return handItem != null && handItem.getType() != Material.AIR
+                ? Optional.of(handItem)
+                : Optional.empty();
     }
 }

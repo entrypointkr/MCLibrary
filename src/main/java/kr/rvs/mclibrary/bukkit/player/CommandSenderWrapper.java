@@ -15,7 +15,7 @@ import java.util.Optional;
 /**
  * Created by Junhyeong Lim on 2017-09-17.
  */
-public class CommandSenderWrapper {
+public class CommandSenderWrapper { // TODO: ByteBuddy?
     private final CommandSender sender;
 
     public CommandSenderWrapper(CommandSender sender) {
@@ -36,17 +36,17 @@ public class CommandSenderWrapper {
                 : Optional.empty();
     }
 
-    public Player getPlayerWithThrow(String usage) {
+    public Player getPlayerOrThrow(String usage) {
         return getPlayer().orElseThrow(() ->
                 new InvalidUsageException(this, usage));
     }
 
-    public Player getPlayerWithThrow() {
-        return getPlayerWithThrow("당신은 온라인 플레이어가 아닙니다.");
+    public Player getPlayerOrThrow() {
+        return getPlayerOrThrow("당신은 온라인 플레이어가 아닙니다.");
     }
 
     public PlayerWrapper getWrappedPlayer() {
-        return new PlayerWrapper(getPlayerWithThrow());
+        return new PlayerWrapper(getPlayerOrThrow());
     }
 
     @SuppressWarnings("deprecation")
@@ -54,24 +54,24 @@ public class CommandSenderWrapper {
         return getPlayer().map(Player::getItemInHand).filter(item -> item.getType() != Material.AIR);
     }
 
-    public ItemStack getItemInHandWithThrow(String usage) {
+    public ItemStack getItemInHandOrThrow(String usage) {
         return getItemInHand().orElseThrow(() -> new InvalidUsageException(this, usage));
     }
 
-    public ItemStack getItemInHandWithThrow() {
-        return getItemInHandWithThrow("손에 아이템을 들어주세요.");
+    public ItemStack getItemInHandOrThrow() {
+        return getItemInHandOrThrow("손에 아이템을 들어주세요.");
     }
 
     public Optional<World> getWorld() {
         return getPlayer().map(Player::getWorld);
     }
 
-    public World getWorldWithThrow(String usage) {
+    public World getWorldOrThrow(String usage) {
         return getWorld().orElseThrow(() -> new InvalidUsageException(usage));
     }
 
-    public World getWorldWithThrow() {
-        return getWorldWithThrow("존재하지 않는 월드입니다.");
+    public World getWorldOrThrow() {
+        return getWorldOrThrow("존재하지 않는 월드입니다.");
     }
 
     public void sendMessage(CharSequence... messages) {

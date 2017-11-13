@@ -79,28 +79,28 @@ public class CommandArguments extends VolatileArrayList { // TODO: Implement Lis
         return getOptional(index).flatMap(WorldUtils::getWorld);
     }
 
-    public World getWorldWithThrow(int index, String usage) {
+    public World getWorldOrThrow(int index, String usage) {
         return getWorld(index).orElseThrow(() -> new InvalidUsageException(usage));
     }
 
-    public World getWorldWithThrow(int index) {
-        return getWorldWithThrow(index, "존재하지 않는 월드입니다.");
+    public World getWorldOrThrow(int index) {
+        return getWorldOrThrow(index, "존재하지 않는 월드입니다.");
     }
 
     public Optional<Player> getPlayer(int index) {
         return getOptional(index).flatMap(PlayerUtils::getPlayer);
     }
 
-    public Player getPlayerWithThrow(int index, String usage) {
+    public Player getPlayerOrThrow(int index, String usage) {
         return getPlayer(index).orElseThrow(() -> new InvalidUsageException(usage));
     }
 
-    public Player getPlayerWithThrow(int index) {
-        return getPlayerWithThrow(index, "온라인 중인 플레이어가 아닙니다.");
+    public Player getPlayerOrThrow(int index) {
+        return getPlayerOrThrow(index, "온라인 중인 플레이어가 아닙니다.");
     }
 
     public Player getPlayerWithPermission(int index, String permission) {
-        return Optional.of(getPlayerWithThrow(index)).filter(p -> p.hasPermission(permission)).orElseThrow(() ->
+        return Optional.of(getPlayerOrThrow(index)).filter(p -> p.hasPermission(permission)).orElseThrow(() ->
                 new PermissionDeniedException(permission));
     }
 

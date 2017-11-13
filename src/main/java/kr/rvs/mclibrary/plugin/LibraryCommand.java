@@ -92,7 +92,7 @@ public class LibraryCommand {
             desc = "모든 몬스터를 제거합니다."
     )
     public void killallCommand(CommandSenderWrapper wrapper, CommandArguments args) {
-        World world = args.size() > 0 ? args.getWorldWithThrow(0) : wrapper.getWorldWithThrow();
+        World world = args.size() > 0 ? args.getWorldOrThrow(0) : wrapper.getWorldOrThrow();
         world.getEntities().stream()
                 .filter(entity -> entity instanceof Creature)
                 .forEach(Entity::remove);
@@ -119,7 +119,7 @@ public class LibraryCommand {
                         );
                     }
                 }
-        ).open(wrapper.getPlayerWithThrow());
+        ).open(wrapper.getPlayerOrThrow());
     }
 
     @Command(
@@ -129,7 +129,7 @@ public class LibraryCommand {
             desc = "클릭한 위치의 블럭 정보를 출력합니다."
     )
     public void blockInfo(CommandSenderWrapper wrapper, CommandArguments args) {
-        Player player = wrapper.getPlayerWithThrow();
+        Player player = wrapper.getPlayerOrThrow();
         String message;
         if (!INFO_LISTENERS.contains(player)) {
             INFO_LISTENERS.add(player);
@@ -149,7 +149,7 @@ public class LibraryCommand {
     )
     @SuppressWarnings("deprecation")
     public void heal(CommandSenderWrapper wrapper, CommandArguments args) {
-        Player player = args.size() > 0 ? args.getPlayerWithThrow(0) : wrapper.getPlayerWithThrow();
+        Player player = args.size() > 0 ? args.getPlayerOrThrow(0) : wrapper.getPlayerOrThrow();
         PlayerUtils.setHealth(player, PlayerUtils.getMaxHealth(player));
         player.setFoodLevel(30);
         wrapper.sendMessage("완료.");
@@ -164,7 +164,7 @@ public class LibraryCommand {
     )
     @SuppressWarnings("deprecation")
     public void serialize(CommandSenderWrapper sender, CommandArguments args) throws IOException {
-        ItemStack item = sender.getItemInHandWithThrow("손에 아이템을 들어주세요.");
+        ItemStack item = sender.getItemInHandOrThrow("손에 아이템을 들어주세요.");
         String fileName = "items/" + args.get(0, "serialize") + ".json";
         File file = new File(MCLibrary.getPlugin().getDataFolder(), fileName);
         GsonUtils.write(file, item, ex -> sender.sendMessage("에러가 발생했습니다." + ex.toString()));
