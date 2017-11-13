@@ -34,6 +34,11 @@ public class CommandAdaptor extends Command implements PluginIdentifiableCommand
     public boolean execute(CommandSender sender, String commandLabel, String[] args) {
         CommandSenderWrapper wrapper = new CommandSenderWrapper(sender);
         CommandArguments arguments = new CommandArguments(Arrays.asList(args));
+
+        if (command instanceof CommandInfo) {
+            arguments.setLastCommand((CommandInfo) command);
+        }
+
         try {
             command.execute(wrapper, arguments);
         } catch (Exception ex) {
