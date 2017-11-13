@@ -7,6 +7,7 @@ import kr.rvs.mclibrary.bukkit.command.TabCompletable;
 import kr.rvs.mclibrary.bukkit.command.exception.CommandException;
 import kr.rvs.mclibrary.bukkit.command.exception.CommandNotFoundException;
 import kr.rvs.mclibrary.bukkit.player.CommandSenderWrapper;
+import org.apache.commons.lang.StringUtils;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -69,6 +70,9 @@ public class MapCommand extends LinkedHashMap<String, ICommand> implements IComm
         MapCommand ret = this;
         for (int i = start; i < end; i++) {
             String arg = args[i];
+            if (StringUtils.isEmpty(arg))
+                continue;
+
             ICommand command = ret.computeIfAbsent(arg, k -> new MapCommand());
             if (!(command instanceof MapCommand)) {
                 MapCommand mapCommand = new MapCommand();

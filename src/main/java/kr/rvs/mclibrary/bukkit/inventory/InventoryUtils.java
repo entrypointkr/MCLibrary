@@ -116,10 +116,11 @@ public class InventoryUtils {
     }
 
     public static void giveItem(Inventory inv, ItemStack item, int amount) {
-        for (int i = 0; i < amount / 64; i++) {
+        int maxStack = item.getMaxStackSize();
+        for (int i = 0; i < amount / maxStack; i++) {
             inv.addItem(new ItemBuilder(item).amount(64).build());
         }
-        int remain = amount % 64;
+        int remain = amount % maxStack;
         if (remain > 0) {
             inv.addItem(new ItemBuilder(item).amount(remain).build());
         }
