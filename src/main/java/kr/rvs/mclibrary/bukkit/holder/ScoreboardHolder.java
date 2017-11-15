@@ -34,6 +34,14 @@ public class ScoreboardHolder extends Replaceable<ScoreboardHolder> {
         return this;
     }
 
+    public void setContent(int index, String content) { // size: 4, index: 3
+        // Fill
+        for (int i = contents.size(); i < index + 1; i++) {
+            contents.add("");
+        }
+        contents.set(index, content);
+    }
+
     private String ensure(String content) {
         if (content.length() > 40) {
             Static.log("스코어보드 내용 \"" + content + "\" 이 40 글자를 넘었습니다.");
