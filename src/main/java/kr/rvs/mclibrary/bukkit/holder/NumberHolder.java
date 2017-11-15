@@ -4,42 +4,42 @@ package kr.rvs.mclibrary.bukkit.holder;
  * Created by Junhyeong Lim on 2017-10-11.
  */
 public class NumberHolder {
-    private Integer data;
+    private Double number;
 
-    public NumberHolder(Integer data) {
-        this.data = data;
+    public NumberHolder(Double number) {
+        this.number = number;
     }
 
     public NumberHolder() {
-        this(0);
+        this(0D);
     }
 
-    public boolean has(int data) {
-        return this.data >= data;
+    public boolean has(double data) {
+        return this.number >= data;
     }
 
-    public boolean take(int data) {
+    public boolean take(double data) {
         if (has(data)) {
-            this.data -= data;
+            this.number -= data;
             return true;
         }
         return false;
     }
 
-    public void add(int data) {
-        this.data += data;
+    public void add(double data) {
+        this.number += data;
     }
 
-    public void set(Integer obj) {
-        this.data = obj;
+    public void set(double obj) {
+        this.number = obj;
     }
 
-    public Integer get() {
-        return data;
+    public Double get() {
+        return number;
     }
 
     @Override
     public String toString() {
-        return String.valueOf(data);
+        return number.toString();
     }
 }
