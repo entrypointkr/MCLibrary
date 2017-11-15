@@ -34,7 +34,7 @@ public class ScoreboardHolder extends Replaceable<ScoreboardHolder> {
         return this;
     }
 
-    public void setContent(int index, String content) { // size: 4, index: 3
+    public void setContent(int index, String content) {
         // Fill
         for (int i = contents.size(); i < index + 1; i++) {
             contents.add("");
@@ -71,7 +71,7 @@ public class ScoreboardHolder extends Replaceable<ScoreboardHolder> {
         return scoreboard;
     }
 
-    public Scoreboard show(Iterable<Player> players) {
+    public Scoreboard show(Iterable<? extends Player> players) {
         Scoreboard scoreboard = create();
         for (Player player : players) {
             if (player == null)
