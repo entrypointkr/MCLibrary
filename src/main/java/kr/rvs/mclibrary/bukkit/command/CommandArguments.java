@@ -55,6 +55,7 @@ public class CommandArguments extends VolatileArrayList { // TODO: Implement Lis
         return builder.toString();
     }
 
+    @Override
     public String get(int index, String def) {
         return getOptional(index).orElse(def);
     }
