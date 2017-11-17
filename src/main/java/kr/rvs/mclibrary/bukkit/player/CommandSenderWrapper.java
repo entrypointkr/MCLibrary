@@ -86,8 +86,12 @@ public class CommandSenderWrapper { // TODO: ByteBuddy?
         }
     }
 
+    public boolean hasPermission(String permission) {
+        return sender.hasPermission(permission);
+    }
+
     public CommandSenderWrapper checkPermission(String permission) {
-        if (!sender.hasPermission(permission))
+        if (!hasPermission(permission))
             throw new PermissionDeniedException(this, permission);
         return this;
     }

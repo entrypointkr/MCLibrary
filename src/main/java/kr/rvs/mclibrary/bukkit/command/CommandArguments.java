@@ -59,6 +59,18 @@ public class CommandArguments extends VolatileArrayList { // TODO: Implement Lis
         return getOptional(index).orElse(def);
     }
 
+    public String getStrings(int start, int end, String separator) {
+        return StringUtils.join(subList(start, Math.min(end, size())), separator);
+    }
+
+    public String getStrings(int start, int end) {
+        return getStrings(start, end, " ");
+    }
+
+    public String getStrings(int start) {
+        return getStrings(start, size(), " ");
+    }
+
     public Integer getInt(int index, String usage) {
         return getInt(index).orElseThrow(() -> new InvalidUsageException(usage));
     }
@@ -102,6 +114,12 @@ public class CommandArguments extends VolatileArrayList { // TODO: Implement Lis
     public Player getPlayerWithPermission(int index, String permission) {
         return Optional.of(getPlayerOrThrow(index)).filter(p -> p.hasPermission(permission)).orElseThrow(() ->
                 new PermissionDeniedException(permission));
+    }
+
+    public CommandArguments filter(boolean condition, String usage) {
+        if (!condition)
+            throw new InvalidUsageException(usage);
+        return this;
     }
 
     public CommandInfo getLastCommand() {
