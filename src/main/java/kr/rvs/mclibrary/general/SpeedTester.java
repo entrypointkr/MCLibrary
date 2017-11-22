@@ -11,13 +11,17 @@ public class SpeedTester {
     private int tryCount = 10;
     private final boolean nanoTime;
 
+    public SpeedTester(int tryCount, boolean nanoTime) {
+        this.tryCount = tryCount;
+        this.nanoTime = nanoTime;
+    }
+
     public SpeedTester() {
         this(10, true);
     }
 
-    public SpeedTester(int tryCount, boolean nanoTime) {
-        this.tryCount = tryCount;
-        this.nanoTime = nanoTime;
+    public SpeedTester(boolean nanoTime) {
+        this(10, nanoTime);
     }
 
     public SpeedTester addRunnable(Runnable... runnables) {
