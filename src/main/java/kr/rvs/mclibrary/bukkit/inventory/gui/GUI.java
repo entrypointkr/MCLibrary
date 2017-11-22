@@ -1,7 +1,7 @@
 package kr.rvs.mclibrary.bukkit.inventory.gui;
 
 import kr.rvs.mclibrary.MCLibrary;
-import kr.rvs.mclibrary.bukkit.collection.EntityHashMap;
+import kr.rvs.mclibrary.bukkit.collection.PlayerHashMap;
 import kr.rvs.mclibrary.bukkit.inventory.gui.factory.BaseInventoryFactory;
 import kr.rvs.mclibrary.bukkit.inventory.gui.factory.DefaultInventoryProcessor;
 import org.bukkit.Bukkit;
@@ -19,7 +19,7 @@ import org.bukkit.inventory.ItemStack;
  * Created by Junhyeong Lim on 2017-10-06.
  */
 public class GUI {
-    private static final EntityHashMap<GUI> guiMap = new EntityHashMap<>();
+    private static final PlayerHashMap<GUI> guiMap = new PlayerHashMap<>();
     private final GUIHandlers handlers = new GUIHandlers(this);
     private final GUISignature signature;
     private final InventoryFactory factory;
@@ -29,7 +29,7 @@ public class GUI {
         Bukkit.getPluginManager().registerEvents(new GUIListener(), plugin);
     }
 
-    public static EntityHashMap<GUI> getGuiMap() {
+    public static PlayerHashMap<GUI> getGuiMap() {
         return guiMap;
     }
 

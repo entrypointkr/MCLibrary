@@ -1,6 +1,6 @@
 package kr.rvs.mclibrary.bukkit.wizard;
 
-import kr.rvs.mclibrary.bukkit.collection.EntityHashMap;
+import kr.rvs.mclibrary.bukkit.collection.PlayerHashMap;
 import org.bukkit.entity.Player;
 
 import java.util.Optional;
@@ -10,7 +10,7 @@ import java.util.function.Consumer;
  * Created by Junhyeong Lim on 2017-11-01.
  */
 public abstract class Wizard<C> {
-    private static final EntityHashMap<Wizard<?>> WIZARD_MAP = new EntityHashMap<>();
+    private static final PlayerHashMap<Wizard<?>> WIZARD_MAP = new PlayerHashMap<>();
     private final Player player;
     private final Consumer<C> callback;
 
