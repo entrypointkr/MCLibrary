@@ -10,10 +10,6 @@ version '1.0-SNAPSHOT'
 
 sourceCompatibility = 1.8
 
-task wrapper(type: Wrapper) {
-    gradleVersion = '3.3'
-}
-
 test.testLogging.showStandardStreams = true
 [compileJava, compileTestJava, javadoc]*.options*.encoding = 'UTF-8'
 compileJava.dependsOn clean
@@ -83,6 +79,10 @@ task sourcesJar(type: Jar, dependsOn: classes) {
 task javadocJar(type: Jar, dependsOn: javadoc) {
     classifier = 'javadoc'
     from javadoc.destinationDir
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '3.3'
 }
 
 artifacts {

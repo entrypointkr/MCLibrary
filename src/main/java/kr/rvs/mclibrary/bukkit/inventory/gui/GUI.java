@@ -44,6 +44,10 @@ public class GUI {
         this(signature, new DefaultInventoryProcessor(new BaseInventoryFactory()), handlers);
     }
 
+    public GUI(GUIHandler... handlers) {
+        this(new GUISignature(), handlers);
+    }
+
     public GUIHandlers getHandlers() {
         return handlers;
     }
