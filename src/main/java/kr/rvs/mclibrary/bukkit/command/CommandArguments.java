@@ -76,16 +76,32 @@ public class CommandArguments extends VolatileArrayList { // TODO: Implement Lis
         return getInt(index).orElseThrow(() -> new InvalidUsageException(usage));
     }
 
+    public Integer getIntOrThrow(int index) {
+        return getInt(index, "숫자를 입력하세요.");
+    }
+
     public Double getDouble(int index, String usage) {
         return getDouble(index).orElseThrow(() -> new InvalidUsageException(usage));
+    }
+
+    public Double getDoubleOrThrow(int index) {
+        return getDouble(index, "숫자를 입력하세요.");
     }
 
     public Float getFloat(int index, String usage) {
         return getFloat(index).orElseThrow(() -> new InvalidUsageException(usage));
     }
 
+    public Float getFloatOrThrow(int index) {
+        return getFloat(index, "숫자를 입력하세요.");
+    }
+
     public Long getLong(int index, String usage) {
         return getLong(index).orElseThrow(() -> new InvalidUsageException(usage));
+    }
+
+    public Long getLongOrThrow(int index) {
+        return getLong(index, "숫자를 입력하세요.");
     }
 
     public Optional<World> getWorld(int index) {
