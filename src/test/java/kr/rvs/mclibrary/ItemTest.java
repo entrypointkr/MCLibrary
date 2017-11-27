@@ -2,6 +2,7 @@ package kr.rvs.mclibrary;
 
 import kr.rvs.mclibrary.bukkit.item.ItemBuilder;
 import kr.rvs.mclibrary.bukkit.item.ItemWrapper;
+import kr.rvs.mclibrary.bukkit.item.MaterialAndData;
 import kr.rvs.mclibrary.struct.Injector;
 import kr.rvs.mclibrary.struct.MockFactory;
 import org.bukkit.Material;
@@ -35,5 +36,14 @@ public class ItemTest extends Assert {
         ItemWrapper wrapper = builder.buildAndWrapping();
         wrapper.setName("Test diamond B");
         assertEquals(wrapper.getHandle().getItemMeta().getDisplayName(), "Test diamond B");
+    }
+
+    @Test
+    public void matAndDataTest() {
+        ItemStack item = new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 14);
+        MaterialAndData data = MaterialAndData.ofString("160:14");
+        assertTrue(data.isMatch(item));
+        assertTrue(item.isSimilar(data.createItem()));
+        assertFalse(MaterialAndData.ofString("160").isMatch(item));
     }
 }
