@@ -3,7 +3,7 @@ package kr.rvs.mclibrary.bukkit.location;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
-import org.bukkit.entity.Entity;
+import org.bukkit.util.NumberConversions;
 import org.bukkit.util.Vector;
 
 /**
@@ -16,39 +16,23 @@ public class LocationUtils {
                 "null";
     }
 
-    public static void setDirection(Entity entity, Vector vector) {
-        Location entityLoc = entity.getLocation();
-        Vector trajectory = getTrajectory(entityLoc.toVector(), vector);
-        entityLoc.setYaw(getYaw(trajectory));
-        entityLoc.setPitch(getPitch(trajectory));
+    public static void setDirection(Location location, Vector vector) {
+        final double _2PI = 2 * Math.PI;
+        final double x = vector.getX();
+        final double z = vector.getZ();
 
-        entity.teleport(entityLoc);
-    }
+        if (x == 0 && z == 0) {
+            location.setPitch(vector.getY() > 0 ? -90 : 90);
+            return;
+        }
 
-    public static void setDirection(Entity entity, Location location) {
-        setDirection(entity, location.toVector());
-    }
+        double theta = Math.atan2(-x, z);
+        location.setYaw((float) Math.toDegrees((theta + _2PI) % _2PI));
 
-    public static Vector getTrajectory(Vector from, Vector to) {
-        return to.subtract(from).normalize();
-    }
-
-    public static float getPitch(Vector vector) {
-        double x = vector.getX();
-        double y = vector.getY();
-        double z = vector.getZ();
-        double xz = Math.sqrt(x * x + z * z);
-
-        return (float) (Math.toDegrees(Math.atan(xz / y))
-                        + y <= 0 ? 90 : -90);
-    }
-
-    public static float getYaw(Vector vector) {
-        double x = vector.getX();
-        double z = vector.getZ();
-
-        return (float) Math.toDegrees(Math.atan(-x / z))
-                + z < 0 ? 180 : 0;
+        double x2 = NumberConversions.square(x);
+        double z2 = NumberConversions.square(z);
+        double xz = Math.sqrt(x2 + z2);
+        location.setPitch((float) Math.toDegrees(Math.atan(-vector.getY() / xz)));
     }
 
     public static Location getTopLocation(Location location) {
