@@ -16,14 +16,14 @@ public class LocationUtils {
                 "null";
     }
 
-    public static void setDirection(Location location, Vector vector) {
+    public static Location setDirection(Location location, Vector vector) {
         final double _2PI = 2 * Math.PI;
         final double x = vector.getX();
         final double z = vector.getZ();
 
         if (x == 0 && z == 0) {
             location.setPitch(vector.getY() > 0 ? -90 : 90);
-            return;
+            return location;
         }
 
         double theta = Math.atan2(-x, z);
@@ -33,6 +33,8 @@ public class LocationUtils {
         double z2 = NumberConversions.square(z);
         double xz = Math.sqrt(x2 + z2);
         location.setPitch((float) Math.toDegrees(Math.atan(-vector.getY() / xz)));
+
+        return location;
     }
 
     public static Location getTopLocation(Location location) {
