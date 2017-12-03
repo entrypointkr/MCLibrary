@@ -137,4 +137,8 @@ public class InventoryUtils {
         }
         return true;
     }
+
+    public static boolean isEmpty(InventoryHolder holder) {
+        return isEmpty(holder.getInventory());
+    }
 }
