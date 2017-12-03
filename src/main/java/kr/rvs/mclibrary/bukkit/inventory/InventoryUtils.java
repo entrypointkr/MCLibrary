@@ -133,7 +133,7 @@ public class InventoryUtils {
     public static boolean isEmpty(Inventory inventory) {
         for (int i = 0; i < inventory.getSize(); i++) {
             if (inventory.getItem(i) != null)
-                return true;
+                return false;
         }
         return true;
     }
