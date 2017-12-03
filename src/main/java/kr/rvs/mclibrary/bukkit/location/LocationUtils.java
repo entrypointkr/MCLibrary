@@ -1,9 +1,9 @@
 package kr.rvs.mclibrary.bukkit.location;
 
+import kr.rvs.mclibrary.general.NumberUtil;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
-import org.bukkit.util.NumberConversions;
 import org.bukkit.util.Vector;
 
 /**
@@ -12,7 +12,7 @@ import org.bukkit.util.Vector;
 public class LocationUtils {
     public static String toString(Vector vector) {
         return vector != null ?
-                String.format("x: %s, y: %s, z: %s", vector.getX(), vector.getY(), vector.getZ()):
+                String.format("x: %s, y: %s, z: %s", vector.getX(), vector.getY(), vector.getZ()) :
                 "null";
     }
 
@@ -29,8 +29,8 @@ public class LocationUtils {
         double theta = Math.atan2(-x, z);
         location.setYaw((float) Math.toDegrees((theta + _2PI) % _2PI));
 
-        double x2 = NumberConversions.square(x);
-        double z2 = NumberConversions.square(z);
+        double x2 = NumberUtil.square(x);
+        double z2 = NumberUtil.square(z);
         double xz = Math.sqrt(x2 + z2);
         location.setPitch((float) Math.toDegrees(Math.atan(-vector.getY() / xz)));
 

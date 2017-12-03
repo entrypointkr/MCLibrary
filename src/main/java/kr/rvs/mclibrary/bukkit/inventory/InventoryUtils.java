@@ -129,4 +129,12 @@ public class InventoryUtils {
     public static void giveItem(InventoryHolder holder, ItemStack item, int amount) {
         giveItem(holder.getInventory(), item, amount);
     }
+
+    public static boolean isEmpty(Inventory inventory) {
+        for (int i = 0; i < inventory.getSize(); i++) {
+            if (inventory.getItem(i) != null)
+                return true;
+        }
+        return true;
+    }
 }

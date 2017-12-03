@@ -4,6 +4,10 @@ package kr.rvs.mclibrary.general;
  * Created by Junhyeong Lim on 2017-10-08.
  */
 public class NumberUtil {
+    public static double square(double num) {
+        return num * num;
+    }
+
     public static String toRomanNumeral(int input) {
         if (input < 1 || input > 3999)
             return "Invalid Roman Number Value";
