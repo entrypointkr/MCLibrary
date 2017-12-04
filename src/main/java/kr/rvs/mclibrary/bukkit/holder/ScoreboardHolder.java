@@ -1,10 +1,12 @@
 package kr.rvs.mclibrary.bukkit.holder;
 
 import kr.rvs.mclibrary.Static;
+import kr.rvs.mclibrary.bukkit.MCUtils;
 import kr.rvs.mclibrary.bukkit.Replaceable;
 import kr.rvs.mclibrary.bukkit.mock.MockFactory;
 import kr.rvs.mclibrary.collection.StringArrayList;
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
@@ -20,6 +22,12 @@ public class ScoreboardHolder extends Replaceable<ScoreboardHolder> {
     private String id;
     private final String title;
     private StringArrayList contents = new StringArrayList();
+
+    public static OfflinePlayer getOffline(String contents) {
+        String parsed = contents.substring(0, Math.min(contents.length(), 16));
+        return MockFactory.createOfflinePlayer(
+                MCUtils.colorize(parsed));
+    }
 
     public ScoreboardHolder(String id, String title) {
         this.id = id;
@@ -66,7 +74,7 @@ public class ScoreboardHolder extends Replaceable<ScoreboardHolder> {
         for (int i = 0; i < contents.size(); i++) {
             String content = ensure(formatting(contents.get(i)));
             int number = contents.size() - i;
-            Score score = objective.getScore(MockFactory.createOfflinePlayer(content)); // For Legacy version
+            Score score = objective.getScore(getOffline(content)); // For Legacy version
             score.setScore(number);
         }
 
