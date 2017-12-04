@@ -2,9 +2,12 @@ package kr.rvs.mclibrary.bukkit.location;
 
 import kr.rvs.mclibrary.general.NumberUtil;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.util.Vector;
+
+import java.util.function.Predicate;
 
 /**
  * Created by Junhyeong Lim on 2017-10-08.
@@ -49,5 +52,24 @@ public class LocationUtils {
         }
 
         return location;
+    }
+
+    public static Location getEmptyLocation(Location location, Predicate<Block> filter) {
+        World world = location.getWorld();
+        int maxHeight = world.getMaxHeight();
+        int x = location.getBlockX();
+        int z = location.getBlockZ();
+        for (int i = location.getBlockY(); i < maxHeight; i++) {
+            Block block = world.getBlockAt(x, i, z);
+            if (block.getType() == Material.AIR
+                    && filter.test(block))
+                return new Location(world, x, i, z);
+        }
+
+        return location;
+    }
+
+    public static Location getEmptyLocation(Location location) {
+        return getEmptyLocation(location, block -> true);
     }
 }
