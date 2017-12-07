@@ -26,7 +26,7 @@ public class GsonManager {
     }
 
     public static GsonBuilder createDefaultBuilder() {
-        return new GsonBuilder().setPrettyPrinting()
+        return new GsonBuilder()
                 .disableHtmlEscaping()
                 .enableComplexMapKeySerialization()
                 .registerTypeAdapterFactory(new BukkitTypeAdapterFactory());
