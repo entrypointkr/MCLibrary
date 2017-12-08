@@ -12,7 +12,7 @@ public class MaterialAndData {
     private final short data;
 
     @SuppressWarnings("deprecation")
-    public static MaterialAndData ofString(String idAndData) {
+    public static MaterialAndData parse(String idAndData) {
         String[] splited = idAndData.split(":");
         int id = Integer.parseInt(splited[0]);
         Material material = Material.getMaterial(id);

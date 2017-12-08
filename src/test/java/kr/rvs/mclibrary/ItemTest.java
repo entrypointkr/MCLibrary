@@ -41,9 +41,9 @@ public class ItemTest extends Assert {
     @Test
     public void matAndDataTest() {
         ItemStack item = new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 14);
-        MaterialAndData data = MaterialAndData.ofString("160:14");
+        MaterialAndData data = MaterialAndData.parse("160:14");
         assertTrue(data.isMatch(item));
         assertTrue(item.isSimilar(data.createItem()));
-        assertFalse(MaterialAndData.ofString("160").isMatch(item));
+        assertFalse(MaterialAndData.parse("160").isMatch(item));
     }
 }
