@@ -1,12 +1,7 @@
 package kr.rvs.mclibrary.general;
 
 
-import kr.rvs.mclibrary.collection.OptionalArrayList;
-
-import java.util.ArrayDeque;
-import java.util.Arrays;
 import java.util.Optional;
-import java.util.Queue;
 import java.util.function.Consumer;
 
 /**
@@ -16,7 +11,7 @@ public class VarargsParser {
     private final Object[] args;
     private int count = 2;
 
-    public VarargsParser(Object[] args) {
+    public VarargsParser(Object... args) {
         this.args = args;
     }
 
@@ -26,31 +21,29 @@ public class VarargsParser {
     }
 
     public void parse(Consumer<Section> sectionCallback) {
-        Queue queue = new ArrayDeque<>(Arrays.asList(args));
-        while (queue.size() >= count) {
-            OptionalArrayList<Object> values = new OptionalArrayList<>(count);
-            for (int i = 0; i < count; i++) {
-                values.add(queue.poll());
-            }
+        for (int i = 0; i < args.length / count; i++) {
+            int source = i * count;
+            Object[] values = new Object[count];
+            System.arraycopy(args, source, values, 0, count);
             sectionCallback.accept(new Section(values));
         }
     }
 
     public class Section {
-        private final OptionalArrayList values;
+        private final Object[] values;
 
-        public Section(OptionalArrayList values) {
+        public Section(Object[] values) {
             this.values = values;
         }
 
         @SuppressWarnings("unchecked")
         public <T> T get(Integer index) {
-            Object value = values.get(index);
+            Object value = values[index];
             return value != null ? (T) value : null;
         }
 
         public String getString(Integer index) {
-            Object value = values.get(index);
+            Object value = values[index];
             return value != null ? String.valueOf(value) : null;
         }
 

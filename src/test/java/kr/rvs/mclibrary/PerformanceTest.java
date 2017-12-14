@@ -23,7 +23,7 @@ public class PerformanceTest {
         ItemStack item = new ItemStack(Material.STONE);
 
         new SpeedTester(10, false)
-                .addRunnable("contents", () -> {
+                .addRunnable("data", () -> {
                     new ItemBuilder(item)
                             .display("a b c")
                             .replacement(
