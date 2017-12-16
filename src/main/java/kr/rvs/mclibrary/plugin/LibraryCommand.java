@@ -31,14 +31,11 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
-import java.io.IOException;
 
 /**
  * Created by Junhyeong Lim on 2017-09-20.
  */
-@Command(
-        args = "mclibrary"
-)
+@Command(args = "mclibrary")
 public class LibraryCommand {
     private static final PlayerHashSet<Player> INFO_LISTENERS = new PlayerHashSet<>();
     private final MCLibrary instance = (MCLibrary) MCLibrary.getPlugin();
@@ -89,7 +86,7 @@ public class LibraryCommand {
             desc = "모든 몬스터를 제거합니다."
     )
     public void killallCommand(CommandSenderWrapper wrapper, CommandArguments args) {
-        World world = args.size() > 0 ? args.getWorldOrThrow(0) : wrapper.getWorldOrThrow();
+        World world = args.isEmpty() ? wrapper.getWorldOrThrow() : args.getWorldOrThrow(0);
         world.getEntities().stream()
                 .filter(entity -> entity instanceof Creature)
                 .forEach(Entity::remove);
@@ -139,7 +136,7 @@ public class LibraryCommand {
     )
     @SuppressWarnings("deprecation")
     public void heal(CommandSenderWrapper wrapper, CommandArguments args) {
-        Player player = args.size() > 0 ? args.getPlayerOrThrow(0) : wrapper.getPlayerOrThrow();
+        Player player = args.isEmpty() ? wrapper.getPlayerOrThrow() : args.getPlayerOrThrow(0);
         PlayerUtils.setHealth(player, PlayerUtils.getMaxHealth(player));
         player.setFoodLevel(30);
         wrapper.sendMessage("완료.");
@@ -153,7 +150,7 @@ public class LibraryCommand {
             perm = "mclibrary.serialize"
     )
     @SuppressWarnings("deprecation")
-    public void serialize(CommandSenderWrapper sender, CommandArguments args) throws IOException {
+    public void serialize(CommandSenderWrapper sender, CommandArguments args) {
         ItemStack item = sender.getItemInHandOrThrow("손에 아이템을 들어주세요.");
         String fileName = "items/" + args.get(0, "serialize") + ".json";
         File file = new File(MCLibrary.getPlugin().getDataFolder(), fileName);
