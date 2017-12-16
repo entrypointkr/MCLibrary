@@ -60,21 +60,15 @@ Example command 4
 
 ## usage
 ```java
-new GUI(
-	new GUISignature(InventoryType.CHEST)
-			.title("MCLibrary GUI")
-			.item(13, new ItemBuilder(Material.MAP).display("MCLibrary").build()),
-	new EventCancelHandler(),
-	new ClickHandler(13) {
-		@Override
-		public void click(GUIClickEvent e) {
-			e.sendMessage(
-				"&aHello,",
-				"&eMCLibrary"
-			);
-		}
-	}
-).open(player);
+new SimpleGUI(new GUIData(InventoryType.CHEST)
+        .item(13, new ItemStack(Material.CHEST))
+        .title("MCLibrary GUI"))
+        .handler(handlers -> handlers.addLast(
+                CancelHandler.TOP,
+                new ClickHandler().handler(13, event ->
+                        GUI.sendMessage(event, "&aHello, MCLibrary"))
+        ))
+        .open(player);
 ```
 
 ## processors
