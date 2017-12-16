@@ -100,8 +100,8 @@ public class LibraryCommand {
     )
     public void guiCommand(CommandSenderWrapper wrapper, CommandArguments args) {
         new SimpleGUI(new GUIData(InventoryType.CHEST)
-                .item(13, new ItemStack(Material.CHEST))
-                .title("MCLibrary GUI"))
+                .title("MCLibrary GUI")
+                .item(13, new ItemStack(Material.CHEST)))
                 .handler(handlers -> handlers.addLast(
                         CancelHandler.TOP,
                         new ClickHandler().handler(13, event ->
