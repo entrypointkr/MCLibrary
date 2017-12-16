@@ -13,7 +13,7 @@ public abstract class DelegateWizard<C, T> extends Wizard<C> {
     }
 
     @Override
-    protected void release() {
+    public void release() {
         wizard.release();
     }
 
