@@ -30,9 +30,4 @@ public class EventCaller implements Listener {
             event.setCancelled(custom.isCancelled());
         }
     }
-
-    @EventHandler(priority = EventPriority.LOWEST)
-    public void onInteract(PlayerInteractEvent event) {
-        Bukkit.getPluginManager().callEvent(new SafePlayerInteractEvent(event));
-    }
 }

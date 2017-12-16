@@ -8,23 +8,24 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 import java.util.function.Consumer;
 
 /**
- * Created by Junhyeong Lim on 2017-11-01.
+ * Created by Junhyeong Lim on 2017-12-16.
  */
 public class ChatWizard extends ListenerWizard<String> {
-    public ChatWizard(Player player, Consumer<String> callback) {
-        super(player, callback);
+    private final Player player;
+
+    public ChatWizard(Player player) {
+        this.player = player;
     }
 
     @Override
-    protected void process() {
-        registerListener(new Listener() {
+    public Listener listener(Consumer<String> callback) {
+        return new Listener() {
             @EventHandler
             public void onChat(AsyncPlayerChatEvent event) {
-                if (event.getPlayer().equals(getPlayer())) {
-                    event.setCancelled(true);
-                    release(event.getMessage());
+                if (event.getPlayer().equals(player)) {
+                    callback.accept(event.getMessage());
                 }
             }
-        });
+        };
     }
 }

@@ -1,30 +1,27 @@
 package kr.rvs.mclibrary.bukkit.wizard;
 
 import kr.rvs.mclibrary.MCLibrary;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 
 import java.util.function.Consumer;
 
 /**
- * Created by Junhyeong Lim on 2017-11-01.
+ * Created by Junhyeong Lim on 2017-12-16.
  */
 public abstract class ListenerWizard<C> extends Wizard<C> {
     private Listener listener;
 
-    public ListenerWizard(Player player, Consumer<C> callback) {
-        super(player, callback);
-    }
+    public abstract Listener listener(Consumer<C> callback);
 
-    protected void registerListener(Listener listener) {
-        this.listener = listener;
-        Bukkit.getPluginManager().registerEvents(listener, MCLibrary.getPlugin());
+    @Override
+    protected void process(Consumer<C> callback) {
+        this.listener = listener(callback);
+        MCLibrary.registerListener(listener);
     }
 
     @Override
-    protected void release() {
+    public void release() {
         if (listener != null)
             HandlerList.unregisterAll(listener);
     }

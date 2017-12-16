@@ -79,9 +79,9 @@ public class GUISignature implements Cloneable {
 
     /**
      * This method can use two types of multiple args.
-     * For example, contents(1, contents, 2, contents, 10, contents)
+     * For example, data(1, data, 2, data, 10, data)
      *
-     * @param args (int slot, ItemStack contents)...
+     * @param args (int slot, ItemStack data)...
      * @return this
      */
     public GUISignature item(Object... args) {

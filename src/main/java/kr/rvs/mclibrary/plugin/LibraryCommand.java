@@ -5,14 +5,11 @@ import kr.rvs.mclibrary.bukkit.collection.PlayerHashSet;
 import kr.rvs.mclibrary.bukkit.command.CommandArguments;
 import kr.rvs.mclibrary.bukkit.command.CommandType;
 import kr.rvs.mclibrary.bukkit.command.annotation.Command;
-import kr.rvs.mclibrary.bukkit.event.SafePlayerInteractEvent;
-import kr.rvs.mclibrary.bukkit.inventory.event.GUIClickEvent;
-import kr.rvs.mclibrary.bukkit.inventory.gui.GUI;
-import kr.rvs.mclibrary.bukkit.inventory.gui.GUIEvent;
-import kr.rvs.mclibrary.bukkit.inventory.gui.GUISignature;
-import kr.rvs.mclibrary.bukkit.inventory.gui.handler.ClickHandler;
-import kr.rvs.mclibrary.bukkit.inventory.gui.handler.EventCancelHandler;
-import kr.rvs.mclibrary.bukkit.item.ItemBuilder;
+import kr.rvs.mclibrary.bukkit.inventory.newgui.GUI;
+import kr.rvs.mclibrary.bukkit.inventory.newgui.GUIData;
+import kr.rvs.mclibrary.bukkit.inventory.newgui.SimpleGUI;
+import kr.rvs.mclibrary.bukkit.inventory.newgui.handler.CancelHandler;
+import kr.rvs.mclibrary.bukkit.inventory.newgui.handler.ClickHandler;
 import kr.rvs.mclibrary.bukkit.player.CommandSenderWrapper;
 import kr.rvs.mclibrary.bukkit.player.PlayerUtils;
 import kr.rvs.mclibrary.gson.GsonUtils;
@@ -49,7 +46,7 @@ public class LibraryCommand {
         Bukkit.getPluginManager().registerEvents(new Listener() {
             @EventHandler
             @SuppressWarnings("deprecation")
-            public void onInteract(SafePlayerInteractEvent event) {
+            public void onInteract(CompatiblePlayerInteractEvent event) {
                 PlayerInteractEvent e = event.getDelegate();
                 if (event.hasGetHandMethod() && e.getHand() != EquipmentSlot.HAND)
                     return;
@@ -105,27 +102,20 @@ public class LibraryCommand {
             desc = "테스트 gui 를 엽니다."
     )
     public void guiCommand(CommandSenderWrapper wrapper, CommandArguments args) {
-        new GUI(
-                new GUISignature(InventoryType.CHEST)
-                        .title("MCLibrary GUI")
-                        .item(13, new ItemBuilder(Material.MAP).display("MCLibrary version").build()),
-                new EventCancelHandler(),
-                new ClickHandler(13) {
-                    @Override
-                    public void click(GUIEvent<GUIClickEvent> event) {
-                        event.getEvent().sendMessage(
-                                "&aHello,",
-                                "&e" + instance.getDescription().getFullName()
-                        );
-                    }
-                }
-        ).open(wrapper.getPlayerOrThrow());
+        new SimpleGUI(new GUIData(InventoryType.CHEST)
+                .item(13, new ItemStack(Material.CHEST)))
+                .handler(handlers -> handlers.addLast(
+                        CancelHandler.TOP,
+                        new ClickHandler().handler(13, event ->
+                                GUI.sendMessage(event, "&aHello, MCLibrary"))
+                ))
+                .open(wrapper.getPlayerOrThrow());
     }
 
     @Command(
             type = CommandType.PLAYER,
-            args = "click",
-            perm = "mclibrary.click",
+            args = "receive",
+            perm = "mclibrary.receive",
             desc = "클릭한 위치의 블럭 정보를 출력합니다."
     )
     public void blockInfo(CommandSenderWrapper wrapper, CommandArguments args) {

@@ -3,6 +3,9 @@ package kr.rvs.mclibrary;
 import kr.rvs.mclibrary.bukkit.MCUtils;
 import kr.rvs.mclibrary.bukkit.command.CommandManager;
 import kr.rvs.mclibrary.bukkit.event.EventCaller;
+import kr.rvs.mclibrary.bukkit.factory.packet.LegacyPacketFactory;
+import kr.rvs.mclibrary.bukkit.factory.packet.ModernPacketFactory;
+import kr.rvs.mclibrary.bukkit.factory.packet.PacketFactory;
 import kr.rvs.mclibrary.bukkit.inventory.gui.GUI;
 import kr.rvs.mclibrary.bukkit.player.PlayerUtils;
 import kr.rvs.mclibrary.bukkit.plugin.PluginUtils;
@@ -13,8 +16,10 @@ import kr.rvs.mclibrary.gson.SettingManager;
 import kr.rvs.mclibrary.plugin.LibraryCommand;
 import kr.rvs.mclibrary.plugin.ServerHostnameGetter;
 import org.bstats.bukkit.Metrics;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -32,6 +37,7 @@ public class MCLibrary extends JavaPlugin {
     private static final CommandManager COMMAND_MANAGER = new CommandManager(); // TODO: Separation?
     private static final GsonManager GSON_MANAGER = new GsonManager();
     private static final SettingManager SETTING_MANAGER = new SettingManager();
+    private static PacketFactory packetFactory;
     private static String address = "unknown";
     private static Plugin plugin;
 
@@ -47,8 +53,23 @@ public class MCLibrary extends JavaPlugin {
         return SETTING_MANAGER;
     }
 
+    public static PacketFactory getPacketFactory() {
+        if (packetFactory == null) {
+            if (Version.BUKKIT.afterEquals(Version.V1_11)) {
+                packetFactory = new ModernPacketFactory();
+            } else {
+                packetFactory =  new LegacyPacketFactory();
+            }
+        }
+        return packetFactory;
+    }
+
     public static Plugin getPlugin() {
         return plugin;
+    }
+
+    public static void registerListener(Listener listener) {
+        Bukkit.getPluginManager().registerEvents(listener, plugin);
     }
 
     public MCLibrary() {
@@ -63,8 +84,8 @@ public class MCLibrary extends JavaPlugin {
         configInit();
 
         // Function
-        Version.init(this);
         GUI.init(this);
+        kr.rvs.mclibrary.bukkit.inventory.newgui.GUI.init(this);
         ServerHostnameGetter.init(this);
         LibraryCommand.init(this);
         EventCaller.init(this);
