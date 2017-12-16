@@ -15,7 +15,7 @@ import java.util.Optional;
 /**
  * Created by Junhyeong Lim on 2017-09-17.
  */
-public class CommandSenderWrapper { // TODO: ByteBuddy?
+public class CommandSenderWrapper {
     private final CommandSender sender;
 
     public CommandSenderWrapper(CommandSender sender) {

@@ -31,8 +31,8 @@ public class Plugins {
                 ret.add(plugin);
         }
         return ret;
-//        return Stream.of(Bukkit.getPluginManager().getPlugins())
-//                .filter(element -> isDepend(superPlugin, element))
-//                .collect(Collectors.toSet());
+    }
+
+    private Plugins() {
     }
 }

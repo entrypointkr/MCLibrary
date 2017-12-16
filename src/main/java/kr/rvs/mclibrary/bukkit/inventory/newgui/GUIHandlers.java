@@ -1,7 +1,7 @@
 package kr.rvs.mclibrary.bukkit.inventory.newgui;
 
 import kr.rvs.mclibrary.bukkit.inventory.newgui.handler.GUIHandler;
-import org.bukkit.event.inventory.*;
+import org.bukkit.event.inventory.InventoryEvent;
 
 import java.util.ArrayList;
 import java.util.Arrays;

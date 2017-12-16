@@ -1,7 +1,7 @@
 package kr.rvs.mclibrary.bukkit.command.duplex;
 
 import kr.rvs.mclibrary.bukkit.command.CommandArguments;
-import kr.rvs.mclibrary.bukkit.command.CommandInfo;
+import kr.rvs.mclibrary.bukkit.command.CommandInformation;
 import kr.rvs.mclibrary.bukkit.command.ICommand;
 import kr.rvs.mclibrary.bukkit.player.CommandSenderWrapper;
 import org.apache.commons.lang.StringUtils;
@@ -62,13 +62,13 @@ public abstract class AbstractHelpExecutor implements ICommand {
                     init(argSpacing(args, key), val);
                     if (base != null)
                         init(argSpacing(args, ""), base);
-                } else if (val instanceof CommandInfo) {
-                    CommandStorage storage = new CommandStorage(argSpacing(args, key), (CommandInfo) val);
+                } else if (val instanceof CommandInformation) {
+                    CommandStorage storage = new CommandStorage(argSpacing(args, key), (CommandInformation) val);
                     storageList.add(storage);
                 }
             }
-        } else if (command instanceof CommandInfo) {
-            CommandStorage storage = new CommandStorage("", (CommandInfo) command);
+        } else if (command instanceof CommandInformation) {
+            CommandStorage storage = new CommandStorage("", (CommandInformation) command);
             storageList.add(storage);
         }
     }
@@ -77,7 +77,7 @@ public abstract class AbstractHelpExecutor implements ICommand {
         return storageList.size() / line + (storageList.size() % line > 0 ? 1 : 0);
     }
 
-    protected boolean hasPerm(CommandInfo info, CommandSender sender) {
+    protected boolean hasPerm(CommandInformation info, CommandSender sender) {
         return StringUtils.isEmpty(info.perm()) || sender.hasPermission(info.perm());
     }
 
@@ -87,13 +87,13 @@ public abstract class AbstractHelpExecutor implements ICommand {
 
         // Sort
         CommandSender sender = wrapper.getSender();
-        List<CommandStorage> storageList = new ArrayList<>(this.storageList);
-        storageList.sort((o1, o2) ->
+        List<CommandStorage> storages = new ArrayList<>(storageList);
+        storages.sort((o1, o2) ->
                 Boolean.compare(hasPerm(o2.info, sender), hasPerm(o1.info, sender)));
         int maxPage = getMaxPage();
         int currPage = Math.min(Math.max(args.getInt(0, 1), 1), maxPage);
         int start = (currPage - 1) * line;
-        int end = Math.min(currPage * line, storageList.size());
+        int end = Math.min(currPage * line, storages.size());
         boolean paging = maxPage > 1;
 
         // Header
@@ -119,7 +119,7 @@ public abstract class AbstractHelpExecutor implements ICommand {
 
         // Contents
         for (int i = start; i < end; i++) {
-            CommandStorage storage = storageList.get(i);
+            CommandStorage storage = storages.get(i);
             sendCommandInfo(wrapper, storage.args, storage.info);
         }
     }
@@ -136,7 +136,7 @@ public abstract class AbstractHelpExecutor implements ICommand {
         return ret;
     }
 
-    public abstract void sendCommandInfo(CommandSenderWrapper wrapper, String args, CommandInfo commandInfo);
+    public abstract void sendCommandInfo(CommandSenderWrapper wrapper, String args, CommandInformation commandInformation);
 
     public String getLabel() {
         return label;
@@ -144,9 +144,9 @@ public abstract class AbstractHelpExecutor implements ICommand {
 
     static class CommandStorage {
         private final String args;
-        private final CommandInfo info;
+        private final CommandInformation info;
 
-        public CommandStorage(String args, CommandInfo info) {
+        public CommandStorage(String args, CommandInformation info) {
             this.args = args;
             this.info = info;
         }

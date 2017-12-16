@@ -4,6 +4,7 @@ import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
+import kr.rvs.mclibrary.Static;
 import kr.rvs.mclibrary.bukkit.inventory.gui.GUISignature;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.ItemStack;
@@ -73,7 +74,8 @@ public class GUISignatureTypeAdapter extends TypeAdapter<GUISignature> {
         Map<String, Object> contents = new HashMap<>();
         in.beginObject();
         while (in.hasNext()) {
-            switch (in.nextName()) {
+            String name = in.nextName();
+            switch (name) {
                 case "type":
                     signature.type(InventoryType.valueOf(in.nextString()));
                     break;
@@ -91,6 +93,8 @@ public class GUISignatureTypeAdapter extends TypeAdapter<GUISignature> {
                 case "data":
                     contents = mapAdapter.read(in);
                     break;
+                default:
+                    Static.log("Unknown type, " + name);
             }
         }
 

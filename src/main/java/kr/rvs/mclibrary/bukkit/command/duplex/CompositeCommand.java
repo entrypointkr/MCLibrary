@@ -1,10 +1,6 @@
 package kr.rvs.mclibrary.bukkit.command.duplex;
 
-import kr.rvs.mclibrary.bukkit.command.CommandArguments;
-import kr.rvs.mclibrary.bukkit.command.CommandInfo;
-import kr.rvs.mclibrary.bukkit.command.Executable;
-import kr.rvs.mclibrary.bukkit.command.ICommand;
-import kr.rvs.mclibrary.bukkit.command.TabCompletable;
+import kr.rvs.mclibrary.bukkit.command.*;
 import kr.rvs.mclibrary.bukkit.player.CommandSenderWrapper;
 
 import java.util.ArrayList;
@@ -13,10 +9,10 @@ import java.util.List;
 /**
  * Created by Junhyeong Lim on 2017-09-30.
  */
-public class CompositeCommand implements ICommand, CommandInfo {
+public class CompositeCommand implements ICommand, CommandInformation {
     private Executable executable;
     private TabCompletable completable;
-    private CommandInfo commandInfo = CommandInfo.DEFAULT;
+    private CommandInformation commandInformation = CommandInformation.DEFAULT;
 
     @Override
     public void execute(CommandSenderWrapper wrapper, CommandArguments args) {
@@ -34,17 +30,17 @@ public class CompositeCommand implements ICommand, CommandInfo {
 
     @Override
     public String usage() {
-        return commandInfo.usage();
+        return commandInformation.usage();
     }
 
     @Override
     public String desc() {
-        return commandInfo.desc();
+        return commandInformation.desc();
     }
 
     @Override
     public String perm() {
-        return commandInfo.perm();
+        return commandInformation.perm();
     }
 
     public void setExecutable(Executable executable) {
@@ -55,8 +51,8 @@ public class CompositeCommand implements ICommand, CommandInfo {
         this.completable = completable;
     }
 
-    public void setCommandInfo(CommandInfo commandInfo) {
-        this.commandInfo = commandInfo;
+    public void setCommandInfo(CommandInformation commandInformation) {
+        this.commandInformation = commandInformation;
     }
 
     public Executable getExecutable() {
@@ -67,7 +63,7 @@ public class CompositeCommand implements ICommand, CommandInfo {
         return completable;
     }
 
-    public CommandInfo getCommandInfo() {
-        return commandInfo;
+    public CommandInformation getCommandInfo() {
+        return commandInformation;
     }
 }

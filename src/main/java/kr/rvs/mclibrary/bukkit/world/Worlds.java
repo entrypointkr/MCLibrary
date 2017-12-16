@@ -8,8 +8,11 @@ import java.util.Optional;
 /**
  * Created by Junhyeong Lim on 2017-11-06.
  */
-public class WorldUtils {
+public class Worlds {
     public static Optional<World> getWorld(String name) {
         return Optional.ofNullable(Bukkit.getWorld(name));
+    }
+
+    private Worlds() {
     }
 }

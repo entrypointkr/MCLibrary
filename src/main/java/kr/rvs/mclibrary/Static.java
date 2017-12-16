@@ -47,4 +47,7 @@ public class Static {
             }
         });
     }
+
+    private Static() {
+    }
 }

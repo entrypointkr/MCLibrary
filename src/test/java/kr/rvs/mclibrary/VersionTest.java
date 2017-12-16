@@ -11,9 +11,9 @@ public class VersionTest extends Assert {
     @Test
     public void versionParse() {
         Version version = new Version("1.12.1-R0.1-SNAPSHOT");
-        assertEquals(version.getMajor(), 1);
-        assertEquals(version.getMinor(), 12);
-        assertEquals(version.getMaintenance(), 1);
+        assertEquals(1, version.getMajor());
+        assertEquals(12, version.getMinor());
+        assertEquals(1, version.getMaintenance());
     }
 
     @Test

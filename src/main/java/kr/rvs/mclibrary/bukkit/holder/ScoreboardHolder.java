@@ -10,7 +10,6 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
-import org.bukkit.scoreboard.Score;
 import org.bukkit.scoreboard.Scoreboard;
 
 import java.util.Arrays;
@@ -74,8 +73,7 @@ public class ScoreboardHolder extends Replaceable<ScoreboardHolder> {
         for (int i = 0; i < contents.size(); i++) {
             String content = ensure(formatting(contents.get(i)));
             int number = contents.size() - i;
-            Score score = objective.getScore(getOffline(content)); // For Legacy version
-            score.setScore(number);
+            objective.getScore(getOffline(content)).setScore(number); // For Legacy version
         }
 
         return scoreboard;

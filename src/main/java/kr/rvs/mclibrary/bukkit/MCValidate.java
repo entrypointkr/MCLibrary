@@ -14,4 +14,7 @@ public class MCValidate {
     public static void protocolLibEnabled() {
         specificPluginEnabled("ProtocolLib");
     }
+
+    private MCValidate() {
+    }
 }

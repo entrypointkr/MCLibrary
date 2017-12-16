@@ -142,4 +142,7 @@ public class Inventories {
     public static boolean isEmpty(InventoryHolder holder) {
         return isEmpty(holder.getInventory());
     }
+
+    private Inventories() {
+    }
 }

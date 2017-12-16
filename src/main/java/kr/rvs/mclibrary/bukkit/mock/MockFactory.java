@@ -15,4 +15,7 @@ public class MockFactory {
                 (proxy, method, args) -> name
         );
     }
+
+    private MockFactory() {
+    }
 }

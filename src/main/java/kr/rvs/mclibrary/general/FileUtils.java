@@ -1,10 +1,6 @@
 package kr.rvs.mclibrary.general;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.Writer;
+import java.io.*;
 import java.util.function.Consumer;
 
 /**
@@ -66,5 +62,8 @@ public class FileUtils {
 
     public static void write(File file, CharSequence charSequence) {
         write(file, charSequence, Exception::printStackTrace);
+    }
+
+    private FileUtils() {
     }
 }

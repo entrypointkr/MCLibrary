@@ -116,7 +116,7 @@ public class CommandManager {
             Reflections.getAnnotation(commandClass, SubCommand.class).ifPresent(subCommandAnnot ->
                     subClasses.addAll(Arrays.asList(subCommandAnnot.value())));
 
-            setupCommandWithMethod(commandClass, commandAnnot, instance, base);
+            setupCommandWithMethod(commandClass, instance, base);
             for (Class<?> subClass : subClasses) {
                 setupCommandWithClass(subClass, base);
             }
@@ -125,10 +125,11 @@ public class CommandManager {
         return annotRef.get();
     }
 
-    private void setupCommandWithMethod(Class<?> commandClass, Command commandAnnot, Object instance, MapCommand parent) {
+    private void setupCommandWithMethod(Class<?> commandClass, Object instance, MapCommand parent) {
         for (Method method : commandClass.getDeclaredMethods()) {
             String[] slice = null;
             Consumer<CompositeCommand> callback = compositeCommand -> {
+                // Empty
             };
             if (method.isAnnotationPresent(Command.class)) {
                 CommandAnnotationWrapper annot = new CommandAnnotationWrapper(method.getAnnotation(Command.class));
@@ -142,9 +143,7 @@ public class CommandManager {
             } else if (method.isAnnotationPresent(TabCompleter.class)) {
                 TabCompleter annot = method.getAnnotation(TabCompleter.class);
                 slice = annot.args().split(" ");
-                callback = composition -> {
-                    composition.setCompletable(new ReflectiveCompleter(instance, method));
-                };
+                callback = composition -> composition.setCompletable(new ReflectiveCompleter(instance, method));
             }
 
             // Process

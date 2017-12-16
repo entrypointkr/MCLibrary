@@ -1,6 +1,6 @@
 package kr.rvs.mclibrary.bukkit.command.duplex;
 
-import kr.rvs.mclibrary.bukkit.command.CommandInfo;
+import kr.rvs.mclibrary.bukkit.command.CommandInformation;
 import kr.rvs.mclibrary.bukkit.command.ICommand;
 import kr.rvs.mclibrary.bukkit.player.CommandSenderWrapper;
 import kr.rvs.mclibrary.bukkit.player.Players;
@@ -22,12 +22,12 @@ public class ModernHelpExecutor extends AbstractHelpExecutor {
     }
 
     @Override
-    public void sendCommandInfo(CommandSenderWrapper wrapper, String args, CommandInfo commandInfo) {
+    public void sendCommandInfo(CommandSenderWrapper wrapper, String args, CommandInformation commandInformation) {
         CommandSender nativeSender = wrapper.getSender();
-        String usage = commandInfo.usage();
-        boolean hasPerm = hasPerm(commandInfo, nativeSender);
+        String usage = commandInformation.usage();
+        boolean hasPerm = hasPerm(commandInformation, nativeSender);
         ChatColor color = hasPerm ? ChatColor.GOLD : ChatColor.RED;
-        String desc = commandInfo.desc();
+        String desc = commandInformation.desc();
         StringBuilder builder = new StringBuilder()
                 .append(color);
         StringBuilder cmdSection = new StringBuilder()

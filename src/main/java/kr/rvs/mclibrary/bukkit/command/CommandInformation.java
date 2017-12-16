@@ -3,14 +3,14 @@ package kr.rvs.mclibrary.bukkit.command;
 /**
  * Created by Junhyeong Lim on 2017-09-28.
  */
-public interface CommandInfo {
+public interface CommandInformation {
     String usage();
 
     String desc();
 
     String perm();
 
-    CommandInfo DEFAULT = new CommandInfo() {
+    CommandInformation DEFAULT = new CommandInformation() {
         @Override
         public String usage() {
             return "";

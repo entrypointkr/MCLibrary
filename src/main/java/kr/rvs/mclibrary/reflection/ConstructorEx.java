@@ -14,7 +14,7 @@ public class ConstructorEx extends AccessibleObjectWrapper<Constructor> {
     public Optional<Object> newInstance(Object... args) {
         try {
             return Optional.of(getAccessibleObject().newInstance(args));
-        } catch (Throwable e) {
+        } catch (Exception e) {
             // Ignore
         }
         return Optional.empty();

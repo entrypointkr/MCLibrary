@@ -98,9 +98,7 @@ public class GUI {
 
         @EventHandler
         public void onDrag(InventoryDragEvent e) {
-            guiMap.getOptional(e.getWhoClicked()).ifPresent(gui -> {
-                gui.getHandlers().notify(e);
-            });
+            guiMap.getOptional(e.getWhoClicked()).ifPresent(gui -> gui.getHandlers().notify(e));
         }
 
         @EventHandler

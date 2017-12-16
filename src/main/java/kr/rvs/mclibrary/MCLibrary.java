@@ -58,7 +58,7 @@ public class MCLibrary extends JavaPlugin {
             if (Version.BUKKIT.afterEquals(Version.V1_11)) {
                 packetFactory = new ModernPacketFactory();
             } else {
-                packetFactory =  new LegacyPacketFactory();
+                packetFactory = new LegacyPacketFactory();
             }
         }
         return packetFactory;

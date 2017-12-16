@@ -1,10 +1,9 @@
 package kr.rvs.mclibrary.bukkit.command.duplex;
 
 import kr.rvs.mclibrary.bukkit.command.CommandArguments;
-import kr.rvs.mclibrary.bukkit.command.CommandInfo;
+import kr.rvs.mclibrary.bukkit.command.CommandInformation;
 import kr.rvs.mclibrary.bukkit.command.ICommand;
 import kr.rvs.mclibrary.bukkit.command.TabCompletable;
-import kr.rvs.mclibrary.bukkit.command.exception.CommandException;
 import kr.rvs.mclibrary.bukkit.command.exception.CommandNotFoundException;
 import kr.rvs.mclibrary.bukkit.player.CommandSenderWrapper;
 import org.apache.commons.lang.StringUtils;
@@ -18,15 +17,15 @@ import java.util.stream.Collectors;
  */
 public class MapCommand extends LinkedHashMap<String, ICommand> implements ICommand {
     @Override
-    public void execute(CommandSenderWrapper wrapper, CommandArguments args) throws CommandException {
+    public void execute(CommandSenderWrapper wrapper, CommandArguments args) {
         String arg = args.getOptional(0).orElse(""); // TODO: Send help message when execute failed from BaseCommand, Simplify getBaseCommand
         ICommand baseCommand = getBaseCommand();
         ICommand command = getOrDefault(arg, baseCommand);
         if (command != null) {
             if (!command.equals(baseCommand))
                 args.remove(0);
-            if (command instanceof CommandInfo)
-                args.setLastCommand((CommandInfo) command);
+            if (command instanceof CommandInformation)
+                args.setLastCommand((CommandInformation) command);
             command.execute(wrapper, args);
         } else {
             throw new CommandNotFoundException(this);
@@ -36,7 +35,7 @@ public class MapCommand extends LinkedHashMap<String, ICommand> implements IComm
     @Override
     public List<String> tabComplete(CommandSenderWrapper wrapper, CommandArguments args) { // /test first
         String arg = args.remove(0);
-        TabCompletable completable = arg != null && args.size() > 0 ? get(arg) : getBaseTabCompleter();
+        TabCompletable completable = arg != null && !args.isEmpty() ? get(arg) : getBaseTabCompleter();
         return completable != null ?
                 completable.tabComplete(wrapper, args) :
                 keySet().stream()

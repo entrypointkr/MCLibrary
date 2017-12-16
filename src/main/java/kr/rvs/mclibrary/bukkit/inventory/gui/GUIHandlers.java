@@ -14,19 +14,19 @@ import java.util.List;
  */
 public class GUIHandlers {
     private final GUI gui;
-    private final List<GUIHandler> GUIHandlers = new ArrayList<>();
+    private final List<GUIHandler> handlers = new ArrayList<>();
 
     public GUIHandlers(GUI gui) {
         this.gui = gui;
     }
 
     public GUIHandlers addFirst(GUIHandler... handlers) {
-        this.GUIHandlers.addAll(0, Arrays.asList(handlers));
+        this.handlers.addAll(0, Arrays.asList(handlers));
         return this;
     }
 
     public GUIHandlers addLast(GUIHandler... handlers) {
-        this.GUIHandlers.addAll(Arrays.asList(handlers));
+        this.handlers.addAll(Arrays.asList(handlers));
         return this;
     }
 
@@ -40,7 +40,7 @@ public class GUIHandlers {
 
     public void notify(InventoryEvent event) {
         GUIEvent<InventoryEvent> guiEvent = new GUIEvent<>(gui, convert(event));
-        for (GUIHandler handler : GUIHandlers) {
+        for (GUIHandler handler : handlers) {
             handler.handle(guiEvent);
 
             if (guiEvent.isConsume())

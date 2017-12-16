@@ -5,6 +5,7 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
 import kr.rvs.mclibrary.MCLibrary;
+import kr.rvs.mclibrary.Static;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -67,9 +68,11 @@ public class ItemStackTypeAdapter extends TypeAdapter<ItemStack> {
                 case "amount":
                     amount = in.nextInt();
                     break;
-                case"meta":
+                case "meta":
                     meta = metaAdapter.read(in);
                     break;
+                default:
+                    Static.log("Unknown type, " + name);
             }
         }
         in.endObject();

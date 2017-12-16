@@ -43,4 +43,7 @@ public class ItemStacks {
         meta.setDisplayName(display);
         meta.setLore(newLore);
     }
+
+    private ItemStacks() {
+    }
 }

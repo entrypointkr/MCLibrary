@@ -12,4 +12,7 @@ public class MagicSpellUtils {
         }
         return false;
     }
+
+    private MagicSpellUtils() {
+    }
 }

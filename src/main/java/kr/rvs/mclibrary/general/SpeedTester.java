@@ -1,5 +1,7 @@
 package kr.rvs.mclibrary.general;
 
+import kr.rvs.mclibrary.Static;
+
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -48,7 +50,7 @@ public class SpeedTester {
                 entry.getValue().run();
                 total += getTime() - start;
             }
-            System.out.println(entry.getKey() + " 평균: " + total / tryCount);
+            Static.log(entry.getKey() + " 평균: " + total / tryCount);
         }
     }
 

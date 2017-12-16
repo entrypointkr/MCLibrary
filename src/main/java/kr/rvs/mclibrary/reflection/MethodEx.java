@@ -24,6 +24,7 @@ public class MethodEx extends AccessibleObjectWrapper<Method> {
 
     public <T> Optional<T> invoke(Object object, Object... args) {
         return invoke(object, e -> {
+            // Empty
         }, args);
     }
 }

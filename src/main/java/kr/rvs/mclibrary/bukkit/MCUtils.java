@@ -117,4 +117,7 @@ public class MCUtils {
     public static boolean isOffHandSupport() {
         return isOffHandSupported;
     }
+
+    private MCUtils() {
+    }
 }

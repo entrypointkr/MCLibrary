@@ -1,11 +1,10 @@
 package kr.rvs.mclibrary.bukkit.command.executor;
 
 import kr.rvs.mclibrary.bukkit.command.CommandArguments;
-import kr.rvs.mclibrary.bukkit.command.CommandInfo;
+import kr.rvs.mclibrary.bukkit.command.CommandInformation;
 import kr.rvs.mclibrary.bukkit.command.CommandType;
 import kr.rvs.mclibrary.bukkit.command.Executable;
 import kr.rvs.mclibrary.bukkit.command.annotation.Command;
-import kr.rvs.mclibrary.bukkit.command.exception.CommandException;
 import kr.rvs.mclibrary.bukkit.command.exception.InvalidUsageException;
 import kr.rvs.mclibrary.bukkit.command.exception.PermissionDeniedException;
 import kr.rvs.mclibrary.bukkit.player.CommandSenderWrapper;
@@ -16,7 +15,7 @@ import org.bukkit.command.CommandSender;
 /**
  * Created by Junhyeong Lim on 2017-09-27.
  */
-public class AnnotationProxyExecutor implements Executable, CommandInfo {
+public class AnnotationProxyExecutor implements Executable, CommandInformation {
     private final Command annotation;
     private final Executable executable;
 
@@ -26,7 +25,7 @@ public class AnnotationProxyExecutor implements Executable, CommandInfo {
     }
 
     @Override
-    public void execute(CommandSenderWrapper wrapper, CommandArguments args) throws CommandException {
+    public void execute(CommandSenderWrapper wrapper, CommandArguments args) {
         CommandSender sender = wrapper.getSender();
         String perm = annotation.perm();
         if (StringUtils.isNotEmpty(perm) && !sender.hasPermission(perm)) {

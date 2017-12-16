@@ -6,7 +6,7 @@ import java.util.Optional;
  * Created by Junhyeong Lim on 2017-09-27.
  */
 public class CommandException extends RuntimeException {
-    private final Object source;
+    private transient final Object source;
 
     public CommandException(Object source) {
         this.source = source;

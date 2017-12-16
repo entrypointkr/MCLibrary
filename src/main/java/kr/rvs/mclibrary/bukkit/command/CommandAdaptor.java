@@ -35,8 +35,8 @@ public class CommandAdaptor extends Command implements PluginIdentifiableCommand
         CommandSenderWrapper wrapper = new CommandSenderWrapper(sender);
         CommandArguments arguments = new CommandArguments(Arrays.asList(args));
 
-        if (command instanceof CommandInfo) {
-            arguments.setLastCommand((CommandInfo) command);
+        if (command instanceof CommandInformation) {
+            arguments.setLastCommand((CommandInformation) command);
         }
 
         try {
@@ -48,8 +48,7 @@ public class CommandAdaptor extends Command implements PluginIdentifiableCommand
     }
 
     @Override
-    public List<String> tabComplete(CommandSender sender, String alias, String[] args) throws
-            IllegalArgumentException {
+    public List<String> tabComplete(CommandSender sender, String alias, String[] args) {
         CommandSenderWrapper wrapper = new CommandSenderWrapper(sender);
         CommandArguments arguments = new CommandArguments(Arrays.asList(args));
         List<String> complete = command.tabComplete(wrapper, arguments);

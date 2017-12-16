@@ -37,4 +37,7 @@ public class StringUtil {
         }
         return ret;
     }
+
+    private StringUtil() {
+    }
 }

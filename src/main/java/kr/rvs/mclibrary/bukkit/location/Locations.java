@@ -1,6 +1,6 @@
 package kr.rvs.mclibrary.bukkit.location;
 
-import kr.rvs.mclibrary.general.NumberUtil;
+import kr.rvs.mclibrary.general.Numbers;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -12,7 +12,7 @@ import java.util.function.Predicate;
 /**
  * Created by Junhyeong Lim on 2017-10-08.
  */
-public class LocationUtils {
+public class Locations {
     public static String toString(Vector vector) {
         return vector != null ?
                 String.format("x: %s, y: %s, z: %s", vector.getX(), vector.getY(), vector.getZ()) :
@@ -32,8 +32,8 @@ public class LocationUtils {
         double theta = Math.atan2(-x, z);
         location.setYaw((float) Math.toDegrees((theta + _2PI) % _2PI));
 
-        double x2 = NumberUtil.square(x);
-        double z2 = NumberUtil.square(z);
+        double x2 = Numbers.square(x);
+        double z2 = Numbers.square(z);
         double xz = Math.sqrt(x2 + z2);
         location.setPitch((float) Math.toDegrees(Math.atan(-vector.getY() / xz)));
 
@@ -71,5 +71,8 @@ public class LocationUtils {
 
     public static Location getEmptyLocation(Location location) {
         return getEmptyLocation(location, block -> true);
+    }
+
+    private Locations() {
     }
 }

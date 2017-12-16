@@ -18,7 +18,7 @@ public class Reflections {
         Class<?> superClass = aClass.getSuperclass();
         String name = superClass.getName();
 
-        if (superClass == null || superClass == Object.class)
+        if (superClass == Object.class)
             return null;
 
         if (contains ?
@@ -89,5 +89,8 @@ public class Reflections {
         } catch (NoSuchFieldException | IllegalAccessException e) {
             throw new IllegalStateException(e);
         }
+    }
+
+    private Reflections() {
     }
 }

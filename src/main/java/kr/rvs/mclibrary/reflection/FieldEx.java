@@ -15,7 +15,7 @@ public class FieldEx extends AccessibleObjectWrapper<Field> {
     public <T> Optional<T> get(Object object) {
         try {
             return Optional.ofNullable((T) getAccessibleObject().get(object));
-        } catch (Throwable ignore) {
+        } catch (Exception ignore) {
             // Ignore
         }
         return Optional.empty();

@@ -3,7 +3,7 @@ package kr.rvs.mclibrary.general;
 /**
  * Created by Junhyeong Lim on 2017-10-08.
  */
-public class NumberUtil {
+public class Numbers {
     public static double square(double num) {
         return num * num;
     }
@@ -14,7 +14,8 @@ public class NumberUtil {
         StringBuilder builder = new StringBuilder();
         while (input >= 1000) {
             builder.append("M");
-            input -= 1000;        }
+            input -= 1000;
+        }
         while (input >= 900) {
             builder.append("CM");
             input -= 900;
@@ -64,5 +65,8 @@ public class NumberUtil {
             input -= 1;
         }
         return builder.toString();
+    }
+
+    private Numbers() {
     }
 }

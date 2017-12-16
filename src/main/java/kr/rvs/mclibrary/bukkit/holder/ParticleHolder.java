@@ -29,7 +29,7 @@ public class ParticleHolder<D> {
     }
 
     public ParticleHolder(Particle particle, int count, double extra, D data) {
-        this(particle, count,0, 0, 0, extra, data);
+        this(particle, count, 0, 0, 0, extra, data);
     }
 
     public ParticleHolder(Particle particle, int count, double extra) {

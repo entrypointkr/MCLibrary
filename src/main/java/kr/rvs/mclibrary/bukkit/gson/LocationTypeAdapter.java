@@ -4,6 +4,7 @@ import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
+import kr.rvs.mclibrary.Static;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -44,7 +45,8 @@ public class LocationTypeAdapter extends TypeAdapter<Location> {
 
         in.beginObject();
         while (in.hasNext()) {
-            switch (in.nextName()) {
+            String name = in.nextName();
+            switch (name) {
                 case "world":
                     world = Bukkit.getWorld(in.nextString());
                     break;
@@ -63,6 +65,8 @@ public class LocationTypeAdapter extends TypeAdapter<Location> {
                 case "pitch":
                     pitch = in.nextDouble();
                     break;
+                default:
+                    Static.log("Unknown type, " + name);
             }
         }
         in.endObject();

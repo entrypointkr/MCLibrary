@@ -27,19 +27,23 @@ public class ClassProbe {
         init();
     }
 
+    private void findClassAndAdd(String name) {
+        try {
+            String className = name.substring(0, name.indexOf(".class")).replace('/', '.');
+            Class aClass = Class.forName(className);
+            storage.add(aClass);
+        } catch (Exception th) {
+            // Ignore
+        }
+    }
+
     private void init() {
         ZipEntry entry;
         try (ZipInputStream zin = new ZipInputStream(new FileInputStream(file))) {
             while ((entry = zin.getNextEntry()) != null) {
                 String name = entry.getName();
                 if (name.endsWith(".class")) {
-                    try {
-                        String className = name.substring(0, name.indexOf(".class")).replace('/', '.');
-                        Class aClass = Class.forName(className);
-                        storage.add(aClass);
-                    } catch (Throwable th) {
-                        // Ignore
-                    }
+                    findClassAndAdd(name);
                 }
             }
         } catch (Exception e) {

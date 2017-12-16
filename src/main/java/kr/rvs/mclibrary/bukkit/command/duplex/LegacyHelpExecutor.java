@@ -1,6 +1,6 @@
 package kr.rvs.mclibrary.bukkit.command.duplex;
 
-import kr.rvs.mclibrary.bukkit.command.CommandInfo;
+import kr.rvs.mclibrary.bukkit.command.CommandInformation;
 import kr.rvs.mclibrary.bukkit.command.ICommand;
 import kr.rvs.mclibrary.bukkit.player.CommandSenderWrapper;
 import org.apache.commons.lang.StringUtils;
@@ -16,12 +16,12 @@ public class LegacyHelpExecutor extends AbstractHelpExecutor {
     }
 
     @Override
-    public void sendCommandInfo(CommandSenderWrapper wrapper, String args, CommandInfo commandInfo) {
+    public void sendCommandInfo(CommandSenderWrapper wrapper, String args, CommandInformation commandInformation) {
         CommandSender sender = wrapper.getSender();
-        String usage = commandInfo.usage();
-        boolean hasPerm = hasPerm(commandInfo, sender);
+        String usage = commandInformation.usage();
+        boolean hasPerm = hasPerm(commandInformation, sender);
         ChatColor color = hasPerm ? ChatColor.GOLD : ChatColor.RED;
-        String desc = commandInfo.desc();
+        String desc = commandInformation.desc();
         StringBuilder builder = new StringBuilder()
                 .append(color).append('/').append(getLabel());
 

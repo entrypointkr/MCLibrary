@@ -7,19 +7,7 @@ import kr.rvs.mclibrary.general.FileUtils;
 import org.apache.commons.io.output.StringBuilderWriter;
 import org.bukkit.plugin.Plugin;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.io.Reader;
-import java.io.StringReader;
-import java.io.UnsupportedEncodingException;
-import java.io.Writer;
+import java.io.*;
 import java.lang.reflect.Type;
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -128,5 +116,8 @@ public class GsonUtils {
 
     public static void write(Plugin plugin, String fileName, Object obj) {
         write(MCLibrary.getGsonManager().getGson(), new File(plugin.getDataFolder(), fileName), obj);
+    }
+
+    private GsonUtils() {
     }
 }

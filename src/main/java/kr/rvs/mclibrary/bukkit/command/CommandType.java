@@ -12,8 +12,7 @@ import java.util.function.Function;
 public enum CommandType { // TODO: remove
     DEFAULT(sender -> true),
     PLAYER(sender -> sender instanceof Player),
-    CONSOLE(sender -> sender instanceof ConsoleCommandSender)
-    ;
+    CONSOLE(sender -> sender instanceof ConsoleCommandSender);
 
     private final Function<CommandSender, Boolean> function;
 

@@ -1,11 +1,7 @@
 package kr.rvs.mclibrary.bukkit.inventory.gui.factory;
 
 import kr.rvs.mclibrary.bukkit.inventory.event.GUIClickEvent;
-import kr.rvs.mclibrary.bukkit.inventory.gui.GUI;
-import kr.rvs.mclibrary.bukkit.inventory.gui.GUIClickHandler;
-import kr.rvs.mclibrary.bukkit.inventory.gui.GUIEvent;
-import kr.rvs.mclibrary.bukkit.inventory.gui.GUIHandler;
-import kr.rvs.mclibrary.bukkit.inventory.gui.InventoryFactory;
+import kr.rvs.mclibrary.bukkit.inventory.gui.*;
 import kr.rvs.mclibrary.bukkit.inventory.gui.handler.DelegateClickHandler;
 import kr.rvs.mclibrary.bukkit.inventory.gui.handler.TopInventoryHandler;
 import kr.rvs.mclibrary.bukkit.item.ItemBuilder;

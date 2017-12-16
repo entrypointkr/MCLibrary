@@ -3,7 +3,7 @@ package kr.rvs.mclibrary.bukkit.command;
 import kr.rvs.mclibrary.bukkit.command.exception.InvalidUsageException;
 import kr.rvs.mclibrary.bukkit.command.exception.PermissionDeniedException;
 import kr.rvs.mclibrary.bukkit.player.Players;
-import kr.rvs.mclibrary.bukkit.world.WorldUtils;
+import kr.rvs.mclibrary.bukkit.world.Worlds;
 import kr.rvs.mclibrary.collection.VolatileArrayList;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.World;
@@ -16,8 +16,9 @@ import java.util.Optional;
  * Created by Junhyeong Lim on 2017-09-25.
  */
 public class CommandArguments extends VolatileArrayList { // TODO: Implement List, Deque
+    private static final String NUMBER_USAGE = "숫자를 입력하세요.";
     private final StringBuilder consumedArgs = new StringBuilder();
-    private CommandInfo lastCommand = CommandInfo.DEFAULT;
+    private CommandInformation lastCommand = CommandInformation.DEFAULT;
 
     public CommandArguments(int initialCapacity) {
         super(initialCapacity);
@@ -77,7 +78,7 @@ public class CommandArguments extends VolatileArrayList { // TODO: Implement Lis
     }
 
     public Integer getIntOrThrow(int index) {
-        return getInt(index, "숫자를 입력하세요.");
+        return getInt(index, NUMBER_USAGE);
     }
 
     public Double getDouble(int index, String usage) {
@@ -85,7 +86,7 @@ public class CommandArguments extends VolatileArrayList { // TODO: Implement Lis
     }
 
     public Double getDoubleOrThrow(int index) {
-        return getDouble(index, "숫자를 입력하세요.");
+        return getDouble(index, NUMBER_USAGE);
     }
 
     public Float getFloat(int index, String usage) {
@@ -93,7 +94,7 @@ public class CommandArguments extends VolatileArrayList { // TODO: Implement Lis
     }
 
     public Float getFloatOrThrow(int index) {
-        return getFloat(index, "숫자를 입력하세요.");
+        return getFloat(index, NUMBER_USAGE);
     }
 
     public Long getLong(int index, String usage) {
@@ -101,11 +102,11 @@ public class CommandArguments extends VolatileArrayList { // TODO: Implement Lis
     }
 
     public Long getLongOrThrow(int index) {
-        return getLong(index, "숫자를 입력하세요.");
+        return getLong(index, NUMBER_USAGE);
     }
 
     public Optional<World> getWorld(int index) {
-        return getOptional(index).flatMap(WorldUtils::getWorld);
+        return getOptional(index).flatMap(Worlds::getWorld);
     }
 
     public World getWorldOrThrow(int index, String usage) {
@@ -139,11 +140,11 @@ public class CommandArguments extends VolatileArrayList { // TODO: Implement Lis
         return this;
     }
 
-    public CommandInfo getLastCommand() {
+    public CommandInformation getLastCommand() {
         return lastCommand;
     }
 
-    public void setLastCommand(CommandInfo lastCommand) {
+    public void setLastCommand(CommandInformation lastCommand) {
         this.lastCommand = lastCommand;
     }
 }
