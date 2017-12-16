@@ -1,6 +1,7 @@
 package kr.rvs.mclibrary.plugin;
 
 import kr.rvs.mclibrary.MCLibrary;
+import kr.rvs.mclibrary.bukkit.MCUtils;
 import kr.rvs.mclibrary.bukkit.collection.PlayerHashSet;
 import kr.rvs.mclibrary.bukkit.command.CommandArguments;
 import kr.rvs.mclibrary.bukkit.command.CommandType;
@@ -46,13 +47,12 @@ public class LibraryCommand {
         Bukkit.getPluginManager().registerEvents(new Listener() {
             @EventHandler
             @SuppressWarnings("deprecation")
-            public void onInteract(CompatiblePlayerInteractEvent event) {
-                PlayerInteractEvent e = event.getDelegate();
-                if (event.hasGetHandMethod() && e.getHand() != EquipmentSlot.HAND)
+            public void onInteract(PlayerInteractEvent event) {
+                if (MCUtils.isOffHandSupport() && event.getHand() != EquipmentSlot.HAND)
                     return;
 
-                Player player = e.getPlayer();
-                Block block = e.getClickedBlock();
+                Player player = event.getPlayer();
+                Block block = event.getClickedBlock();
                 if (block == null || !INFO_LISTENERS.contains(player))
                     return;
 
