@@ -9,15 +9,15 @@ import java.util.function.Consumer;
  */
 public class VarargsParser {
     private final Object[] args;
-    private int count = 2;
+    private final int count;
 
-    public VarargsParser(Object... args) {
+    public VarargsParser(int sectionSize, Object... args) {
+        this.count = sectionSize;
         this.args = args;
     }
 
-    public VarargsParser count(int count) {
-        this.count = count;
-        return this;
+    public VarargsParser(Object[] args) {
+        this(2, args);
     }
 
     public void parse(Consumer<Section> sectionCallback) {

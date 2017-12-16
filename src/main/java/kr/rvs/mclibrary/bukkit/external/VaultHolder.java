@@ -14,7 +14,6 @@ import java.util.List;
 /**
  * Created by Junhyeong Lim on 2017-10-31.
  */
-@SuppressWarnings("deprecation")
 public class VaultHolder extends Permission implements Economy { // Chat abstract?
     private static final VaultHolder INSTANCE = new VaultHolder();
 

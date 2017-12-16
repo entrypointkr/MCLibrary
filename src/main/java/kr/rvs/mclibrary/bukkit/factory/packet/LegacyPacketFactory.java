@@ -8,7 +8,7 @@ import org.bukkit.inventory.ItemStack;
 /**
  * Created by Junhyeong Lim on 2017-08-26.
  */
-public class DefaultPacketFactory implements PacketFactory {
+public class LegacyPacketFactory implements PacketFactory {
     @Override
     public PacketContainer createSetSlot(int windowId, int itemSlot, ItemStack item) {
         PacketContainer packet = MCUtils.getProtocolManager().createPacket(PacketType.Play.Server.SET_SLOT);

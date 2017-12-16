@@ -10,10 +10,10 @@ import java.util.regex.Pattern;
  * Created by Junhyeong Lim on 2017-08-27.
  */
 public class Version {
-    public static Version BUKKIT = new Version(1, 12, 2);
+    private static final Pattern PATTERN = Pattern.compile("(\\d+)(?:\\.(\\d+))?(?:\\.(\\d+))?");
+    public static Version BUKKIT = new Version(Bukkit.getBukkitVersion());
     public static final Version V1_11 = new Version(1, 11, 0);
     public static final Version V1_8 = new Version(1, 8, 0);
-    private static final Pattern PATTERN = Pattern.compile("(\\d+)(?:\\.(\\d+))?(?:\\.(\\d+))?");
 
     private int major = 0;
     private int minor = 0;

@@ -26,4 +26,8 @@ public class OptionalHashMap<K, V> extends HashMap<K, V> {
     public Optional<V> getOptional(K key) {
         return key != null ? Optional.ofNullable(get(key)) : Optional.empty();
     }
+
+    public Optional<V> removeOptional(K key) {
+        return key != null ? Optional.ofNullable(remove(key)) : Optional.empty();
+    }
 }

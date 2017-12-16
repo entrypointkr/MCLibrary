@@ -54,7 +54,7 @@ public class GUISignatureTypeAdapter extends TypeAdapter<GUISignature> {
             out.name("type").value(value.getType().name());
             out.name("title").value(value.getTitle());
             out.name("size").value(value.getSize());
-            out.name("contents");
+            out.name("data");
             mapAdapter.write(out, contents);
             out.name("handlerIndexes");
             collectionAdapter.write(out, value.getHandlerIndexes());
@@ -88,7 +88,7 @@ public class GUISignatureTypeAdapter extends TypeAdapter<GUISignature> {
                         signature.addHandlerIndexes(index.intValue());
                     }
                     break;
-                case "contents":
+                case "data":
                     contents = mapAdapter.read(in);
                     break;
             }

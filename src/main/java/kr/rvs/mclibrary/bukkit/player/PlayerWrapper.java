@@ -1,6 +1,7 @@
 package kr.rvs.mclibrary.bukkit.player;
 
 import kr.rvs.mclibrary.bukkit.inventory.InventoryUtils;
+import kr.rvs.mclibrary.reflection.Reflections;
 import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -49,5 +50,16 @@ public class PlayerWrapper {
         return handItem != null && handItem.getType() != Material.AIR
                 ? Optional.of(handItem)
                 : Optional.empty();
+    }
+
+    private Object getEntityPlayer() {
+        return Reflections.getMethodEx(player.getClass(), "getHandle").invoke(player)
+                .orElseThrow(IllegalStateException::new);
+    }
+
+    public Integer getContainerCounter() {
+        Object entityPlayer = getEntityPlayer();
+        return Reflections.getFieldEx(entityPlayer.getClass(), "containerCounter").<Integer>get(entityPlayer)
+                .orElseThrow(IllegalStateException::new);
     }
 }

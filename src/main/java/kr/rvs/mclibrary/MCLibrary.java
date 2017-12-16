@@ -3,6 +3,9 @@ package kr.rvs.mclibrary;
 import kr.rvs.mclibrary.bukkit.MCUtils;
 import kr.rvs.mclibrary.bukkit.command.CommandManager;
 import kr.rvs.mclibrary.bukkit.event.EventCaller;
+import kr.rvs.mclibrary.bukkit.factory.packet.LegacyPacketFactory;
+import kr.rvs.mclibrary.bukkit.factory.packet.ModernPacketFactory;
+import kr.rvs.mclibrary.bukkit.factory.packet.PacketFactory;
 import kr.rvs.mclibrary.bukkit.inventory.gui.GUI;
 import kr.rvs.mclibrary.bukkit.player.PlayerUtils;
 import kr.rvs.mclibrary.bukkit.plugin.PluginUtils;
@@ -32,6 +35,7 @@ public class MCLibrary extends JavaPlugin {
     private static final CommandManager COMMAND_MANAGER = new CommandManager(); // TODO: Separation?
     private static final GsonManager GSON_MANAGER = new GsonManager();
     private static final SettingManager SETTING_MANAGER = new SettingManager();
+    private static PacketFactory packetFactory;
     private static String address = "unknown";
     private static Plugin plugin;
 
@@ -45,6 +49,17 @@ public class MCLibrary extends JavaPlugin {
 
     public static SettingManager getSettingManager() {
         return SETTING_MANAGER;
+    }
+
+    public static PacketFactory getPacketFactory() {
+        if (packetFactory == null) {
+            if (Version.BUKKIT.afterEquals(Version.V1_11)) {
+                packetFactory = new ModernPacketFactory();
+            } else {
+                packetFactory =  new LegacyPacketFactory();
+            }
+        }
+        return packetFactory;
     }
 
     public static Plugin getPlugin() {
@@ -63,8 +78,8 @@ public class MCLibrary extends JavaPlugin {
         configInit();
 
         // Function
-        Version.init(this);
         GUI.init(this);
+        kr.rvs.mclibrary.bukkit.inventory.newgui.GUI.init(this);
         ServerHostnameGetter.init(this);
         LibraryCommand.init(this);
         EventCaller.init(this);
