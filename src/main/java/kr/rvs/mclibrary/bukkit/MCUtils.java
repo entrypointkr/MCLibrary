@@ -7,6 +7,7 @@ import kr.rvs.mclibrary.Static;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerInteractEvent;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -19,6 +20,16 @@ import java.util.List;
  */
 public class MCUtils {
     private static String packageVersion;
+    private static boolean isOffHandSupported = false;
+
+    static {
+        try {
+            PlayerInteractEvent.class.getMethod("getHand");
+            isOffHandSupported = true;
+        } catch (NoSuchMethodException e) {
+            // Ignore
+        }
+    }
 
     public static String getBukkitInternalPackageVersion() {
         if (packageVersion == null) {
@@ -101,5 +112,9 @@ public class MCUtils {
 
     public static boolean isEnabled(String name) {
         return Bukkit.getPluginManager().isPluginEnabled(name);
+    }
+
+    public static boolean isOffHandSupport() {
+        return isOffHandSupported;
     }
 }

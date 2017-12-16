@@ -5,13 +5,11 @@ import kr.rvs.mclibrary.bukkit.collection.PlayerHashSet;
 import kr.rvs.mclibrary.bukkit.command.CommandArguments;
 import kr.rvs.mclibrary.bukkit.command.CommandType;
 import kr.rvs.mclibrary.bukkit.command.annotation.Command;
-import kr.rvs.mclibrary.bukkit.event.SafePlayerInteractEvent;
 import kr.rvs.mclibrary.bukkit.inventory.newgui.GUI;
 import kr.rvs.mclibrary.bukkit.inventory.newgui.GUIData;
 import kr.rvs.mclibrary.bukkit.inventory.newgui.SimpleGUI;
 import kr.rvs.mclibrary.bukkit.inventory.newgui.handler.CancelHandler;
 import kr.rvs.mclibrary.bukkit.inventory.newgui.handler.ClickHandler;
-import kr.rvs.mclibrary.bukkit.inventory.newgui.handler.TopHandler;
 import kr.rvs.mclibrary.bukkit.player.CommandSenderWrapper;
 import kr.rvs.mclibrary.bukkit.player.PlayerUtils;
 import kr.rvs.mclibrary.gson.GsonUtils;
@@ -48,7 +46,7 @@ public class LibraryCommand {
         Bukkit.getPluginManager().registerEvents(new Listener() {
             @EventHandler
             @SuppressWarnings("deprecation")
-            public void onInteract(SafePlayerInteractEvent event) {
+            public void onInteract(CompatiblePlayerInteractEvent event) {
                 PlayerInteractEvent e = event.getDelegate();
                 if (event.hasGetHandMethod() && e.getHand() != EquipmentSlot.HAND)
                     return;
