@@ -9,7 +9,7 @@ import java.util.function.Consumer;
 public abstract class Wizard<C> {
     protected abstract void process(Consumer<C> callback);
 
-    protected abstract void release();
+    public abstract void release();
 
     public void start(BiConsumer<Wizard<C>, C> callback) {
         process(data -> callback.accept(this, data));
