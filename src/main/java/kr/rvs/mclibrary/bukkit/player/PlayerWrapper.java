@@ -1,6 +1,6 @@
 package kr.rvs.mclibrary.bukkit.player;
 
-import kr.rvs.mclibrary.bukkit.inventory.InventoryUtils;
+import kr.rvs.mclibrary.bukkit.inventory.Inventories;
 import kr.rvs.mclibrary.reflection.Reflections;
 import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.Material;
@@ -21,27 +21,27 @@ public class PlayerWrapper {
     }
 
     public int hasItems(ItemStack item) {
-        return InventoryUtils.hasItems(player, item);
+        return Inventories.hasItems(player, item);
     }
 
     public boolean hasItem(ItemStack item, int amount) {
-        return InventoryUtils.hasItem(player, item, amount);
+        return Inventories.hasItem(player, item, amount);
     }
 
     public boolean takeItem(ItemStack item, int takeAmount) {
-        return InventoryUtils.takeItem(player, item, takeAmount);
+        return Inventories.takeItem(player, item, takeAmount);
     }
 
     public boolean hasSpace(ItemStack item, int amount) {
-        return InventoryUtils.hasSpace(player, item, amount);
+        return Inventories.hasSpace(player, item, amount);
     }
 
     public void sendBaseComponent(BaseComponent component) {
-        PlayerUtils.sendBaseComponent(player, component);
+        Players.sendBaseComponent(player, component);
     }
 
     public int getMaxHealth() {
-        return PlayerUtils.getMaxHealth(player);
+        return Players.getMaxHealth(player);
     }
 
     @SuppressWarnings("deprecation")

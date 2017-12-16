@@ -20,7 +20,7 @@ import java.util.stream.Stream;
 /**
  * Created by Junhyeong Lim on 2017-07-28.
  */
-public class PlayerUtils {
+public class Players {
     private static BaseComponentSender COMPONENT_SENDER = (player, component) -> player.spigot().sendMessage(component);
 
     static {

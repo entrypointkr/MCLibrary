@@ -12,7 +12,7 @@ import kr.rvs.mclibrary.bukkit.inventory.newgui.SimpleGUI;
 import kr.rvs.mclibrary.bukkit.inventory.newgui.handler.CancelHandler;
 import kr.rvs.mclibrary.bukkit.inventory.newgui.handler.ClickHandler;
 import kr.rvs.mclibrary.bukkit.player.CommandSenderWrapper;
-import kr.rvs.mclibrary.bukkit.player.PlayerUtils;
+import kr.rvs.mclibrary.bukkit.player.Players;
 import kr.rvs.mclibrary.gson.GsonUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -137,7 +137,7 @@ public class LibraryCommand {
     @SuppressWarnings("deprecation")
     public void heal(CommandSenderWrapper wrapper, CommandArguments args) {
         Player player = args.isEmpty() ? wrapper.getPlayerOrThrow() : args.getPlayerOrThrow(0);
-        PlayerUtils.setHealth(player, PlayerUtils.getMaxHealth(player));
+        Players.setHealth(player, Players.getMaxHealth(player));
         player.setFoodLevel(30);
         wrapper.sendMessage("완료.");
     }

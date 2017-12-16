@@ -3,7 +3,7 @@ package kr.rvs.mclibrary.bukkit.command.duplex;
 import kr.rvs.mclibrary.bukkit.command.CommandInfo;
 import kr.rvs.mclibrary.bukkit.command.ICommand;
 import kr.rvs.mclibrary.bukkit.player.CommandSenderWrapper;
-import kr.rvs.mclibrary.bukkit.player.PlayerUtils;
+import kr.rvs.mclibrary.bukkit.player.Players;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.HoverEvent;
@@ -51,7 +51,7 @@ public class ModernHelpExecutor extends AbstractHelpExecutor {
                     new TextComponent("클릭 시 입력창에 자동완성됩니다.")
             }));
             component.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, cmd));
-            PlayerUtils.sendBaseComponent(player, component);
+            Players.sendBaseComponent(player, component);
         } else {
             nativeSender.sendMessage(contents);
         }

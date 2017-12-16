@@ -169,7 +169,7 @@ public class ItemBuilder {
     public ItemBuilder replacement(Object... args) {
         metaProcessors.add(meta ->
                 new VarargsParser(args).parse(section ->
-                        ItemUtils.replaceString(meta, section.getString(0), section.getString(1))));
+                        ItemStacks.replaceString(meta, section.getString(0), section.getString(1))));
         return this;
     }
 

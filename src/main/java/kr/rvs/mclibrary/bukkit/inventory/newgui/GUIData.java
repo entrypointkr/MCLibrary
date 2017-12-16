@@ -1,7 +1,7 @@
 package kr.rvs.mclibrary.bukkit.inventory.newgui;
 
 import kr.rvs.mclibrary.bukkit.MCUtils;
-import kr.rvs.mclibrary.bukkit.inventory.InventoryUtils;
+import kr.rvs.mclibrary.bukkit.inventory.Inventories;
 import kr.rvs.mclibrary.general.VarargsParser;
 import org.bukkit.Bukkit;
 import org.bukkit.event.inventory.InventoryType;
@@ -87,7 +87,7 @@ public class GUIData {
     }
 
     public void setContentsToInventory(Inventory inventory) {
-        InventoryUtils.putAll(inventory, contents);
+        Inventories.putAll(inventory, contents);
     }
 
     public Inventory createInventory() {

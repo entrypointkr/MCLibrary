@@ -10,7 +10,7 @@ import kr.rvs.mclibrary.bukkit.command.duplex.CompositeCommand;
 import kr.rvs.mclibrary.bukkit.command.duplex.MapCommand;
 import kr.rvs.mclibrary.bukkit.command.executor.AnnotationProxyExecutor;
 import kr.rvs.mclibrary.bukkit.command.executor.ReflectiveExecutor;
-import kr.rvs.mclibrary.bukkit.plugin.PluginUtils;
+import kr.rvs.mclibrary.bukkit.plugin.Plugins;
 import kr.rvs.mclibrary.reflection.ClassProbe;
 import kr.rvs.mclibrary.reflection.FieldEx;
 import kr.rvs.mclibrary.reflection.Reflections;
@@ -54,7 +54,7 @@ public class CommandManager {
     }
 
     public void registerAll(MCLibrary superPlugin) {
-        for (Plugin plugin : PluginUtils.getDependPlugins(superPlugin)) {
+        for (Plugin plugin : Plugins.getDependPlugins(superPlugin)) {
             FieldEx fileField = Reflections.getFieldEx(JavaPlugin.class, "file");
             fileField.<File>get(plugin).ifPresent(file -> {
                 ClassProbe probe = new ClassProbe(file);

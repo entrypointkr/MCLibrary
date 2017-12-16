@@ -11,7 +11,7 @@ import java.util.Set;
 /**
  * Created by Junhyeong Lim on 2017-10-08.
  */
-public class PluginUtils {
+public class Plugins {
     public static boolean isDepend(String superPluginName, Plugin checkPlugin) {
         PluginDescriptionFile desc = checkPlugin.getDescription();
         List<String> softDepend = desc.getSoftDepend();

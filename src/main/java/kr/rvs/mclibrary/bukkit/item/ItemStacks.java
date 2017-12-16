@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * Created by Junhyeong Lim on 2017-09-11.
  */
-public class ItemUtils {
+public class ItemStacks {
     public static boolean isEmpty(ItemStack item) {
         return item == null || item.getType() == Material.AIR;
     }

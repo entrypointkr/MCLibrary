@@ -2,7 +2,7 @@ package kr.rvs.mclibrary.bukkit.command;
 
 import kr.rvs.mclibrary.bukkit.command.exception.InvalidUsageException;
 import kr.rvs.mclibrary.bukkit.command.exception.PermissionDeniedException;
-import kr.rvs.mclibrary.bukkit.player.PlayerUtils;
+import kr.rvs.mclibrary.bukkit.player.Players;
 import kr.rvs.mclibrary.bukkit.world.WorldUtils;
 import kr.rvs.mclibrary.collection.VolatileArrayList;
 import org.apache.commons.lang.StringUtils;
@@ -117,7 +117,7 @@ public class CommandArguments extends VolatileArrayList { // TODO: Implement Lis
     }
 
     public Optional<Player> getPlayer(int index) {
-        return getOptional(index).flatMap(PlayerUtils::getPlayer);
+        return getOptional(index).flatMap(Players::getPlayer);
     }
 
     public Player getPlayerOrThrow(int index, String usage) {

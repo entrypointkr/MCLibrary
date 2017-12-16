@@ -31,7 +31,7 @@ public class ItemWrapper extends Wrapper<ItemStack> {
     }
 
     public boolean isEmpty() {
-        return ItemUtils.isEmpty(getHandle());
+        return ItemStacks.isEmpty(getHandle());
     }
 
     public boolean isNotEmpty() {
@@ -93,7 +93,7 @@ public class ItemWrapper extends Wrapper<ItemStack> {
     }
 
     public ItemWrapper replaceString(Object... args) {
-        ItemUtils.replaceString(getHandle(), args);
+        ItemStacks.replaceString(getHandle(), args);
         return this;
     }
 

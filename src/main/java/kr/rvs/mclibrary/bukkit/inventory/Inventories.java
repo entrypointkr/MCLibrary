@@ -12,7 +12,7 @@ import java.util.Map;
 /**
  * Created by Junhyeong Lim on 2017-08-20.
  */
-public class InventoryUtils {
+public class Inventories {
     public static Map<Integer, ItemStack> toMap(Inventory inventory) {
         Map<Integer, ItemStack> ret = new HashMap<>();
         for (int i = 0; i < inventory.getSize(); i++) {

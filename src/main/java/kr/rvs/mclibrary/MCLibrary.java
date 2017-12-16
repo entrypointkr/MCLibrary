@@ -7,8 +7,8 @@ import kr.rvs.mclibrary.bukkit.factory.packet.LegacyPacketFactory;
 import kr.rvs.mclibrary.bukkit.factory.packet.ModernPacketFactory;
 import kr.rvs.mclibrary.bukkit.factory.packet.PacketFactory;
 import kr.rvs.mclibrary.bukkit.inventory.gui.GUI;
-import kr.rvs.mclibrary.bukkit.player.PlayerUtils;
-import kr.rvs.mclibrary.bukkit.plugin.PluginUtils;
+import kr.rvs.mclibrary.bukkit.player.Players;
+import kr.rvs.mclibrary.bukkit.plugin.Plugins;
 import kr.rvs.mclibrary.bukkit.protocol.PacketMonitoringListener;
 import kr.rvs.mclibrary.general.Version;
 import kr.rvs.mclibrary.gson.GsonManager;
@@ -107,13 +107,13 @@ public class MCLibrary extends JavaPlugin {
         Metrics metrics = new Metrics(this);
         metrics.addCustomChart(new Metrics.AdvancedPie("players_by_server", () -> {
             Map<String, Integer> map = new HashMap<>();
-            map.put(getAddress(), PlayerUtils.getOnlinePlayers().size());
+            map.put(getAddress(), Players.getOnlinePlayers().size());
             return map;
         }));
         metrics.addCustomChart(new Metrics.DrilldownPie("depend_plugins_by_server", () -> {
             Map<String, Map<String, Integer>> map = new HashMap<>();
             Map<String, Integer> subMap = new HashMap<>();
-            for (Plugin plugin : PluginUtils.getDependPlugins(this)) {
+            for (Plugin plugin : Plugins.getDependPlugins(this)) {
                 subMap.put(plugin.getName(), 1);
             }
             map.put(getAddress(), subMap);

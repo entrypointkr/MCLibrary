@@ -9,7 +9,7 @@ import kr.rvs.mclibrary.bukkit.inventory.gui.InventoryFactory;
 import kr.rvs.mclibrary.bukkit.inventory.gui.handler.DelegateClickHandler;
 import kr.rvs.mclibrary.bukkit.inventory.gui.handler.TopInventoryHandler;
 import kr.rvs.mclibrary.bukkit.item.ItemBuilder;
-import kr.rvs.mclibrary.bukkit.item.ItemUtils;
+import kr.rvs.mclibrary.bukkit.item.ItemStacks;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Material;
 import org.bukkit.entity.HumanEntity;
@@ -149,7 +149,7 @@ public class PagingInventoryProcessor extends InventoryProcessor {
         @Override
         public void click(GUIEvent<GUIClickEvent> event) {
             GUIClickEvent e = event.getEvent();
-            if (!ItemUtils.isEmpty(e.getCurrentItem()) && currentPage >= 2) {
+            if (!ItemStacks.isEmpty(e.getCurrentItem()) && currentPage >= 2) {
                 currentPage--;
                 e.getGui().open(e.getWhoClicked());
             } else {
@@ -162,7 +162,7 @@ public class PagingInventoryProcessor extends InventoryProcessor {
         @Override
         public void click(GUIEvent<GUIClickEvent> event) {
             GUIClickEvent e = event.getEvent();
-            if (!ItemUtils.isEmpty(e.getCurrentItem()) && currentPage < maxPage) {
+            if (!ItemStacks.isEmpty(e.getCurrentItem()) && currentPage < maxPage) {
                 currentPage++;
                 e.getGui().open(e.getWhoClicked());
             } else {
