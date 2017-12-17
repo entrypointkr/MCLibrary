@@ -28,6 +28,7 @@ public class ClickWizard extends ListenerWizard<Block> {
                 if (event.getPlayer().equals(player)
                         && !MCUtils.isOffHandSupport() || event.getHand() == EquipmentSlot.HAND) {
                     callback.accept(event.getClickedBlock());
+                    event.setCancelled(true);
                 }
             }
         };
