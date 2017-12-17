@@ -13,9 +13,9 @@ import java.lang.annotation.Target;
 @Target({ElementType.TYPE, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Command {
-    CommandType type() default CommandType.DEFAULT;
+    CommandType type() default CommandType.DEFAULT; // TODO: Remove
 
-    String args() default "";
+    String args() default ""; // TODO: String[]
 
     String usage() default "";
 
@@ -23,7 +23,7 @@ public @interface Command {
 
     String perm() default "";
 
-    int min() default 0;
+    int min() default 0; // TODO: Remove
 
-    int max() default Integer.MAX_VALUE;
+    int max() default Integer.MAX_VALUE; // TODO: Remove
 }
