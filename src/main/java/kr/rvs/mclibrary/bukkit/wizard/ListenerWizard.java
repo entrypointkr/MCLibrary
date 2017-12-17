@@ -9,13 +9,13 @@ import java.util.function.Consumer;
 /**
  * Created by Junhyeong Lim on 2017-12-16.
  */
-public abstract class ListenerWizard<C> extends Wizard<C> {
+public abstract class ListenerWizard<T> extends Wizard<T> {
     private Listener listener;
 
-    public abstract Listener listener(Consumer<C> callback);
+    public abstract Listener listener(Consumer<T> callback);
 
     @Override
-    protected void process(Consumer<C> callback) {
+    protected void process(Consumer<T> callback) {
         this.listener = listener(callback);
         MCLibrary.registerListener(listener);
     }

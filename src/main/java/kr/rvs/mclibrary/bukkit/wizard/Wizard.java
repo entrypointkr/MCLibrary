@@ -6,16 +6,16 @@ import java.util.function.Consumer;
 /**
  * Created by Junhyeong Lim on 2017-12-16.
  */
-public abstract class Wizard<C> {
-    protected abstract void process(Consumer<C> callback);
+public abstract class Wizard<T> {
+    protected abstract void process(Consumer<T> callback);
 
     public abstract void release();
 
-    public void start(BiConsumer<Wizard<C>, C> callback) {
+    public void start(BiConsumer<Wizard<T>, T> callback) {
         process(data -> callback.accept(this, data));
     }
 
-    public void startOnce(BiConsumer<Wizard<C>, C> callback) {
+    public void startOnce(BiConsumer<Wizard<T>, T> callback) {
         process(data -> {
             callback.accept(this, data);
             release();
