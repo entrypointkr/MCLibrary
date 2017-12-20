@@ -25,7 +25,7 @@ repositories {
     /* ProtocolLib */
     maven { url 'http://repo.dmulloy2.net/content/groups/public/' }
     /* bStats */
-    maven { url 'http://repo.bstats.org/content/repositories/releases/'}
+    maven { url 'http://repo.bstats.org/content/repositories/releases/' }
 }
 
 dependencies {

@@ -5,6 +5,7 @@ import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -116,6 +117,9 @@ public class Inventories {
     }
 
     public static void giveItem(Inventory inv, ItemStack item, int amount) {
+        if (item == null)
+            return;
+
         int maxStack = item.getMaxStackSize();
         for (int i = 0; i < amount / maxStack; i++) {
             inv.addItem(new ItemBuilder(item).amount(64).build());
@@ -126,8 +130,18 @@ public class Inventories {
         }
     }
 
+    public static void giveItem(Inventory inv, ItemStack item) {
+        if (item != null) {
+            giveItem(inv, item, item.getAmount());
+        }
+    }
+
     public static void giveItem(InventoryHolder holder, ItemStack item, int amount) {
         giveItem(holder.getInventory(), item, amount);
+    }
+
+    public static void giveItem(InventoryHolder holder, ItemStack item) {
+        giveItem(holder.getInventory(), item);
     }
 
     public static boolean isEmpty(Inventory inventory) {
@@ -141,6 +155,31 @@ public class Inventories {
 
     public static boolean isEmpty(InventoryHolder holder) {
         return isEmpty(holder.getInventory());
+    }
+
+    public static Map<Integer, ItemStack> transfer(Inventory inv, Inventory target) {
+        Map<Integer, ItemStack> failMap = new HashMap<>();
+        for (ItemStack item : inv) {
+            if (item != null) {
+                failMap.putAll(target.addItem(item));
+            }
+        }
+
+        if (inv instanceof PlayerInventory) {
+            PlayerInventory pinv = (PlayerInventory) inv;
+            ItemStack[] armorContents = pinv.getArmorContents();
+            for (int i = 0; i < armorContents.length; i++) {
+                ItemStack armor = armorContents[i];
+                int empty = target.firstEmpty();
+                if (empty >= 0) {
+                    target.setItem(empty, armor);
+                } else {
+                    failMap.put(target.getSize() + i, armor);
+                }
+            }
+        }
+
+        return failMap;
     }
 
     private Inventories() {

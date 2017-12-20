@@ -14,7 +14,7 @@ import java.util.List;
 public class GeneralTest extends Assert {
     @Test
     public void varargsParser() {
-        String[] args = new String[] {
+        String[] args = new String[]{
                 "a",
                 "b",
                 "c",
