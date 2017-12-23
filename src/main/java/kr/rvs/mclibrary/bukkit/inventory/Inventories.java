@@ -164,21 +164,6 @@ public class Inventories {
                 failMap.putAll(target.addItem(item));
             }
         }
-
-        if (inv instanceof PlayerInventory) {
-            PlayerInventory pinv = (PlayerInventory) inv;
-            ItemStack[] armorContents = pinv.getArmorContents();
-            for (int i = 0; i < armorContents.length; i++) {
-                ItemStack armor = armorContents[i];
-                int empty = target.firstEmpty();
-                if (empty >= 0) {
-                    target.setItem(empty, armor);
-                } else {
-                    failMap.put(target.getSize() + i, armor);
-                }
-            }
-        }
-
         return failMap;
     }
 

@@ -12,7 +12,7 @@ import java.util.function.Consumer;
 public abstract class ListenerWizard<T> extends Wizard<T> {
     private Listener listener;
 
-    public abstract Listener listener(Consumer<T> callback);
+    protected abstract Listener listener(Consumer<T> callback);
 
     @Override
     protected void process(Consumer<T> callback) {

@@ -32,7 +32,7 @@ public class ClassProbe {
             String className = name.substring(0, name.indexOf(".class")).replace('/', '.');
             Class aClass = Class.forName(className);
             storage.add(aClass);
-        } catch (Exception th) {
+        } catch (Throwable th) { // NoClassDefFoundError
             // Ignore
         }
     }
