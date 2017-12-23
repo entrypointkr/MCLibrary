@@ -7,38 +7,26 @@ Jenkins Build Server: http://builds.rvs.kr/job/MCLibrary/
 ## Command
 
 ```java
-@Command(
-	args = "test"
-)
+@Command(args = "test")
 static class TestCommand {
-	@Command(
-		args = "first"
-	)
+	@Command(args = "first")
 	public void execute(CommandSenderWrapper wrapper, CommandArguments args) {
 		wrapper.sendMessage("Example command 1");
 	}
   
-	@Command(
-		args = "second"
-	)
+	@Command(args = "second")
 	public void execute(CommandSenderWrapper wrapper, CommandArguments args) {
 		wrapper.sendMessage("Example command 2");
 	}
 	
-	@Command(
-		args = "first b"
-	)
+	@Command(args = "first b")
 	public void execute(CommandSenderWrapper wrapper, CommandArguments args) {
 		wrapper.sendMessage("Example command 3");
 	}
 	
-	@Command(
-		args = "second"
-	)
+	@Command(args = "second")
 	static class TestSubCommand {
-		@Command(
-			args = "b"
-		)
+		@Command(args = "b")
 		public void execute(CommandSenderWrapper wrapper, CommandArguments args) {
 			wrapper.sendMessage("Example command 4");
 		}
