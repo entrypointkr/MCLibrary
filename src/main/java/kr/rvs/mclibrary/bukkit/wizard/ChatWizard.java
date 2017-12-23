@@ -18,7 +18,7 @@ public class ChatWizard extends ListenerWizard<String> {
     }
 
     @Override
-    public Listener listener(Consumer<String> callback) {
+    protected Listener listener(Consumer<String> callback) {
         return new Listener() {
             @EventHandler
             public void onChat(AsyncPlayerChatEvent event) {

@@ -18,7 +18,7 @@ public class SneakingWizard extends ListenerWizard<Player> {
     }
 
     @Override
-    public Listener listener(Consumer<Player> callback) {
+    protected Listener listener(Consumer<Player> callback) {
         return new Listener() {
             @EventHandler
             public void onSneak(PlayerToggleSneakEvent event) {

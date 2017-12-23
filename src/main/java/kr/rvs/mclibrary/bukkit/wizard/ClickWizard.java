@@ -21,7 +21,7 @@ public class ClickWizard extends ListenerWizard<Block> {
     }
 
     @Override
-    public Listener listener(Consumer<Block> callback) {
+    protected Listener listener(Consumer<Block> callback) {
         return new Listener() {
             @EventHandler
             public void onClick(PlayerInteractEvent event) {
