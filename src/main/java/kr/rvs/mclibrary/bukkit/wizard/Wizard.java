@@ -15,9 +15,9 @@ public abstract class Wizard<T> {
         process(data -> callback.accept(this, data));
     }
 
-    public void startOnce(BiConsumer<Wizard<T>, T> callback) {
+    public void startOnce(Consumer<T> callback) {
         process(data -> {
-            callback.accept(this, data);
+            callback.accept(data);
             release();
         });
     }

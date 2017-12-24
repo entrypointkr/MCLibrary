@@ -5,10 +5,10 @@ import java.util.function.Consumer;
 /**
  * Created by Junhyeong Lim on 2017-12-16.
  */
-public abstract class DelegateWizard<C, T> extends Wizard<C> {
-    private final Wizard<T> wizard;
+public abstract class DelegateWizard<D, T> extends Wizard<T> {
+    private final Wizard<D> wizard;
 
-    public DelegateWizard(Wizard<T> wizard) {
+    public DelegateWizard(Wizard<D> wizard) {
         this.wizard = wizard;
     }
 
@@ -17,7 +17,10 @@ public abstract class DelegateWizard<C, T> extends Wizard<C> {
         wizard.release();
     }
 
-    protected void delegateProcess(Consumer<T> callback) {
-        wizard.process(callback);
+    @Override
+    protected void process(Consumer<T> callback) {
+        wizard.process(processor(callback));
     }
+
+    protected abstract Consumer<D> processor(Consumer<T> callback);
 }
