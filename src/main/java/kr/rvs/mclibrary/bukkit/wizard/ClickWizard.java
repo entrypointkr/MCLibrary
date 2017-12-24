@@ -18,7 +18,7 @@ import java.util.function.Function;
 public class ClickWizard extends ListenerWizard<Block> {
     public static final Function<Block, String> CLICK_MESSAGE_FUNCTION = block -> {
         Location loc = block.getLocation();
-        return String.format("&c[ 도우미 ] &ex: %d, y: %d, z: %d type: %s &f를 클릭했습니다.",
+        return String.format("&c&l[ 도우미 ] &ex: %d, y: %d, z: %d type: %s &f를 클릭했습니다.",
                 loc.getBlockX(), loc.getBlockY(), loc.getBlockZ(), block.getType());
     };
     private final Player player;
@@ -44,7 +44,7 @@ public class ClickWizard extends ListenerWizard<Block> {
 
                 if (clicker.equals(player)
                         && !MCUtils.isOffHandSupport() || hand == EquipmentSlot.HAND) {
-                    clicker.sendMessage(messageFunc.apply(block));
+                    clicker.sendMessage(MCUtils.colorize(messageFunc.apply(block)));
                     callback.accept(block);
                     event.setCancelled(true);
                 }
