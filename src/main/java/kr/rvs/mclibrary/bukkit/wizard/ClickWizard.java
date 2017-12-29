@@ -42,8 +42,8 @@ public class ClickWizard extends ListenerWizard<Block> {
                 EquipmentSlot hand = event.getHand();
                 Block block = event.getClickedBlock();
 
-                if (clicker.equals(player)
-                        && !MCUtils.isOffHandSupport() || hand == EquipmentSlot.HAND) {
+                if (block != null && clicker.equals(player)
+                        && (!MCUtils.isOffHandSupport() || hand == EquipmentSlot.HAND)) {
                     clicker.sendMessage(MCUtils.colorize(messageFunc.apply(block)));
                     callback.accept(block);
                     event.setCancelled(true);
