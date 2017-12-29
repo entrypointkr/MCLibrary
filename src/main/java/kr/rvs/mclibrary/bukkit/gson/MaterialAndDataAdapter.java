@@ -27,8 +27,7 @@ public class MaterialAndDataAdapter extends TypeAdapter<MaterialAndData> {
     @SuppressWarnings("deprecation")
     public MaterialAndData read(JsonReader in) throws IOException {
         if (in.hasNext() && in.peek() == JsonToken.STRING) {
-            String[] split = in.nextString().split(":", 1);
-            return new MaterialAndData(Material.getMaterial(Integer.parseInt(split[0])), Short.parseShort(split[1]));
+            return MaterialAndData.parse(in.nextString());
         }
         return null;
     }
