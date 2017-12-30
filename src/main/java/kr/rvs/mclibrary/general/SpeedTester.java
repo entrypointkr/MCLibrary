@@ -50,7 +50,7 @@ public class SpeedTester {
                 entry.getValue().run();
                 total += getTime() - start;
             }
-            Static.log(entry.getKey() + " 평균: " + total / tryCount);
+            System.out.println(entry.getKey() + " 평균: " + total / tryCount);
         }
     }
 
