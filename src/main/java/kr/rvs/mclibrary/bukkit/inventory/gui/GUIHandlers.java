@@ -20,22 +20,13 @@ public class GUIHandlers {
         this.gui = gui;
     }
 
-    public GUIHandlers addFirst(GUIHandler... handlers) {
-        this.handlers.addAll(0, Arrays.asList(handlers));
-        return this;
-    }
-
-    public GUIHandlers addLast(GUIHandler... handlers) {
+    public GUIHandlers add(GUIHandler... handlers) {
         this.handlers.addAll(Arrays.asList(handlers));
         return this;
     }
 
-    public GUIHandlers addFirst(GUIClickHandler handler, Integer... slots) {
-        return addFirst(new DelegateClickHandler(handler, slots));
-    }
-
-    public GUIHandlers addLast(GUIClickHandler handler, Integer... slots) {
-        return addLast(new DelegateClickHandler(handler, slots));
+    public GUIHandlers add(GUIClickHandler handler, Integer... slots) {
+        return add(new DelegateClickHandler(handler, slots));
     }
 
     public void notify(InventoryEvent event) {

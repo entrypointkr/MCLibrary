@@ -37,7 +37,7 @@ public class GUI {
         this.factory = factory;
         this.signature = signature;
 
-        getHandlers().addLast(handlers);
+        getHandlers().add(handlers);
     }
 
     public GUI(GUISignature signature, GUIHandler... handlers) {

@@ -98,7 +98,7 @@ public class LibraryCommand {
 //        new SimpleGUI(new GUIData(InventoryType.CHEST)
 //                .title("MCLibrary GUI")
 //                .item(13, new ItemStack(Material.CHEST)))
-//                .handler(handlers -> handlers.addLast(
+//                .handler(handlers -> handlers.add(
 //                        CancelHandler.TOP,
 //                        new ClickHandler().handler(13, event ->
 //                                GUI.sendMessage(event, "&aHello, MCLibrary"))
