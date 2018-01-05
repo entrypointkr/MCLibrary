@@ -1,13 +1,7 @@
 package kr.rvs.mclibrary.bukkit.inventory.newgui;
 
-import com.comphenix.protocol.events.PacketContainer;
-import kr.rvs.mclibrary.MCLibrary;
-import kr.rvs.mclibrary.bukkit.MCUtils;
-import kr.rvs.mclibrary.bukkit.item.ItemBuilder;
-import kr.rvs.mclibrary.bukkit.player.PlayerWrapper;
 import kr.rvs.mclibrary.collection.OptionalHashMap;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -17,7 +11,6 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
 import java.util.Optional;
@@ -71,42 +64,6 @@ public abstract class GUI {
         }, plugin);
     }
 
-    public static void sendMessage(Player player, String message, int slot, int second) {
-        ItemStack item = player.getOpenInventory().getItem(slot);
-        if (item != null && item.getType() != Material.AIR) {
-            ItemStack newItem = new ItemBuilder(item)
-                    .display(message)
-                    .build();
-            PlayerWrapper wrapper = new PlayerWrapper(player);
-
-            Bukkit.getScheduler().runTask(MCLibrary.getPlugin(), () -> {
-                PacketContainer packet = MCLibrary.getPacketFactory().createSetSlot(
-                        wrapper.getContainerCounter(), slot, newItem
-                );
-                MCUtils.sendPacket(player, packet);
-                Bukkit.getScheduler().runTaskLater(MCLibrary.getPlugin(), () -> {
-                    packet.getItemModifier().write(0, item);
-                    MCUtils.sendPacket(player, packet);
-                }, second * 20L);
-            });
-        }
-    }
-
-    public static void sendMessage(Player player, String message, int slot) {
-        sendMessage(player, message, slot, 3);
-    }
-
-    public static void sendMessage(InventoryClickEvent event, String message, int second) {
-        if (event.getWhoClicked() instanceof Player) {
-            Player player = (Player) event.getWhoClicked();
-            sendMessage(player, message, event.getRawSlot(), second);
-        }
-    }
-
-    public static void sendMessage(InventoryClickEvent event, String message) {
-        sendMessage(event, message, 3);
-    }
-
     public GUI(GUIData data) {
         this.data = data;
     }
@@ -135,7 +92,17 @@ public abstract class GUI {
     protected abstract Inventory createInventory();
 
     public void open(HumanEntity human) {
-        human.openInventory(createInventory());
+        Inventory topInv = human.getOpenInventory().getTopInventory();
+        Inventory newInv = createInventory();
+        if (topInv != null && topInv.getTitle().equals(data.title())
+                && topInv.getSize() == data.size()) {
+            topInv.setContents(newInv.getContents());
+            if (human instanceof Player) {
+                ((Player) human).updateInventory();
+            }
+        } else {
+            human.openInventory(newInv);
+        }
         GUI_MAP.put(human.getName(), this);
     }
 }

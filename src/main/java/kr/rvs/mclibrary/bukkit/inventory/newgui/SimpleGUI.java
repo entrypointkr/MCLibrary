@@ -1,9 +1,7 @@
 package kr.rvs.mclibrary.bukkit.inventory.newgui;
 
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.event.inventory.InventoryDragEvent;
-import org.bukkit.event.inventory.InventoryOpenEvent;
+import org.bukkit.Bukkit;
+import org.bukkit.event.inventory.*;
 import org.bukkit.inventory.Inventory;
 
 /**
@@ -36,6 +34,11 @@ public class SimpleGUI extends GUI {
 
     @Override
     protected Inventory createInventory() {
-        return getData().createInventory();
+        GUIData data = getData();
+        Inventory inv = data.type() == InventoryType.CHEST
+                ? Bukkit.createInventory(null, data.size(), data.title())
+                : Bukkit.createInventory(null, data.type(), data.title());
+        inv.setContents(data.contents());
+        return inv;
     }
 }

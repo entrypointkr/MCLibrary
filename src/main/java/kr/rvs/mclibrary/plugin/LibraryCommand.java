@@ -6,11 +6,8 @@ import kr.rvs.mclibrary.bukkit.collection.PlayerHashSet;
 import kr.rvs.mclibrary.bukkit.command.CommandArguments;
 import kr.rvs.mclibrary.bukkit.command.CommandType;
 import kr.rvs.mclibrary.bukkit.command.annotation.Command;
-import kr.rvs.mclibrary.bukkit.inventory.newgui.GUI;
-import kr.rvs.mclibrary.bukkit.inventory.newgui.GUIData;
-import kr.rvs.mclibrary.bukkit.inventory.newgui.SimpleGUI;
-import kr.rvs.mclibrary.bukkit.inventory.newgui.handler.CancelHandler;
-import kr.rvs.mclibrary.bukkit.inventory.newgui.handler.ClickHandler;
+import kr.rvs.mclibrary.bukkit.inventory.newgui.ListData;
+import kr.rvs.mclibrary.bukkit.item.ItemBuilder;
 import kr.rvs.mclibrary.bukkit.player.CommandSenderWrapper;
 import kr.rvs.mclibrary.bukkit.player.Players;
 import kr.rvs.mclibrary.gson.GsonUtils;
@@ -25,7 +22,6 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
@@ -99,14 +95,22 @@ public class LibraryCommand {
             desc = "테스트 gui 를 엽니다."
     )
     public void guiCommand(CommandSenderWrapper wrapper, CommandArguments args) {
-        new SimpleGUI(new GUIData(InventoryType.CHEST)
-                .title("MCLibrary GUI")
-                .item(13, new ItemStack(Material.CHEST)))
-                .handler(handlers -> handlers.addLast(
-                        CancelHandler.TOP,
-                        new ClickHandler().handler(13, event ->
-                                GUI.sendMessage(event, "&aHello, MCLibrary"))
-                ))
+//        new SimpleGUI(new GUIData(InventoryType.CHEST)
+//                .title("MCLibrary GUI")
+//                .item(13, new ItemStack(Material.CHEST)))
+//                .handler(handlers -> handlers.addLast(
+//                        CancelHandler.TOP,
+//                        new ClickHandler().handler(13, event ->
+//                                GUI.sendMessage(event, "&aHello, MCLibrary"))
+//                ))
+//                .open(wrapper.getPlayerOrThrow());
+
+        ListData data = ListData.ofRow(5);
+        for (int i = 0; i < 45; i++) {
+            data.addItem(new ItemBuilder(Material.DIRT).display(String.valueOf(i)).build());
+        }
+        new kr.rvs.mclibrary.bukkit.inventory.newgui.PageGUI(data)
+                .handler(handlers -> handlers.addLast(event -> System.out.println("Invoked")))
                 .open(wrapper.getPlayerOrThrow());
     }
 

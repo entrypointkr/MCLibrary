@@ -1,14 +1,21 @@
 package kr.rvs.mclibrary.bukkit.inventory;
 
+import com.comphenix.protocol.events.PacketContainer;
+import kr.rvs.mclibrary.MCLibrary;
+import kr.rvs.mclibrary.bukkit.MCUtils;
 import kr.rvs.mclibrary.bukkit.item.ItemBuilder;
+import kr.rvs.mclibrary.bukkit.player.PlayerWrapper;
+import kr.rvs.mclibrary.general.SpeedTester;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Created by Junhyeong Lim on 2017-08-20.
@@ -20,6 +27,12 @@ public class Inventories {
             ret.put(i, inventory.getItem(i));
         }
         return ret;
+    }
+
+    public static void putAll(Inventory inv, List<ItemStack> contents) {
+        for (int i = 0; i < contents.size(); i++) {
+            inv.setItem(i, contents.get(i));
+        }
     }
 
     public static void putAll(Inventory inv, Map<Integer, ItemStack> contents) {
@@ -61,26 +74,24 @@ public class Inventories {
     }
 
     public static boolean takeItem(Inventory inv, ItemStack item, int takeAmount) {
-        Map<Integer, ItemStack> removeItemMap = new HashMap<>();
+        Set<Integer> removeSlots = new HashSet<>(takeAmount);
         for (int i = 0; i < inv.getSize(); i++) {
             ItemStack elemItem = inv.getItem(i);
             if (elemItem == null || elemItem.getType() == Material.AIR
                     || !elemItem.isSimilar(item))
                 continue;
+
             int amount = elemItem.getAmount();
             if (takeAmount > amount) {
                 takeAmount -= amount;
-                removeItemMap.put(i, elemItem);
+                removeSlots.add(i);
             } else {
                 if (takeAmount < amount) {
                     elemItem.setAmount(amount - takeAmount);
-                    inv.setItem(i, elemItem);
                 } else {
-                    removeItemMap.put(i, elemItem);
+                    removeSlots.add(i);
                 }
-                for (Integer slot : removeItemMap.keySet()) {
-                    inv.clear(slot);
-                }
+                removeSlots.forEach(inv::clear);
                 return true;
             }
         }
@@ -89,6 +100,56 @@ public class Inventories {
 
     public static boolean takeItem(InventoryHolder holder, ItemStack item, int takeAmount) {
         return takeItem(holder.getInventory(), item, takeAmount);
+    }
+
+    /**
+     * @param inv Inventory
+     * @param item ItemStack
+     * @param takeAmount Take amount
+     * @return Returns insufficient item amount. If all taken, will be return 0.
+     */
+    public static int takeItems(Inventory inv, ItemStack item, int takeAmount) {
+        Map<Integer, ItemStack> removeItemMap = new HashMap<>(takeAmount);
+        for (int i = 0; i < inv.getSize(); i++) {
+            ItemStack elemItem = inv.getItem(i);
+            if (elemItem == null || elemItem.getType() == Material.AIR
+                    || !elemItem.isSimilar(item))
+                continue;
+
+            int amount = elemItem.getAmount();
+            if (takeAmount > amount) {
+                takeAmount -= amount;
+                removeItemMap.put(i, elemItem);
+            } else {
+                if (takeAmount < amount) {
+                    elemItem.setAmount(amount - takeAmount);
+                } else {
+                    removeItemMap.put(i, elemItem);
+                }
+                removeItemMap.keySet().forEach(inv::clear);
+                return 0;
+            }
+        }
+
+        int result = 0;
+        for (ItemStack elemItem : removeItemMap.values()) {
+            result += elemItem.getAmount();
+        }
+        return result;
+    }
+
+    public static int takeItems(Inventory inv, ItemStack item) {
+        return item != null
+                ? takeItems(inv, item, item.getAmount())
+                : 0;
+    }
+
+    public static int takeItems(InventoryHolder holder, ItemStack item, int takeAmount) {
+        return takeItems(holder.getInventory(), item, takeAmount);
+    }
+
+    public static int takeItems(InventoryHolder holder, ItemStack item) {
+        return takeItems(holder.getInventory(), item);
     }
 
     public static int hasSpace(Inventory inv, ItemStack item) {
@@ -116,32 +177,33 @@ public class Inventories {
         return hasSpace(holder.getInventory(), item, amount);
     }
 
-    public static void giveItem(Inventory inv, ItemStack item, int amount) {
-        if (item == null)
-            return;
-
-        int maxStack = item.getMaxStackSize();
-        for (int i = 0; i < amount / maxStack; i++) {
-            inv.addItem(new ItemBuilder(item).amount(64).build());
-        }
-        int remain = amount % maxStack;
-        if (remain > 0) {
-            inv.addItem(new ItemBuilder(item).amount(remain).build());
-        }
-    }
-
-    public static void giveItem(Inventory inv, ItemStack item) {
+    public static Map<Integer, ItemStack> giveItem(Inventory inv, ItemStack item, int amount) {
+        Map<Integer, ItemStack> map = new HashMap<>();
         if (item != null) {
-            giveItem(inv, item, item.getAmount());
+            int maxStack = item.getMaxStackSize();
+            for (int i = 0; i < amount / maxStack; i++) {
+                map.putAll(inv.addItem(new ItemBuilder(item).amount(64).build()));
+            }
+            int remain = amount % maxStack;
+            if (remain > 0) {
+                map.putAll(inv.addItem(new ItemBuilder(item).amount(remain).build()));
+            }
         }
+        return map;
     }
 
-    public static void giveItem(InventoryHolder holder, ItemStack item, int amount) {
-        giveItem(holder.getInventory(), item, amount);
+    public static Map<Integer, ItemStack> giveItem(Inventory inv, ItemStack item) {
+        return item != null
+                ? giveItem(inv, item, item.getAmount())
+                : new HashMap<>();
     }
 
-    public static void giveItem(InventoryHolder holder, ItemStack item) {
-        giveItem(holder.getInventory(), item);
+    public static Map<Integer, ItemStack> giveItem(InventoryHolder holder, ItemStack item, int amount) {
+        return giveItem(holder.getInventory(), item, amount);
+    }
+
+    public static Map<Integer, ItemStack> giveItem(InventoryHolder holder, ItemStack item) {
+        return giveItem(holder.getInventory(), item);
     }
 
     public static boolean isEmpty(Inventory inventory) {
@@ -165,6 +227,42 @@ public class Inventories {
             }
         }
         return failMap;
+    }
+
+    public static void sendMessage(Player player, String message, int slot, int second) {
+        ItemStack item = player.getOpenInventory().getItem(slot);
+        if (item != null && item.getType() != Material.AIR) {
+            ItemStack newItem = new ItemBuilder(item)
+                    .display(message)
+                    .build();
+            PlayerWrapper wrapper = new PlayerWrapper(player);
+
+            Bukkit.getScheduler().runTask(MCLibrary.getPlugin(), () -> {
+                PacketContainer packet = MCLibrary.getPacketFactory().createSetSlot(
+                        wrapper.getContainerCounter(), slot, newItem
+                );
+                MCUtils.sendPacket(player, packet);
+                Bukkit.getScheduler().runTaskLater(MCLibrary.getPlugin(), () -> {
+                    packet.getItemModifier().write(0, item);
+                    MCUtils.sendPacket(player, packet);
+                }, second * 20L);
+            });
+        }
+    }
+
+    public static void sendMessage(Player player, String message, int slot) {
+        sendMessage(player, message, slot, 3);
+    }
+
+    public static void sendMessage(InventoryClickEvent event, String message, int second) {
+        if (event.getWhoClicked() instanceof Player) {
+            Player player = (Player) event.getWhoClicked();
+            sendMessage(player, message, event.getRawSlot(), second);
+        }
+    }
+
+    public static void sendMessage(InventoryClickEvent event, String message) {
+        sendMessage(event, message, 3);
     }
 
     private Inventories() {
