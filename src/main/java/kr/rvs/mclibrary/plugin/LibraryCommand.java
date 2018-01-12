@@ -110,7 +110,7 @@ public class LibraryCommand {
             data.addItem(new ItemBuilder(Material.DIRT).display(String.valueOf(i)).build());
         }
         new kr.rvs.mclibrary.bukkit.inventory.newgui.PageGUI(data)
-                .handler(handlers -> handlers.addLast(event -> System.out.println("Invoked")))
+                .handler(handlers -> handlers.add(event -> System.out.println("Invoked")))
                 .open(wrapper.getPlayerOrThrow());
     }
 

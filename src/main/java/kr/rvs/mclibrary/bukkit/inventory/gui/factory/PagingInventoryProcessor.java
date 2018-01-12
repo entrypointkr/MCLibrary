@@ -66,7 +66,7 @@ public class PagingInventoryProcessor extends InventoryProcessor {
         int lastKey = gui.getSignature().getContents().lastKey();
         this.size = size - 9;
         this.maxPage = lastKey / this.size + (lastKey + 1 % this.size > 0 ? 1 : 0);
-        gui.getHandlers().addFirst(
+        gui.getHandlers().add(
                 new CancelHandler(),
                 new DelegateClickHandler(new PrevPageHandler(), getPrevPageIndex()),
                 new DelegateClickHandler(new NextPageHandler(), getNextPageIndex()),

@@ -14,13 +14,7 @@ public class GUIHandlers {
     private final List<GUIHandler<InventoryEvent>> handlers = new ArrayList<>();
 
     @SafeVarargs
-    public final GUIHandlers addFirst(GUIHandler<InventoryEvent>... handlers) {
-        this.handlers.addAll(0, Arrays.asList(handlers));
-        return this;
-    }
-
-    @SafeVarargs
-    public final GUIHandlers addLast(GUIHandler<InventoryEvent>... handlers) {
+    public final GUIHandlers add(GUIHandler<InventoryEvent>... handlers) {
         this.handlers.addAll(Arrays.asList(handlers));
         return this;
     }
