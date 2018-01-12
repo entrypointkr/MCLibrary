@@ -110,6 +110,7 @@ public class Inventories {
      */
     public static int takeItems(Inventory inv, ItemStack item, int takeAmount) {
         Map<Integer, ItemStack> removeItemMap = new HashMap<>(takeAmount);
+        int take = takeAmount;
         for (int i = 0; i < inv.getSize(); i++) {
             ItemStack elemItem = inv.getItem(i);
             if (elemItem == null || elemItem.getType() == Material.AIR
@@ -117,12 +118,12 @@ public class Inventories {
                 continue;
 
             int amount = elemItem.getAmount();
-            if (takeAmount > amount) {
-                takeAmount -= amount;
+            if (take > amount) {
+                take -= amount;
                 removeItemMap.put(i, elemItem);
             } else {
-                if (takeAmount < amount) {
-                    elemItem.setAmount(amount - takeAmount);
+                if (take < amount) {
+                    elemItem.setAmount(amount - take);
                 } else {
                     removeItemMap.put(i, elemItem);
                 }
@@ -131,9 +132,9 @@ public class Inventories {
             }
         }
 
-        int result = 0;
+        int result = takeAmount;
         for (ItemStack elemItem : removeItemMap.values()) {
-            result += elemItem.getAmount();
+            result -= elemItem.getAmount();
         }
         return result;
     }
