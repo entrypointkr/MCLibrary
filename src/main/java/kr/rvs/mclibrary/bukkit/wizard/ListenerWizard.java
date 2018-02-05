@@ -1,6 +1,7 @@
 package kr.rvs.mclibrary.bukkit.wizard;
 
 import kr.rvs.mclibrary.MCLibrary;
+import org.bukkit.Bukkit;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 
@@ -17,7 +18,7 @@ public abstract class ListenerWizard<T> extends Wizard<T> {
     @Override
     protected void process(Consumer<T> callback) {
         this.listener = listener(callback);
-        MCLibrary.registerListener(listener);
+        Bukkit.getPluginManager().registerEvents(listener, MCLibrary.getPlugin());
     }
 
     @Override

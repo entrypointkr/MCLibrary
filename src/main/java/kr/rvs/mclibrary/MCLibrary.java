@@ -68,10 +68,6 @@ public class MCLibrary extends JavaPlugin {
         return plugin;
     }
 
-    public static void registerListener(Listener listener) {
-        Bukkit.getPluginManager().registerEvents(listener, plugin);
-    }
-
     public MCLibrary() {
         plugin = this;
     }
