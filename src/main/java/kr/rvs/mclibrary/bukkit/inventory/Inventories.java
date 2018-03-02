@@ -183,7 +183,7 @@ public class Inventories {
         if (item != null) {
             int maxStack = item.getMaxStackSize();
             for (int i = 0; i < amount / maxStack; i++) {
-                map.putAll(inv.addItem(new ItemBuilder(item).amount(64).build()));
+                map.putAll(inv.addItem(new ItemBuilder(item).amount(maxStack).build()));
             }
             int remain = amount % maxStack;
             if (remain > 0) {

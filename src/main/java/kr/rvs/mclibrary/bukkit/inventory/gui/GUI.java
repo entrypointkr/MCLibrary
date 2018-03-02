@@ -15,6 +15,8 @@ import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.Optional;
+
 /**
  * Created by Junhyeong Lim on 2017-10-06.
  */
@@ -22,8 +24,7 @@ public class GUI {
     private static final PlayerHashMap<GUI> guiMap = new PlayerHashMap<>();
     private final GUIHandlers handlers = new GUIHandlers(this);
     private final GUISignature signature;
-    private final InventoryFactory factory;
-    private boolean init = true;
+    private InventoryFactory factory;
 
     public static void init(MCLibrary plugin) {
         Bukkit.getPluginManager().registerEvents(new GUIListener(), plugin);
@@ -56,16 +57,16 @@ public class GUI {
         return factory;
     }
 
+    public void setFactory(InventoryFactory factory) {
+        this.factory = Optional.ofNullable(factory)
+                .orElse(new DefaultInventoryProcessor(new BaseInventoryFactory()));
+    }
+
     public GUISignature getSignature() {
         return signature;
     }
 
     public void open(HumanEntity human) {
-        if (init) {
-            factory.initialize(this);
-            init = false;
-        }
-
         Inventory topInv = human.getOpenInventory().getTopInventory();
         Inventory newInv = factory.create(this, human);
         if (signature.isSimilar(topInv)) {

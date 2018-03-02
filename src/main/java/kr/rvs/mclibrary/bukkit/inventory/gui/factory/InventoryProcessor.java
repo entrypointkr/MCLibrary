@@ -20,11 +20,6 @@ public abstract class InventoryProcessor implements InventoryFactory {
     }
 
     @Override
-    public void initialize(GUI gui) {
-        baseFactory.initialize(gui);
-    }
-
-    @Override
     public Inventory create(GUI gui, HumanEntity viewer) {
         Inventory inv = baseFactory.create(gui, viewer);
         process(gui, viewer, inv);

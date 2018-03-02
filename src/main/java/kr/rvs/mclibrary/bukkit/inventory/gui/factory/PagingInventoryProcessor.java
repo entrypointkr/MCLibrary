@@ -28,8 +28,9 @@ public class PagingInventoryProcessor extends InventoryProcessor {
     private int currentPage = 1;
     private int size = -1;
     private int maxPage = -1;
+    private final GUI gui;
 
-    public PagingInventoryProcessor(InventoryFactory factory, ItemStack prevPageBtn, ItemStack pageInfoBtn, ItemStack nextPageBtn, int prevPageIndex, int pageInfoIndex, int nextPageIndex) {
+    public PagingInventoryProcessor(InventoryFactory factory, ItemStack prevPageBtn, ItemStack pageInfoBtn, ItemStack nextPageBtn, int prevPageIndex, int pageInfoIndex, int nextPageIndex, GUI gui) {
         super(factory);
         this.prevPageBtn = prevPageBtn;
         this.pageInfoBtn = pageInfoBtn;
@@ -37,9 +38,11 @@ public class PagingInventoryProcessor extends InventoryProcessor {
         this.prevPageIndex = prevPageIndex;
         this.pageInfoIndex = pageInfoIndex;
         this.nextPageIndex = nextPageIndex;
+        this.gui = gui;
+        initialize();
     }
 
-    public PagingInventoryProcessor(InventoryFactory factory) {
+    public PagingInventoryProcessor(InventoryFactory factory, GUI gui) {
         this(
                 factory,
                 new ItemBuilder(Material.DIODE)
@@ -51,16 +54,15 @@ public class PagingInventoryProcessor extends InventoryProcessor {
                 new ItemBuilder(Material.REDSTONE_COMPARATOR)
                         .display("&a다음 페이지")
                         .build(),
-                3, 4, 5
-        );
+                3, 4, 5,
+                gui);
     }
 
-    public PagingInventoryProcessor() {
-        this(new BaseInventoryFactory());
+    public PagingInventoryProcessor(GUI gui) {
+        this(new BaseInventoryFactory(), gui);
     }
 
-    @Override
-    public void initialize(GUI gui) {
+    private void initialize() {
         int size = gui.getSignature().getSize();
         Validate.isTrue(size >= 18);
         int lastKey = gui.getSignature().getContents().lastKey();
