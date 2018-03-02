@@ -39,11 +39,10 @@ public class ClickWizard extends ListenerWizard<Block> {
             @EventHandler
             public void onClick(PlayerInteractEvent event) {
                 Player clicker = event.getPlayer();
-                EquipmentSlot hand = event.getHand();
                 Block block = event.getClickedBlock();
 
                 if (block != null && clicker.equals(player)
-                        && (!MCUtils.isOffHandSupport() || hand == EquipmentSlot.HAND)) {
+                        && (!MCUtils.isOffHandSupport() || event.getHand() == EquipmentSlot.HAND)) {
                     clicker.sendMessage(MCUtils.colorize(messageFunc.apply(block)));
                     callback.accept(block);
                     event.setCancelled(true);
