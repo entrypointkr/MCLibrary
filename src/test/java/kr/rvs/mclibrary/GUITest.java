@@ -38,13 +38,13 @@ public class GUITest extends Assert {
     public void cloneTest() {
         GUISignature signature = new GUISignature()
                 .title("Clone test")
-                .lineSize(4)
+                .row(4)
                 .item(
                         1, new ItemStack(Material.STAINED_CLAY),
                         2, new ItemStack(Material.ACACIA_DOOR)
                 )
                 .addHandlerIndexes(1, 2);
-        GUISignature cloned = signature.clone();
+        GUISignature cloned = new GUISignature(signature);
         assertEquals(signature, cloned);
     }
 }

@@ -1,6 +1,12 @@
 package kr.rvs.mclibrary.bukkit.inventory.gui;
 
+import com.google.gson.TypeAdapter;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonToken;
+import com.google.gson.stream.JsonWriter;
+import kr.rvs.mclibrary.Static;
 import kr.rvs.mclibrary.bukkit.MCUtils;
+import kr.rvs.mclibrary.bukkit.gson.ConfigurationSerializableAdapter;
 import kr.rvs.mclibrary.bukkit.inventory.ItemContents;
 import kr.rvs.mclibrary.collection.OptionalArrayList;
 import kr.rvs.mclibrary.general.VarargsParser;
@@ -8,8 +14,10 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -29,6 +37,14 @@ public class GUISignature implements Cloneable {
     public GUISignature() {
     }
 
+    public GUISignature(GUISignature signature) {
+        this(signature.type);
+        this.title = signature.title;
+        this.size = signature.size;
+        this.contents = new ItemContents(signature.contents);
+        this.handlerIndexes = new OptionalArrayList<>(signature.handlerIndexes);
+    }
+
     public GUISignature type(InventoryType type) {
         this.type = type;
         return this;
@@ -44,7 +60,7 @@ public class GUISignature implements Cloneable {
         return this;
     }
 
-    public GUISignature lineSize(int size) {
+    public GUISignature row(int size) {
         this.size = size * 9;
         return this;
     }
@@ -160,16 +176,99 @@ public class GUISignature implements Cloneable {
         return result;
     }
 
-    @SuppressWarnings("unchecked")
-    @Override
-    public GUISignature clone() {
-        try {
-            GUISignature signature = (GUISignature) super.clone();
-            signature.contents = (ItemContents) contents.clone();
-            signature.handlerIndexes = (OptionalArrayList<Integer>) handlerIndexes.clone();
+    public static class Adapter extends TypeAdapter<GUISignature> {
+        private final TypeAdapter<Map> mapAdapter;
+        private final TypeAdapter<Collection> collectionAdapter;
+
+        public Adapter(TypeAdapter<Map> mapAdapter, TypeAdapter<Collection> collectionAdapter) {
+            this.mapAdapter = mapAdapter;
+            this.collectionAdapter = collectionAdapter;
+        }
+
+        private Object value(Map<Integer, Object> contents, ItemStack item, Map<Integer, Integer> hashCodeMap) {
+            int itemHash = item.hashCode();
+            Object value = item;
+            for (Map.Entry<Integer, Object> entry : contents.entrySet()) {
+                int hashCode = hashCodeMap.computeIfAbsent(entry.getKey(), k -> entry.getValue().hashCode());
+                if (itemHash == hashCode) {
+                    value = entry.getKey();
+                    break;
+                }
+            }
+
+            return value;
+        }
+
+        @Override
+        public void write(JsonWriter out, GUISignature value) throws IOException {
+            if (value != null) {
+                Map<Integer, Integer> hashCodeMap = new HashMap<>();
+                Map<Integer, Object> contents = new HashMap<>();
+                Map<Integer, ItemStack> itemMap = value.getContents();
+                for (Map.Entry<Integer, ItemStack> entry : itemMap.entrySet()) {
+                    contents.put(entry.getKey(), value(contents, entry.getValue(), hashCodeMap));
+                }
+
+                out.beginObject();
+                out.name("type").value(value.getType().name());
+                out.name("title").value(value.getTitle());
+                out.name("size").value(value.getSize());
+                out.name("data");
+                mapAdapter.write(out, contents);
+                out.name("handlerIndexes");
+                collectionAdapter.write(out, value.getHandlerIndexes());
+                out.endObject();
+            } else {
+                out.nullValue();
+            }
+        }
+
+        @Override
+        public GUISignature read(JsonReader in) throws IOException {
+            if (in.peek() != JsonToken.BEGIN_OBJECT)
+                return null;
+
+            GUISignature signature = new GUISignature();
+            Map<String, Object> contents = new HashMap<>();
+            in.beginObject();
+            while (in.hasNext()) {
+                String name = in.nextName();
+                switch (name) {
+                    case "type":
+                        signature.type(InventoryType.valueOf(in.nextString()));
+                        break;
+                    case "title":
+                        signature.title(in.nextString());
+                        break;
+                    case "size":
+                        signature.size(in.nextInt());
+                        break;
+                    case "handlerIndexes":
+                        for (Number index : (Collection<Number>) collectionAdapter.read(in)) {
+                            signature.addHandlerIndexes(index.intValue());
+                        }
+                        break;
+                    case "data":
+                        contents = mapAdapter.read(in);
+                        break;
+                    default:
+                        Static.log("Unknown type, " + name);
+                }
+            }
+
+            for (Map.Entry<String, Object> entry : contents.entrySet()) {
+                Integer key = Integer.parseInt(entry.getKey());
+                Object value = entry.getValue();
+                if (value instanceof Map) {
+                    signature.item(key, ConfigurationSerializableAdapter.deserialize((Map<String, Object>) entry.getValue()));
+                } else {
+                    Number numVal = (Number) value;
+                    signature.item(key, signature.getContents().get(numVal.intValue()));
+                }
+            }
+            in.endObject();
+
             return signature;
-        } catch (CloneNotSupportedException e) {
-            throw new IllegalStateException(e);
         }
     }
 }

@@ -27,9 +27,9 @@ public class BukkitTypeAdapterFactory implements TypeAdapterFactory {
         } else if (ConfigurationSerializable.class.isAssignableFrom(rawType)) {
             return (TypeAdapter<T>) new ConfigurationSerializableAdapter(mapAdapter);
         } else if (GUISignature.class.isAssignableFrom(rawType)) {
-            return (TypeAdapter<T>) new GUISignatureTypeAdapter(mapAdapter, collectionAdapter);
+            return (TypeAdapter<T>) new GUISignature.Adapter(mapAdapter, collectionAdapter);
         } else if (MaterialAndData.class.isAssignableFrom(rawType)) {
-            return (TypeAdapter<T>) new MaterialAndDataAdapter();
+            return (TypeAdapter<T>) new MaterialAndData.Adapter();
         }
         return null;
     }

@@ -11,6 +11,10 @@ import org.bukkit.event.player.PlayerMoveEvent;
 public class PlayerWalkEvent extends PlayerMoveEvent {
     private static final HandlerList handlers = new HandlerList();
 
+    public static HandlerList getHandlerList() {
+        return handlers;
+    }
+
     public PlayerWalkEvent(Player player, Location from, Location to) {
         super(player, from, to);
     }
@@ -22,10 +26,6 @@ public class PlayerWalkEvent extends PlayerMoveEvent {
 
     @Override
     public HandlerList getHandlers() {
-        return handlers;
-    }
-
-    public static HandlerList getHandlerList() {
         return handlers;
     }
 }

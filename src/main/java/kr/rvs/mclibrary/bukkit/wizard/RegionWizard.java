@@ -22,7 +22,7 @@ public class RegionWizard extends DelegateWizard<List<Block>, Region> {
 
     @Override
     protected Consumer<List<Block>> processor(Consumer<Region> callback) {
-        return blocks -> callback.accept(new Region(
+        return blocks -> callback.accept(Region.of(
                 blocks.get(0).getLocation(),
                 blocks.get(1).getLocation()
         ));

@@ -7,6 +7,8 @@ import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.util.Vector;
 
+import java.util.Objects;
+
 /**
  * Created by Junhyeong Lim on 2017-10-07.
  */
@@ -15,15 +17,21 @@ public class Region {
     private final Vector min;
     private final Vector max;
 
-    public Region(Location pointA, Location pointB) {
+    public Region(String world, Vector min, Vector max) {
+        this.world = world;
+        this.min = min;
+        this.max = max;
+    }
+
+    public static Region of(Location pointA, Location pointB) {
         Validate.isTrue(pointA.getWorld().equals(pointB.getWorld()), "Two worlds are different.");
 
         double minX = Math.min(pointA.getBlockX(), pointB.getBlockX());
-        double maxX = Math.max(pointA.getBlockX(), pointB.getBlockX()) + 1;
+        double maxX = Math.max(pointA.getBlockX(), pointB.getBlockX()) + 1D;
         double minY = Math.min(pointA.getBlockY(), pointB.getBlockY());
         double maxY = Math.max(pointA.getBlockY(), pointB.getBlockY());
         double minZ = Math.min(pointA.getBlockZ(), pointB.getBlockZ());
-        double maxZ = Math.max(pointA.getBlockZ(), pointB.getBlockZ()) + 1;
+        double maxZ = Math.max(pointA.getBlockZ(), pointB.getBlockZ()) + 1D;
 
         pointA.setX(minX);
         pointA.setY(minY);
@@ -32,9 +40,7 @@ public class Region {
         pointB.setY(maxY);
         pointB.setZ(maxZ);
 
-        this.world = pointA.getWorld().getName();
-        this.min = pointA.toVector();
-        this.max = pointB.toVector();
+        return new Region(pointA.getWorld().getName(), pointA.toVector(), pointB.toVector());
     }
 
     public boolean isIn(Location location) {
@@ -67,5 +73,28 @@ public class Region {
 
     public World getWorld() {
         return Bukkit.getWorld(world);
+    }
+
+    public Vector getMin() {
+        return min;
+    }
+
+    public Vector getMax() {
+        return max;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Region region = (Region) o;
+        return Objects.equals(world, region.world) &&
+                Objects.equals(min, region.min) &&
+                Objects.equals(max, region.max);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(world, min, max);
     }
 }

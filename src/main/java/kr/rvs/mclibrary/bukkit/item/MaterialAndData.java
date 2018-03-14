@@ -1,8 +1,14 @@
 package kr.rvs.mclibrary.bukkit.item;
 
 
+import com.google.gson.TypeAdapter;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonToken;
+import com.google.gson.stream.JsonWriter;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+
+import java.io.IOException;
 
 /**
  * Created by Junhyeong Lim on 2017-08-27.
@@ -52,5 +58,24 @@ public class MaterialAndData {
 
     public short getData() {
         return data;
+    }
+
+    @SuppressWarnings({"unchecked", "deprecation"})
+    public static class Adapter extends TypeAdapter<MaterialAndData> {
+        @Override
+        public void write(JsonWriter out, MaterialAndData value) throws IOException {
+            if (value != null) {
+                out.value(value.getMaterial().getId() + ":" + value.getData());
+            } else {
+                out.nullValue();
+            }
+        }
+
+        @Override
+        public MaterialAndData read(JsonReader in) throws IOException {
+            return in.hasNext() && in.peek() == JsonToken.STRING
+                    ? parse(in.nextString())
+                    : null;
+        }
     }
 }
