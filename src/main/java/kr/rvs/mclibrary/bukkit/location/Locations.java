@@ -73,6 +73,14 @@ public class Locations {
         return getEmptyLocation(location, block -> true);
     }
 
+    public static Vector toBlockVector(Vector vector) {
+        return new Vector(vector.getBlockX(), vector.getBlockY(), vector.getBlockZ());
+    }
+
+    public static Vector toBlockVector(Location location) {
+        return toBlockVector(location.toVector());
+    }
+
     private Locations() {
     }
 }
