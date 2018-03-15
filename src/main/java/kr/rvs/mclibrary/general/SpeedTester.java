@@ -1,7 +1,5 @@
 package kr.rvs.mclibrary.general;
 
-import kr.rvs.mclibrary.Static;
-
 import java.util.LinkedHashMap;
 import java.util.Map;
 

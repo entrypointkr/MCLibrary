@@ -16,6 +16,10 @@ public class ItemStacks {
         return item == null || item.getType() == Material.AIR;
     }
 
+    public static boolean isNotEmpty(ItemStack item) {
+        return !isEmpty(item);
+    }
+
     public static void replaceString(ItemStack item, Object... args) {
         ItemMeta meta = item.getItemMeta();
         new VarargsParser(args).parse(section ->

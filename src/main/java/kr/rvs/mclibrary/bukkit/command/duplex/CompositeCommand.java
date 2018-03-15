@@ -1,6 +1,10 @@
 package kr.rvs.mclibrary.bukkit.command.duplex;
 
-import kr.rvs.mclibrary.bukkit.command.*;
+import kr.rvs.mclibrary.bukkit.command.CommandArguments;
+import kr.rvs.mclibrary.bukkit.command.CommandInformation;
+import kr.rvs.mclibrary.bukkit.command.Executable;
+import kr.rvs.mclibrary.bukkit.command.ICommand;
+import kr.rvs.mclibrary.bukkit.command.TabCompletable;
 import kr.rvs.mclibrary.bukkit.player.CommandSenderWrapper;
 
 import java.util.ArrayList;

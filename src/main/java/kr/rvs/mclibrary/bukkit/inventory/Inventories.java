@@ -4,8 +4,8 @@ import com.comphenix.protocol.events.PacketContainer;
 import kr.rvs.mclibrary.MCLibrary;
 import kr.rvs.mclibrary.bukkit.MCUtils;
 import kr.rvs.mclibrary.bukkit.item.ItemBuilder;
+import kr.rvs.mclibrary.bukkit.item.ItemStacks;
 import kr.rvs.mclibrary.bukkit.player.PlayerWrapper;
-import kr.rvs.mclibrary.general.SpeedTester;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -14,8 +14,11 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by Junhyeong Lim on 2017-08-20.
@@ -180,7 +183,7 @@ public class Inventories {
 
     public static Map<Integer, ItemStack> giveItem(Inventory inv, ItemStack item, int amount) {
         Map<Integer, ItemStack> map = new HashMap<>();
-        if (item != null) {
+        if (ItemStacks.isNotEmpty(item)) {
             int maxStack = item.getMaxStackSize();
             for (int i = 0; i < amount / maxStack; i++) {
                 map.putAll(inv.addItem(new ItemBuilder(item).amount(maxStack).build()));

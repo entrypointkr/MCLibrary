@@ -16,10 +16,8 @@ import kr.rvs.mclibrary.gson.SettingManager;
 import kr.rvs.mclibrary.plugin.LibraryCommand;
 import kr.rvs.mclibrary.plugin.ServerHostnameGetter;
 import org.bstats.bukkit.Metrics;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
