@@ -83,17 +83,28 @@ public class Locations {
         return toBlockVector(location.toVector());
     }
 
-    public static List<Block> getReleatives(Block block, int radius) {
+    public static List<Block> getRelatives(Block block, int radius, Predicate<Block> predicate) {
         List<Block> blocks = new ArrayList<>(radius * radius);
         World world = block.getWorld();
         int blockX = block.getX();
         int blockZ = block.getZ();
         for (int x = blockX - radius; x <= blockX + radius; x++) {
             for (int z = blockZ - radius; z <= blockZ + radius; z++) {
-                blocks.add(world.getBlockAt(x, block.getY(), z));
+                Block newBlock = world.getBlockAt(x, block.getY(), z);
+                if (predicate.test(newBlock)) {
+                    blocks.add(newBlock);
+                }
             }
         }
         return blocks;
+    }
+
+    public static List<Block> getRelatives(Block block, int radius) {
+        return getRelatives(block, radius, aBlock -> true);
+    }
+
+    public static List<Block> getRelativesWithoutAir(Block block, int radius) {
+        return getRelatives(block, radius, aBlock -> aBlock != null && aBlock.getType() != Material.AIR);
     }
 
     private Locations() {
