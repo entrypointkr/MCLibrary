@@ -7,6 +7,8 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.util.Vector;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Predicate;
 
 /**
@@ -79,6 +81,19 @@ public class Locations {
 
     public static Vector toBlockVector(Location location) {
         return toBlockVector(location.toVector());
+    }
+
+    public static List<Block> getReleatives(Block block, int radius) {
+        List<Block> blocks = new ArrayList<>(radius * radius);
+        World world = block.getWorld();
+        int blockX = block.getX();
+        int blockZ = block.getZ();
+        for (int x = blockX - radius; x <= blockX + radius; x++) {
+            for (int z = blockZ - radius; z <= blockZ + radius; z++) {
+                blocks.add(world.getBlockAt(x, block.getY(), z));
+            }
+        }
+        return blocks;
     }
 
     private Locations() {
