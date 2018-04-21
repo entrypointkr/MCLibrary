@@ -84,7 +84,7 @@ public class Locations {
     }
 
     public static List<Block> getRelatives(Block block, int radius, Predicate<Block> predicate) {
-        List<Block> blocks = new ArrayList<>(radius * radius);
+        List<Block> blocks = new ArrayList<>((int) Math.pow(radius * 2 + 1D, 2));
         World world = block.getWorld();
         int blockX = block.getX();
         int blockZ = block.getZ();
