@@ -6,18 +6,21 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.material.MaterialData;
 
 import java.io.IOException;
 
 /**
  * Created by Junhyeong Lim on 2017-08-27.
  */
+@SuppressWarnings("deprecation")
 public class MaterialAndData {
     private final Material material;
     private final short data;
 
-    @SuppressWarnings("deprecation")
     public static MaterialAndData parse(String idAndData) {
         String[] splited = idAndData.split(":");
         int id = Integer.parseInt(splited[0]);
@@ -46,6 +49,13 @@ public class MaterialAndData {
 
     public ItemStack createItem() {
         return new ItemStack(material, 1, data);
+    }
+
+    public void applyToBlock(Block block) {
+        BlockState state = block.getState();
+        block.setType(getMaterial());
+        state.setRawData((byte) getData());
+        state.update();
     }
 
     public ItemBuilder createBuilder() {

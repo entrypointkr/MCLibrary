@@ -83,28 +83,31 @@ public class Locations {
         return toBlockVector(location.toVector());
     }
 
-    public static List<Block> getRelatives(Block block, int radius, Predicate<Block> predicate) {
-        List<Block> blocks = new ArrayList<>((int) Math.pow(radius * 2 + 1D, 2));
-        World world = block.getWorld();
-        int blockX = block.getX();
-        int blockZ = block.getZ();
+    public static List<Location> getRelatives(Location location, int radius, Predicate<Location> predicate) {
+        List<Location> locations = new ArrayList<>((int) Math.pow(radius * 2 + 1D, 2));
+        World world = location.getWorld();
+        int blockX = location.getBlockX();
+        int blockY = location.getBlockY();
+        int blockZ = location.getBlockZ();
         for (int x = blockX - radius; x <= blockX + radius; x++) {
-            for (int z = blockZ - radius; z <= blockZ + radius; z++) {
-                Block newBlock = world.getBlockAt(x, block.getY(), z);
-                if (predicate.test(newBlock)) {
-                    blocks.add(newBlock);
+            for (int y = blockY - radius; y <= blockY + radius; y++) {
+                for (int z = blockZ - radius; z <= blockZ + radius; z++) {
+                    Location newLocation = new Location(world, x, y, z);
+                    if (predicate.test(newLocation)) {
+                        locations.add(newLocation);
+                    }
                 }
             }
         }
-        return blocks;
+        return locations;
     }
 
-    public static List<Block> getRelatives(Block block, int radius) {
-        return getRelatives(block, radius, aBlock -> true);
+    public static List<Location> getRelatives(Location location, int radius) {
+        return getRelatives(location, radius, aLocation -> true);
     }
 
-    public static List<Block> getRelativesWithoutAir(Block block, int radius) {
-        return getRelatives(block, radius, aBlock -> aBlock != null && aBlock.getType() != Material.AIR);
+    public static List<Location> getRelativesWithoutAir(Location block, int radius) {
+        return getRelatives(block, radius, aLocation -> aLocation.getBlock() != null && aLocation.getBlock().getType() != Material.AIR);
     }
 
     private Locations() {
