@@ -110,6 +110,12 @@ public class Locations {
         return getRelatives(block, radius, aLocation -> aLocation.getBlock() != null && aLocation.getBlock().getType() != Material.AIR);
     }
 
+    public static boolean equalsBlockLocation(Location locA, Location locB) {
+        return locA != null && locB != null
+                && locA.getWorld().equals(locB.getWorld())
+                && toBlockVector(locA).equals(toBlockVector(locB));
+    }
+
     private Locations() {
     }
 }
