@@ -1,7 +1,7 @@
 package kr.rvs.mclibrary.general;
 
 import kr.rvs.mclibrary.Static;
-import org.apache.commons.lang.Validate;
+import org.apache.commons.lang3.Validate;
 
 /**
  * Created by Junhyeong Lim on 2017-12-18.

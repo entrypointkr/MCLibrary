@@ -5,7 +5,7 @@ import kr.rvs.mclibrary.bukkit.command.exception.PermissionDeniedException;
 import kr.rvs.mclibrary.bukkit.player.Players;
 import kr.rvs.mclibrary.bukkit.world.Worlds;
 import kr.rvs.mclibrary.collection.VolatileArrayList;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 

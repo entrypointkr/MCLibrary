@@ -10,7 +10,7 @@ import kr.rvs.mclibrary.bukkit.inventory.gui.handler.DelegateClickHandler;
 import kr.rvs.mclibrary.bukkit.inventory.gui.handler.TopInventoryHandler;
 import kr.rvs.mclibrary.bukkit.item.ItemBuilder;
 import kr.rvs.mclibrary.bukkit.item.ItemStacks;
-import org.apache.commons.lang.Validate;
+import org.apache.commons.lang3.Validate;
 import org.bukkit.Material;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.inventory.InventoryEvent;

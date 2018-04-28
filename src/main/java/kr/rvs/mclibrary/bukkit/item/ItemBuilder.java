@@ -3,7 +3,7 @@ package kr.rvs.mclibrary.bukkit.item;
 import kr.rvs.mclibrary.bukkit.MCUtils;
 import kr.rvs.mclibrary.general.StringUtil;
 import kr.rvs.mclibrary.general.VarargsParser;
-import org.apache.commons.lang.Validate;
+import org.apache.commons.lang3.Validate;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.HumanEntity;

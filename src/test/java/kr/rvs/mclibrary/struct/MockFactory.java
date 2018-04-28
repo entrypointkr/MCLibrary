@@ -4,7 +4,7 @@ import kr.rvs.mclibrary.MCLibrary;
 import kr.rvs.mclibrary.mock.MockInventory;
 import kr.rvs.mclibrary.mock.MockItemFactory;
 import kr.rvs.mclibrary.mock.MockItemMeta;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Server;

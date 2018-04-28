@@ -1,6 +1,6 @@
 package kr.rvs.mclibrary.reflection;
 
-import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang3.ArrayUtils;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;

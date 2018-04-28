@@ -1,6 +1,6 @@
 package kr.rvs.mclibrary.collection;
 
-import org.apache.commons.lang.math.NumberUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 
 import java.util.Collection;
 import java.util.Optional;

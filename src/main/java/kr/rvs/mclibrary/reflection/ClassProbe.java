@@ -19,8 +19,13 @@ import java.util.zip.ZipInputStream;
  */
 @SuppressWarnings("unchecked")
 public class ClassProbe {
+    private static final Set<String> IGNORE_PREFIXES = new HashSet<>();
     private final File file;
     private final InternalStorage storage = new InternalStorage();
+
+    public static void addIgnorePrefix(String prefix) {
+        IGNORE_PREFIXES.add(prefix);
+    }
 
     public ClassProbe(File file) {
         this.file = file;
@@ -30,8 +35,10 @@ public class ClassProbe {
     private void findClassAndAdd(String name) {
         try {
             String className = name.substring(0, name.indexOf(".class")).replace('/', '.');
-            Class aClass = Class.forName(className);
-            storage.add(aClass);
+            if (IGNORE_PREFIXES.stream().noneMatch(className::startsWith)) {
+                Class aClass = Class.forName(className);
+                storage.add(aClass);
+            }
         } catch (Throwable th) { // NoClassDefFoundError
             // Ignore
         }
