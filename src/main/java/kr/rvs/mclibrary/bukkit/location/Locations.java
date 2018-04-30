@@ -9,6 +9,7 @@ import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Predicate;
 
 /**
@@ -42,37 +43,44 @@ public class Locations {
         return location;
     }
 
-    public static Location getTopLocation(Location location) {
+    public static Optional<Location> getLocationTopToBottom(Location location, Predicate<Block> filter) {
         World world = location.getWorld();
         int height = world.getMaxHeight();
         int x = location.getBlockX();
         int z = location.getBlockZ();
         for (int i = height; i >= 0; i--) {
             Block block = world.getBlockAt(x, i, z);
-            if (block.getType().isSolid())
-                return new Location(world, x, i + 1, z);
+            if (filter.test(block)) {
+                return Optional.of(new Location(world, x, i + 1, z));
+            }
         }
-
-        return location;
+        return Optional.empty();
     }
 
-    public static Location getEmptyLocation(Location location, Predicate<Block> filter) {
+    public static Optional<Location> getTopLocation(Location location) {
+        return getLocationTopToBottom(location, block -> block.getType().isSolid());
+    }
+
+    public static Optional<Location> getLocationBottomToTop(Location location, Predicate<Block> filter) {
         World world = location.getWorld();
         int maxHeight = world.getMaxHeight();
         int x = location.getBlockX();
         int z = location.getBlockZ();
         for (int i = location.getBlockY(); i < maxHeight; i++) {
             Block block = world.getBlockAt(x, i, z);
-            if (block.getType() == Material.AIR
-                    && filter.test(block))
-                return new Location(world, x, i, z);
+            if (filter.test(block)) {
+                return Optional.of(new Location(world, x, i, z));
+            }
         }
-
-        return location;
+        return Optional.empty();
     }
 
-    public static Location getEmptyLocation(Location location) {
-        return getEmptyLocation(location, block -> true);
+    public static Optional<Location> getEmptyLocation(Location location, Predicate<Block> filter) {
+        return getLocationBottomToTop(location, block -> block.getType() == Material.AIR && filter.test(block));
+    }
+
+    public static Optional<Location> getEmptyLocation(Location location) {
+        return getLocationBottomToTop(location, block -> block.getType() == Material.AIR);
     }
 
     public static Vector toBlockVector(Vector vector) {
