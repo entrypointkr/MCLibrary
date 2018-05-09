@@ -115,7 +115,7 @@ public class PageGUI extends GUI {
         String title = getData().title();
         int size = getData().size();
         int lastLineFirstIndex = size - 9;
-        ItemStack wall = new ItemBuilder(Material.STAINED_GLASS)
+        ItemStack wall = new ItemBuilder(Material.GLASS)
                 .display("")
                 .build();
         for (int i = 0; i < 9; i++) {
