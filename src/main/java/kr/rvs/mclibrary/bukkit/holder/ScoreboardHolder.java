@@ -1,7 +1,7 @@
 package kr.rvs.mclibrary.bukkit.holder;
 
 import kr.rvs.mclibrary.Static;
-import kr.rvs.mclibrary.bukkit.MCUtils;
+import kr.rvs.mclibrary.bukkit.Colors;
 import kr.rvs.mclibrary.bukkit.Replaceable;
 import kr.rvs.mclibrary.bukkit.mock.MockFactory;
 import kr.rvs.mclibrary.collection.StringArrayList;
@@ -25,7 +25,7 @@ public class ScoreboardHolder extends Replaceable<ScoreboardHolder> {
     public static OfflinePlayer getOffline(String contents) {
         String parsed = contents.substring(0, Math.min(contents.length(), 16));
         return MockFactory.createOfflinePlayer(
-                MCUtils.colorize(parsed));
+                Colors.colorize(parsed));
     }
 
     public ScoreboardHolder(String id, String title) {

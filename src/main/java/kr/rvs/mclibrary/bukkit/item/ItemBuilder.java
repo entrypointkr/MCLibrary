@@ -1,6 +1,6 @@
 package kr.rvs.mclibrary.bukkit.item;
 
-import kr.rvs.mclibrary.bukkit.MCUtils;
+import kr.rvs.mclibrary.bukkit.Colors;
 import kr.rvs.mclibrary.general.StringUtil;
 import kr.rvs.mclibrary.general.VarargsParser;
 import org.apache.commons.lang3.Validate;
@@ -18,7 +18,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.function.Consumer;
 
-import static kr.rvs.mclibrary.bukkit.MCUtils.colorize;
 
 /**
  * Created by Junhyeong Lim on 2017-07-27.
@@ -64,7 +63,7 @@ public class ItemBuilder {
 
     private void loreFormatting(List<String> lore) {
         for (int i = 0; i < lore.size(); i++) {
-            lore.set(i, MCUtils.colorize("&f" + lore.get(i)));
+            lore.set(i, Colors.colorize("&f" + lore.get(i)));
         }
     }
 
@@ -85,7 +84,7 @@ public class ItemBuilder {
 
     public ItemBuilder display(String displayName) {
         Validate.notNull(displayName);
-        metaProcessors.add(meta -> meta.setDisplayName(colorize(displayName)));
+        metaProcessors.add(meta -> meta.setDisplayName(Colors.colorize(displayName)));
         return this;
     }
 

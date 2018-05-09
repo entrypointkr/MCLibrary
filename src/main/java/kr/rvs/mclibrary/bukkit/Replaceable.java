@@ -19,7 +19,7 @@ public abstract class Replaceable<S extends Replaceable<?>> {
         for (Map.Entry<String, String> entry : getReplacements().entrySet()) {
             content = content.replace(entry.getKey(), entry.getValue());
         }
-        return MCUtils.colorize(content);
+        return Colors.colorize(content);
     }
 
     @SuppressWarnings("unchecked")

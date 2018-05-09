@@ -5,7 +5,7 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
 import kr.rvs.mclibrary.Static;
-import kr.rvs.mclibrary.bukkit.MCUtils;
+import kr.rvs.mclibrary.bukkit.Colors;
 import kr.rvs.mclibrary.bukkit.gson.ConfigurationSerializableAdapter;
 import kr.rvs.mclibrary.bukkit.inventory.ItemContents;
 import kr.rvs.mclibrary.collection.OptionalArrayList;
@@ -126,7 +126,7 @@ public class GUISignature implements Cloneable {
     }
 
     public String getTitle() {
-        return MCUtils.colorize(title);
+        return Colors.colorize(title);
     }
 
     public int getSize() {

@@ -1,6 +1,6 @@
 package kr.rvs.mclibrary.bukkit.inventory.newgui;
 
-import kr.rvs.mclibrary.bukkit.MCUtils;
+import kr.rvs.mclibrary.bukkit.Colors;
 import kr.rvs.mclibrary.general.VarargsParser;
 import org.apache.commons.lang3.Validate;
 import org.bukkit.event.inventory.InventoryType;
@@ -26,7 +26,7 @@ public class SimpleData implements GUIData {
     }
 
     public SimpleData title(String title) {
-        this.title = MCUtils.colorize(title);
+        this.title = Colors.colorize(title);
         return this;
     }
 

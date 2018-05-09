@@ -1,6 +1,6 @@
 package kr.rvs.mclibrary;
 
-import kr.rvs.mclibrary.bukkit.MCUtils;
+import kr.rvs.mclibrary.bukkit.Colors;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 
@@ -28,7 +28,7 @@ public class Static {
 
     public static void log(String... messages) {
         for (String message : messages) {
-            Bukkit.getConsoleSender().sendMessage("[MCLibrary] " + MCUtils.colorize(message));
+            Bukkit.getConsoleSender().sendMessage("[MCLibrary] " + Colors.colorize(message));
         }
     }
 

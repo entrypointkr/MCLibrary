@@ -1,6 +1,6 @@
 package kr.rvs.mclibrary.bukkit.player;
 
-import kr.rvs.mclibrary.bukkit.MCUtils;
+import kr.rvs.mclibrary.bukkit.Colors;
 import kr.rvs.mclibrary.bukkit.command.exception.InvalidUsageException;
 import kr.rvs.mclibrary.bukkit.command.exception.PermissionDeniedException;
 import org.bukkit.Material;
@@ -76,13 +76,13 @@ public class CommandSenderWrapper {
 
     public void sendMessage(CharSequence... messages) {
         for (CharSequence message : messages) {
-            sender.sendMessage(MCUtils.colorize(message.toString()));
+            sender.sendMessage(Colors.colorize(message.toString()));
         }
     }
 
     public void sendMessage(Object... messages) {
         for (Object message : messages) {
-            sender.sendMessage(MCUtils.colorize(String.valueOf(message)));
+            sender.sendMessage(Colors.colorize(String.valueOf(message)));
         }
     }
 

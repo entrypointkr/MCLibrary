@@ -1,5 +1,6 @@
 package kr.rvs.mclibrary.bukkit.wizard;
 
+import kr.rvs.mclibrary.bukkit.Colors;
 import kr.rvs.mclibrary.bukkit.MCUtils;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -43,7 +44,7 @@ public class ClickWizard extends ListenerWizard<Block> {
 
                 if (block != null && clicker.equals(player)
                         && (!MCUtils.isOffHandSupport() || event.getHand() == EquipmentSlot.HAND)) {
-                    clicker.sendMessage(MCUtils.colorize(messageFunc.apply(block)));
+                    clicker.sendMessage(Colors.colorize(messageFunc.apply(block)));
                     callback.accept(block);
                     event.setCancelled(true);
                 }

@@ -5,15 +5,11 @@ import com.comphenix.protocol.ProtocolManager;
 import com.comphenix.protocol.events.PacketContainer;
 import kr.rvs.mclibrary.Static;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * Created by Junhyeong Lim on 2017-07-28.
@@ -90,25 +86,7 @@ public class MCUtils {
         }
     }
 
-    public static String colorize(String message) {
-        return ChatColor.translateAlternateColorCodes('&', message);
-    }
 
-    public static List<String> colorize(List<String> list) {
-        List<String> newList = new ArrayList<>();
-        for (String element : list) {
-            newList.add(colorize(element));
-        }
-
-        return newList;
-    }
-
-    public static List<String> asColorizeList(String... args) {
-        for (int i = 0; i < args.length; i++) {
-            args[i] = colorize(args[i]);
-        }
-        return Arrays.asList(args);
-    }
 
     public static boolean isEnabled(String name) {
         return Bukkit.getPluginManager().isPluginEnabled(name);

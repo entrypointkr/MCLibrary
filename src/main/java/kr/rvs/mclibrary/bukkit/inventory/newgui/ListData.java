@@ -1,6 +1,6 @@
 package kr.rvs.mclibrary.bukkit.inventory.newgui;
 
-import kr.rvs.mclibrary.bukkit.MCUtils;
+import kr.rvs.mclibrary.bukkit.Colors;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.ItemStack;
 
@@ -29,7 +29,7 @@ public class ListData implements GUIData {
     }
 
     public ListData title(String title) {
-        this.title = MCUtils.colorize(title);
+        this.title = Colors.colorize(title);
         return this;
     }
 
