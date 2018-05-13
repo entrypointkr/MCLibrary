@@ -2,6 +2,7 @@ package kr.rvs.mclibrary.bukkit;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
+import org.bukkit.DyeColor;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -64,6 +65,57 @@ public class Colors {
             ret = ChatColor.DARK_PURPLE;
         } else if (color == Color.ORANGE) {
             ret = ChatColor.GOLD;
+        }
+        return Optional.ofNullable(ret);
+    }
+
+    public static Optional<ChatColor> getChatColorByDyeColor(DyeColor color) {
+        ChatColor ret = null;
+        switch (color) {
+            case WHITE:
+                ret = ChatColor.WHITE;
+                break;
+            case ORANGE:
+            case BROWN:
+                ret = ChatColor.GOLD;
+                break;
+            case MAGENTA:
+            case PURPLE:
+                ret = ChatColor.DARK_PURPLE;
+                break;
+            case LIGHT_BLUE:
+                ret = ChatColor.BLUE;
+                break;
+            case YELLOW:
+                ret = ChatColor.YELLOW;
+                break;
+            case LIME:
+                ret = ChatColor.LIGHT_PURPLE;
+                break;
+            case PINK:
+                ret = ChatColor.LIGHT_PURPLE;
+                break;
+            case GRAY:
+                ret = ChatColor.DARK_GRAY;
+                break;
+            case SILVER:
+                ret = ChatColor.GRAY;
+                break;
+            case CYAN:
+                ret = ChatColor.AQUA;
+                break;
+            case BLUE:
+                ret = ChatColor.DARK_BLUE;
+                break;
+            case GREEN:
+                ret = ChatColor.DARK_GREEN;
+                break;
+            case RED:
+                ret = ChatColor.RED;
+                break;
+            case BLACK:
+                ret = ChatColor.BLACK;
+                break;
         }
         return Optional.ofNullable(ret);
     }
