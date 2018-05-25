@@ -23,6 +23,10 @@ public class ClassProbe {
     private final File file;
     private final InternalStorage storage = new InternalStorage();
 
+    static {
+        addIgnorePrefix("kr.rvs.mclibrary.general");
+    }
+
     public static void addIgnorePrefix(String prefix) {
         IGNORE_PREFIXES.add(prefix);
     }
