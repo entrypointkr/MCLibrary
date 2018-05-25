@@ -13,10 +13,10 @@ import org.junit.Test;
 public class VersionTest extends Assert {
 
     @Before
-    public void register() throws NoSuchMethodException {
+    public void register() {
         Injector.injectServer(MockFactory.createMockServer());
     }
-    
+
     @Test
     public void versionParse() {
         Version version = new Version("1.12.1-R0.1-SNAPSHOT");
