@@ -1,13 +1,22 @@
 package kr.rvs.mclibrary;
 
 import kr.rvs.mclibrary.general.Version;
+import kr.rvs.mclibrary.struct.Injector;
+import kr.rvs.mclibrary.struct.MockFactory;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
 /**
  * Created by Junhyeong Lim on 2017-08-27.
  */
 public class VersionTest extends Assert {
+
+    @Before
+    public void register() throws NoSuchMethodException {
+        Injector.injectServer(MockFactory.createMockServer());
+    }
+    
     @Test
     public void versionParse() {
         Version version = new Version("1.12.1-R0.1-SNAPSHOT");
